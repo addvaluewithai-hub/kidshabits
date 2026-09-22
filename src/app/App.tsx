@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { characters, getCharacter } from '../vendor/pixilive/core/registry.ts';
 import { loadCharacterEngine, portrait, SvgCharacter } from '../vendor/pixilive/core/SvgCharacter.ts';
-import { SessionController, initialSessionView } from '../vendor/pixilive/core/SessionController.ts';
+import { SessionController } from '../vendor/pixilive/core/SessionController.ts';
 import { HABIT_OPTIONS, clearSnapshot, initialSnapshot, loadSnapshot, saveSnapshot, type AppSnapshot, type StorySequence } from './state';
 import { completeHabit as applyHabitCompletion, followFirstLight, settleStorySequence } from '../domain/storyProgress';
 import { WorldHost } from '../world/WorldHost';
+import { InWorldCompanion } from '../world/InWorldCompanion';
 
 const interests = ['الفضاء', 'الحيوانات', 'القصص', 'الألغاز', 'الرسم'];
-type LiveMode = 'off' | 'guide' | 'chat';
 
 function habitDetails(ids: string[]) {
   return ids.map(id => HABIT_OPTIONS.find(item => item.id === id)).filter((item): item is NonNullable<typeof item> => Boolean(item));
@@ -21,124 +21,34 @@ function PrimaryButton({ children, onClick, disabled = false }: { children: Reac
   return <button className="primary" type="button" onClick={onClick} disabled={disabled}>{children}</button>;
 }
 
-function fitCharacter(host: HTMLElement, compact: boolean, canFly: boolean) {
-  const svg = host.querySelector('svg');
-  if (!svg) return;
-  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-  // The PixiLive master intentionally contains generous stage margins for the
-  // lab. Product cards need a tighter camera around the full silhouette.
-  if (compact) svg.setAttribute('viewBox', canFly ? '62 20 516 525' : '82 18 476 525');
-  else svg.setAttribute('viewBox', canFly ? '18 -10 604 570' : '72 8 496 545');
-}
-
-function CompanionStage({
-  snapshot,
-  liveMode = 'off',
-  compact = false,
-  onGuideComplete,
-}: {
-  snapshot: AppSnapshot;
-  liveMode?: LiveMode;
-  compact?: boolean;
-  onGuideComplete?: () => void;
-}) {
+function CompanionPreview({ snapshot }: { snapshot: AppSnapshot }) {
   const character = getCharacter(snapshot.companionId);
   const host = useRef<HTMLDivElement>(null);
   const session = useRef<SessionController | null>(null);
-  const scriptSent = useRef(false);
-  const guideFinished = useRef(false);
   const [engine, setEngine] = useState<Awaited<ReturnType<typeof loadCharacterEngine>> | null>(null);
-  const [view, setView] = useState(initialSessionView);
   const [loadError, setLoadError] = useState('');
-  const [text, setText] = useState('');
 
   useEffect(() => {
-    let disposed = false;
-    const controller = new SessionController(next => { if (!disposed) setView(next); });
+    const controller = new SessionController(() => undefined);
     session.current = controller;
-    void loadCharacterEngine().then(next => { if (!disposed) setEngine(next); }).catch(error => setLoadError(error instanceof Error ? error.message : 'تعذّر تحميل الشخصية.'));
-    return () => { disposed = true; controller.dispose(); session.current = null; };
+    void loadCharacterEngine().then(setEngine).catch(error => setLoadError(error instanceof Error ? error.message : 'تعذّر تحميل الشخصية.'));
+    return () => {
+      controller.dispose();
+      session.current = null;
+    };
   }, []);
-
-  useEffect(() => {
-    scriptSent.current = false;
-    guideFinished.current = false;
-  }, [liveMode, snapshot.companionId]);
 
   useEffect(() => {
     if (!engine || !host.current || !session.current) return;
     const actor = new SvgCharacter(host.current, engine, character);
-    fitCharacter(host.current, compact, Boolean(character.canFly));
+    host.current.querySelector('svg')?.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     session.current.attach(actor, { name: character.name, species: character.species, canFly: character.canFly });
     session.current.manual('happy', 'wave');
-    const timer = !compact && character.canFly
-      ? window.setTimeout(() => session.current?.manualFlight({ action: 'move', x: .66, y: .28, speed: .32, path: 'arc' }), 900)
-      : 0;
-    return () => { if (timer) window.clearTimeout(timer); };
-  }, [engine, character, compact]);
+  }, [engine, character]);
 
-  useEffect(() => {
-    if (liveMode === 'off' || view.connection !== 'connected' || scriptSent.current || !session.current) return;
-    scriptSent.current = true;
-    const selectedHabits = habitDetails(snapshot.habits);
-    const habitsText = selectedHabits.map(item => item.label).join('، ') || 'العادات اللي اختارها ولي الأمر';
-    const required = Math.max(1, Math.min(snapshot.requiredHabits, selectedHabits.length || 1));
-    const locationName = snapshot.currentLocation === 'river-clearing' ? 'فسحة النهر' : 'مرج الوصول';
-
-    if (liveMode === 'guide') {
-      session.current.send(
-        `أنت ${character.name}، الصاحب اللي ${snapshot.childName || 'الطفل'} اختاره في KidsHabits. إنت ظاهر جوه كوكب البراعم نفسه، ومهمتك في الدور ده محددة جدًا: تشرح النظام ثم تنهي كلامك. لا تبدأ دردشة مفتوحة، لا تسأل الطفل سؤال، لا تطلب منه يختار عادة، ولا تخترع مهمة أو قصة من عندك.
-العادات الحقيقية المحددة له هي فقط: ${habitsText}. المطلوب كل يوم ${required} من ${Math.max(1, selectedHabits.length)}.
-قول له بالمصري البسيط: لما يكمّل العدد المطلوب في الحقيقة، الوقت في الكوكب يتحرك، العالم يتغير، وحدث جديد في القصة يظهر. العادات مش فلوس ولا نقاط، وإنت مش هتزعل منه ومش هتربط صداقتكم بإنه أنجز أو لأ.
-ابدأ باسمه، عرّف نفسك في جملة قصيرة، اذكر العادات بأسمائها، اشرح قاعدة ${required} من ${Math.max(1, selectedHabits.length)}، وبعدها قول إنكم موجودين دلوقتي في مرج الوصول وإن أول سر هيتكشف لما عادات اليوم تكتمل.
-استخدم 5 أو 6 جمل فقط. لا تسأل أي سؤال في النهاية. اختم حرفيًا بمعنى: «أنا هسيب الكلام دلوقتي ونبدأ نشوف العالم سوا.» لو بتطير استخدم fly مرة هادية أثناء الشرح، واستخدم perform للتعبير.`,
-        '[شرح نظام KidsHabits داخل العالم]'
-      );
-      return;
-    }
-
-    const completedLabels = habitDetails(snapshot.completedHabits).map(item => item.label).join('، ') || 'ولا عادة متسجلة كمكتملة لسه';
-    session.current.send(
-      `إنت ${character.name} وبتتكلم مع ${snapshot.childName || 'صاحبك'} من جوه كوكب البراعم، في ${locationName}. ده سياق حقيقي ومحدد، مش اقتراح: اليوم ${snapshot.storyDay} من 30. العادات المحددة: ${habitsText}. المكتمل فعليًا: ${completedLabels}. أول نور ${snapshot.firstLightRevealed ? 'ظهر' : 'لسه ما ظهرش'}. فسحة النهر ${snapshot.riverClearingReached ? 'اتفتحت ووصلنا لها' : 'لسه ما وصلناش لها'}.
-اتكلم بالمصري الدافئ وباختصار. ما تدّعيش إن عادة اتعملت لو الحالة ما بتقولش كده، ما تفتحش منطقة أو تقدّم القصة بنفسك، وما تخترعش objective أو reward. لو الطفل سأل نعمل إيه، اشرح له اللي ظاهر حاليًا في العالم أو العادات المطلوبة فقط. إنت صاحب داخل العالم، مش مدير progression. ابدأ بتحية قصيرة جدًا مرتبطة بالمكان الحالي وبعدها اسمع الطفل.`,
-      '[فتح كلام مع الصاحب داخل العالم]'
-    );
-  }, [liveMode, view.connection, character, snapshot]);
-
-  useEffect(() => {
-    if (liveMode !== 'guide' || guideFinished.current || view.connection !== 'connected') return;
-    if (!view.assistant.trim() || view.mode !== 'listening') return;
-    guideFinished.current = true;
-    const timer = window.setTimeout(() => {
-      void session.current?.stop().finally(() => onGuideComplete?.());
-    }, 420);
-    return () => window.clearTimeout(timer);
-  }, [liveMode, view.assistant, view.mode, view.connection, onGuideComplete]);
-
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-    if (!text.trim()) return;
-    session.current?.send(text);
-    setText('');
-  };
-
-  const connected = view.connection === 'connected';
-  const connecting = view.connection === 'connecting';
-  const status = connecting ? 'بنوصل…' : connected ? (view.mode === 'speaking' ? 'بيكلمك' : view.mode === 'thinking' ? 'بيفكر…' : 'سامعك') : 'جاهز';
-  const canTalk = liveMode !== 'off';
-
-  return <section className={`companion-stage ${compact ? 'compact' : ''} ${liveMode === 'guide' ? 'guide-mode' : ''}`} style={{ '--accent': character.accent } as CSSProperties}>
-    <div className="stage-meta"><div><small>صاحبك</small><strong>{character.name}</strong></div><span className={connected ? 'status live' : 'status'}>{status}</span></div>
+  return <section className="companion-stage compact companion-preview" style={{ '--accent': character.accent } as CSSProperties}>
+    <div className="stage-meta"><div><small>صاحبك</small><strong>{character.name}</strong></div><span className="status">جاهز</span></div>
     <div className="character-window"><div className="character-glow" /><div ref={host} className="character-host" />{!engine && <span className="loading-character">{loadError || 'بنجهّزه…'}</span>}</div>
-    {!compact && character.canFly && liveMode === 'chat' && <div className="quick-actions"><button onClick={() => session.current?.manualFlight({ action: 'move', x: .22, y: .18, speed: .55, path: 'swoop' })}>↗ طير</button><button onClick={() => session.current?.manualFlight({ action: 'land', x: .5, y: 1, speed: .3, path: 'direct' })}>انزل</button><button onClick={() => session.current?.manual('excited', 'celebrate')}>احتفل ✦</button></div>}
-    {canTalk && <div className="live-box">
-      <button className={connected || connecting ? 'talk stop' : 'talk'} disabled={!engine || (liveMode === 'guide' && guideFinished.current)} onClick={() => { if (connected || connecting) { scriptSent.current = false; void session.current?.stop(); } else void session.current?.start(); }}>{connecting ? 'إلغاء' : connected ? (liveMode === 'guide' ? 'إيقاف الشرح' : 'إنهاء الكلام') : liveMode === 'guide' ? `🎙️ ابدأ الرحلة مع ${character.name}` : `🎙️ كلم ${character.name}`}</button>
-      {(view.error || loadError) && <p className="inline-error">{view.error || loadError}</p>}
-      {liveMode === 'guide' && connected && <p className="guide-listening-note">اسمعه بس في الجزء ده — لما يخلص هنكمل جوه العالم تلقائيًا.</p>}
-      {liveMode === 'chat' && (view.user || view.assistant) && <div className="mini-transcript">{view.user && <p><b>إنت:</b> {view.user.startsWith('[') ? 'بدأتوا الكلام…' : view.user}</p>}{view.assistant && <p><b>{character.name}:</b> {view.assistant}</p>}</div>}
-      {liveMode === 'chat' && <form className="chat-form" onSubmit={submit}><input aria-label="رسالة للشخصية" value={text} disabled={!connected} onChange={e => setText(e.target.value)} placeholder={connected ? 'أو اكتب هنا…' : 'ابدأ الكلام الأول'} /><button disabled={!connected || !text.trim()}>↑</button></form>}
-      <small className="privacy">الميكروفون يشتغل فقط أثناء المحادثة.</small>
-    </div>}
   </section>;
 }
 
@@ -171,7 +81,7 @@ function CompanionSelection({ snapshot, update }: { snapshot: AppSnapshot; updat
   const portraits = useMemo(() => engine ? Object.fromEntries(characters.map(character => [character.id, portrait(engine, character)])) : {}, [engine]);
   const toggleInterest = (value: string) => update({ safeInterests: snapshot.safeInterests.includes(value) ? snapshot.safeInterests.filter(item => item !== value) : [...snapshot.safeInterests, value].slice(0, 3) });
 
-  return <Shell step="4 / 4"><section className="screen companion-pick"><span className="eyebrow">اختار صاحب رحلتك</span><h2>مين تحب يفضل معاك؟</h2><p>كلهم يقدروا يسمعوك ويتكلموا معاك من جوه العالم. ولومي ونسمة كمان بيطيروا فعلًا.</p><CompanionStage snapshot={snapshot} liveMode="off" compact /><div className="companion-grid">{characters.map(character => <button key={character.id} className={snapshot.companionId === character.id ? 'companion-card selected' : 'companion-card'} onClick={() => update({ companionId: character.id })}><span className="portrait">{engine && <img src={portraits[character.id]} alt="" />}</span><strong>{character.name}</strong><small>{character.canFly ? '✦ بيطير' : character.description}</small></button>)}</div><div className="interest-box compact-interests"><small>حاجات بتحبها — اختياري</small><div>{interests.map(value => <button key={value} className={snapshot.safeInterests.includes(value) ? 'chip selected' : 'chip'} onClick={() => toggleInterest(value)}>{value}</button>)}</div></div><PrimaryButton onClick={() => update({ phase: 'world', companionIntroComplete: false })}>ادخل العالم مع {selected.name}</PrimaryButton></section></Shell>;
+  return <Shell step="4 / 4"><section className="screen companion-pick"><span className="eyebrow">اختار صاحب رحلتك</span><h2>مين تحب يفضل معاك؟</h2><p>كلهم يقدروا يسمعوك ويتكلموا معاك من جوه العالم. ولومي ونسمة كمان بيطيروا فعلًا.</p><CompanionPreview snapshot={snapshot} /><div className="companion-grid">{characters.map(character => <button key={character.id} className={snapshot.companionId === character.id ? 'companion-card selected' : 'companion-card'} onClick={() => update({ companionId: character.id })}><span className="portrait">{engine && <img src={portraits[character.id]} alt="" />}</span><strong>{character.name}</strong><small>{character.canFly ? '✦ بيطير' : character.description}</small></button>)}</div><div className="interest-box compact-interests"><small>حاجات بتحبها — اختياري</small><div>{interests.map(value => <button key={value} className={snapshot.safeInterests.includes(value) ? 'chip selected' : 'chip'} onClick={() => toggleInterest(value)}>{value}</button>)}</div></div><PrimaryButton onClick={() => update({ phase: 'world', companionIntroComplete: false })}>ادخل العالم مع {selected.name}</PrimaryButton></section></Shell>;
 }
 
 function WorldScreen({
@@ -187,43 +97,47 @@ function WorldScreen({
   settleSequence: (sequence: StorySequence) => void;
   followLight: () => void;
 }) {
-  const [chatOpen, setChatOpen] = useState(false);
-  const character = getCharacter(snapshot.companionId);
   const selectedHabits = habitDetails(snapshot.habits);
   const completed = snapshot.completedHabits.length;
+  const remaining = Math.max(0, snapshot.requiredHabits - completed);
   const locationName = snapshot.currentLocation === 'river-clearing' ? 'فسحة النهر' : 'مرج الوصول';
 
-  const hook = snapshot.pendingSequence === 'first-light'
-    ? <>استنى…<br /><b>الكوكب بيصحى!</b></>
-    : snapshot.pendingSequence === 'river-arrival'
-      ? <>النور بيتحرك…<br /><b>خد بالك إحنا رايحين فين.</b></>
-      : snapshot.currentLocation === 'river-clearing'
-        ? <>وصلنا للنهر.<br /><b>النور اختفى عند الحافة… في حاجة هنا لسه مستخبية.</b></>
-        : snapshot.firstLightRevealed
-          ? <>شايف الطريق اللي ظهر؟<br /><b>النور بيقودنا ناحية النهر.</b></>
-          : snapshot.companionIntroComplete
-            ? <>الكوكب لسه هادي.<br /><b>كمّل {Math.max(0, snapshot.requiredHabits - completed)} من عاداتك ونشوف هيحصل إيه.</b></>
-            : <>أول حاجة…<br /><b>{character.name} هيشرح لك إزاي العالم ده بيتحرك.</b></>;
+  const whisper = !snapshot.companionIntroComplete
+    ? null
+    : snapshot.pendingSequence === 'first-light'
+      ? 'الكوكب بيصحى…'
+      : snapshot.pendingSequence === 'river-arrival'
+        ? 'النور بيتحرك ناحية النهر…'
+        : snapshot.currentLocation === 'river-clearing'
+          ? 'النور اختفى عند حافة الميه. في حاجة هنا لسه مستخبية.'
+          : snapshot.firstLightRevealed
+            ? 'الطريق بان. النور مستنينا ناحية النهر.'
+            : remaining > 0
+              ? `${remaining} ${remaining === 1 ? 'عادة' : 'عادات'} ونشوف أول تغيير في العالم.`
+              : null;
 
-  return <main className="world-screen">
+  return <main className="world-screen world-v2">
     <WorldHost currentLocation={snapshot.currentLocation} firstLightRevealed={snapshot.firstLightRevealed} pendingSequence={snapshot.pendingSequence} onSequenceComplete={settleSequence} />
-    <div className="world-top"><div><small>كوكب البراعم · {locationName}</small><strong>اليوم {snapshot.storyDay} من 30</strong></div><button disabled={!snapshot.companionIntroComplete} onClick={() => setChatOpen(true)}>كلم {character.name}</button></div>
-    <div className={`world-hook ${snapshot.firstLightRevealed ? 'revealed' : ''}`}><span>✦</span><p>{hook}</p></div>
 
-    <div className="world-companion"><CompanionStage snapshot={snapshot} liveMode="off" compact /></div>
+    <div className="world-hud"><div className="world-day-pill"><small>{locationName}</small><strong>اليوم {snapshot.storyDay} <span>من 30</span></strong></div></div>
 
-    {!snapshot.companionIntroComplete && <section className="world-guide-card" aria-label="شرح بداية الرحلة"><div className="world-guide-copy"><span className="eyebrow">أول دقيقة جوه العالم</span><h2>{character.name} هيشرحها لك هنا.</h2><p>مش شاشة شات منفصلة. العالم موجود وراكم، وبعد ما يخلص الشرح المكالمة تقفل لوحدها.</p></div><CompanionStage snapshot={snapshot} liveMode={snapshot.voiceEnabled ? 'guide' : 'off'} onGuideComplete={() => update({ companionIntroComplete: true })} />{!snapshot.voiceEnabled && <PrimaryButton onClick={() => update({ companionIntroComplete: true })}>فهمت — نبدأ العالم</PrimaryButton>}</section>}
+    {whisper && <div className="world-whisper"><span>✦</span><p>{whisper}</p></div>}
 
-    {chatOpen && snapshot.companionIntroComplete && <div className="world-chat-backdrop" onClick={() => setChatOpen(false)}><section className="world-chat-sheet" onClick={event => event.stopPropagation()}><button className="sheet-close" onClick={() => setChatOpen(false)}>×</button><CompanionStage snapshot={snapshot} liveMode="chat" /></section></div>}
+    <div className="world-companion-v2">
+      <InWorldCompanion snapshot={snapshot} onGuideComplete={() => update({ companionIntroComplete: true })} />
+    </div>
 
-    {snapshot.companionIntroComplete && snapshot.currentLocation === 'landing-meadow' && snapshot.firstLightRevealed && !snapshot.pendingSequence && <button className="journey-cta" onClick={followLight}><span>✦</span><b>اتبع النور للنهر</b><small>أول انتقال حقيقي بين مناطق الكوكب</small></button>}
+    {snapshot.companionIntroComplete && snapshot.currentLocation === 'landing-meadow' && snapshot.firstLightRevealed && !snapshot.pendingSequence && <button className="journey-cta journey-cta-v2" onClick={followLight}><span>✦</span><b>اتبع النور</b><small>ناحية النهر</small></button>}
 
-    <section className={`habit-dock ${!snapshot.companionIntroComplete ? 'locked' : ''}`} aria-label="عادات اليوم"><div className="habit-dock-title"><div><small>عادات النهارده</small><strong>{completed} / {snapshot.requiredHabits} لفتح حدث القصة</strong></div><span>{snapshot.firstLightRevealed ? '✦ اتفتح' : snapshot.companionIntroComplete ? 'جاهز' : 'بعد الشرح'}</span></div><div className="habit-dock-list">{selectedHabits.map(habit => {
-      const done = snapshot.completedHabits.includes(habit.id);
-      return <button key={habit.id} disabled={done || !snapshot.companionIntroComplete} className={done ? 'done' : ''} onClick={() => completeHabit(habit.id)}><span>{habit.icon}</span><b>{habit.label}</b><small>{done ? 'تم ✓' : 'خلصتها'}</small></button>;
-    })}</div></section>
+    <section className={`habit-dock habit-dock-v2 ${!snapshot.companionIntroComplete ? 'locked' : ''}`} aria-label="عادات اليوم">
+      <div className="habit-dock-title"><div><small>النهارده</small><strong>{completed} / {snapshot.requiredHabits}</strong></div><span>{snapshot.firstLightRevealed ? '✦ العالم اتحرك' : snapshot.companionIntroComplete ? 'عاداتك' : 'بعد ما صاحبك يشرح'}</span></div>
+      <div className="habit-dock-list">{selectedHabits.map(habit => {
+        const done = snapshot.completedHabits.includes(habit.id);
+        return <button key={habit.id} disabled={done || !snapshot.companionIntroComplete} className={done ? 'done' : ''} onClick={() => completeHabit(habit.id)}><span>{habit.icon}</span><b>{habit.label}</b><small>{done ? '✓' : 'تم'}</small></button>;
+      })}</div>
+    </section>
 
-    <div className="world-bottom"><div className="day-progress"><span>{selectedHabits.map(item => item.icon).join(' ')}</span><b>{snapshot.currentLocation === 'river-clearing' ? 'وصلت لأول منطقة جديدة' : snapshot.firstLightRevealed ? 'أول نور ظهر في المرج' : `${snapshot.requiredHabits} عادات تحرك القصة`}</b></div><button className="debug-reset" onClick={() => { if (confirm('نرجع لأول onboarding؟')) { clearSnapshot(); location.reload(); } }}>Reset</button></div>
+    <button className="debug-reset debug-reset-v2" onClick={() => { if (confirm('نرجع لأول onboarding؟')) { clearSnapshot(); location.reload(); } }}>Reset</button>
   </main>;
 }
 
