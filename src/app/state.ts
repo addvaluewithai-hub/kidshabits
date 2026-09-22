@@ -47,6 +47,12 @@ export interface AppSnapshot {
   storyEventsSeen: string[];
 }
 
+type StoredSnapshot = Partial<Omit<AppSnapshot, 'phase' | 'currentLocation' | 'pendingSequence'>> & {
+  phase?: string;
+  currentLocation?: string;
+  pendingSequence?: string | null;
+};
+
 const STORAGE_KEY = 'kidshabits.snapshot.v1';
 
 export const initialSnapshot: AppSnapshot = {
@@ -76,7 +82,7 @@ export function loadSnapshot(): AppSnapshot {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return initialSnapshot;
-    const parsed = JSON.parse(raw) as Partial<AppSnapshot> & { phase?: string; currentLocation?: string; pendingSequence?: string };
+    const parsed = JSON.parse(raw) as StoredSnapshot;
     if (parsed.version !== 1) return initialSnapshot;
 
     // v1 migration: the early prototype had separate companion / planet screens.
