@@ -1,0 +1,44 @@
+name: One-time Phaser 4 skill import
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/import-phaser-skills.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download uploaded Phaser skills
+        run: |
+          curl -fL 'https://res.cloudinary.com/as9o12al/raw/upload/v1790092035/all-phaser-skills-2026-09-22' -o /tmp/all-phaser-skills.zip
+
+      - name: Expand skill packages into project reference library
+        run: |
+          rm -rf /tmp/phaser-skill-zips
+          mkdir -p /tmp/phaser-skill-zips project/skills/phaser
+          unzip -q /tmp/all-phaser-skills.zip -d /tmp/phaser-skill-zips
+          for skill_zip in /tmp/phaser-skill-zips/*.zip; do
+            unzip -oq "$skill_zip" -d project/skills/phaser
+          done
+          count="$(find project/skills/phaser -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l)"
+          test "$count" -eq 25
+          echo "Imported $count Phaser 4 skills."
+
+      - name: Remove one-time importer
+        run: rm .github/workflows/import-phaser-skills.yml
+
+      - name: Commit full skill library
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add project/skills/phaser .github/workflows/import-phaser-skills.yml
+          git commit -m 'Import full Phaser 4 skill library'
+          git push origin HEAD:main
