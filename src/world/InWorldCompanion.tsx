@@ -56,8 +56,7 @@ export function InWorldCompanion({
   useEffect(() => {
     if (!engine || !host.current || !session.current) return;
     const actor = new SvgCharacter(host.current, engine, character);
-    const svg = host.current.querySelector('svg');
-    svg?.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    host.current.querySelector('svg')?.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     session.current.attach(actor, { name: character.name, species: character.species, canFly: character.canFly });
     session.current.manual('happy', 'wave');
     const timer = character.canFly
@@ -91,7 +90,7 @@ export function InWorldCompanion({
     session.current.send(
       `إنت ${character.name}، صاحب ${snapshot.childName || 'الطفل'} جوه كوكب البراعم. إنت موجود بصوتك وشخصيتك داخل العالم، مش شات منفصل.
 الحالة الحقيقية الآن: اليوم ${snapshot.storyDay} من 30، المكان ${locationName}، العادات المحددة ${habitsText}، والمكتمل فعلًا ${completed.length ? completed.join('، ') : 'ولا عادة لسه'}. أول نور ${snapshot.firstLightRevealed ? 'ظهر' : 'لسه ما ظهرش'}، وفسحة النهر ${snapshot.riverClearingReached ? 'اتفتحت ووصلنا لها' : 'لسه ما وصلناش لها'}.
-اتكلم بالمصري الدافئ وبجمل قصيرة. اسمع الطفل ورد طبيعي، لكن لا تدّعي إن عادة اتعملت، لا تفتح مناطق، لا تغيّر progression، ولا تخترع objective أو reward. لو سألك نعمل إيه، اتكلم فقط عن اللي ظاهر فعلًا أو العادات المطلوبة. استخدم perform، ولو بتطير استخدم fly بشكل طبيعي.` ,
+اتكلم بالمصري الدافئ وبجمل قصيرة. اسمع الطفل ورد طبيعي، لكن لا تدّعي إن عادة اتعملت، لا تفتح مناطق، لا تغيّر progression، ولا تخترع objective أو reward. لو سألك نعمل إيه، اتكلم فقط عن اللي ظاهر فعلًا أو العادات المطلوبة. استخدم perform، ولو بتطير استخدم fly بشكل طبيعي.`,
       '[فتح محادثة صوتية داخل العالم]'
     );
   }, [intent, view.connection, character, snapshot]);
@@ -141,16 +140,15 @@ export function InWorldCompanion({
         ? `${character.name} بيفكر…`
         : connected
           ? `${character.name} سامعك`
-          : !snapshot.companionIntroComplete
-            ? `اضغط واسمع ${character.name}`
-            : `كلم ${character.name}`;
+          : `اضغط واسمع ${character.name}`;
+  const showStatus = !snapshot.companionIntroComplete || connected || connecting || Boolean(view.error || loadError);
 
   return <div className={`in-world-companion ${connected ? 'is-live' : ''} ${speaking ? 'is-speaking' : ''}`} style={{ '--accent': character.accent } as CSSProperties}>
     <div className="world-character-render" ref={host} aria-label={`شخصية ${character.name}`} />
     <button className="world-voice-button" type="button" onClick={toggleVoice} disabled={!engine} aria-label={connected || connecting ? `إنهاء الكلام مع ${character.name}` : `التكلم مع ${character.name}`}>
       <span>{connected || connecting ? '■' : '🎙️'}</span>
     </button>
-    <div className="world-voice-status">{status}</div>
+    {showStatus && <div className="world-voice-status">{status}</div>}
     {(view.error || loadError) && <div className="world-voice-error">{view.error || loadError}</div>}
   </div>;
 }
