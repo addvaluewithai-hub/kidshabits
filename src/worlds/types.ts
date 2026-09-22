@@ -42,10 +42,14 @@ export interface WorldManifest {
   availability: 'available' | 'preview';
 }
 
+/**
+ * WorldProgress contains only story/world truth. Real-life habit check-ins are
+ * deliberately stored in the app-level daily ledger, because one real-life
+ * action must not be duplicated just because the child changes planets.
+ */
 export interface WorldProgress {
   day: number;
   locationId: string;
-  completedHabits: string[];
   pendingSequence: string | null;
   eventsSeen: string[];
   flags: Record<string, boolean>;
@@ -55,7 +59,6 @@ export function createWorldProgress(manifest: WorldManifest): WorldProgress {
   return {
     day: 1,
     locationId: manifest.startingLocationId,
-    completedHabits: [],
     pendingSequence: null,
     eventsSeen: [],
     flags: {},
