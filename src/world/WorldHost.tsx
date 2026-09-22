@@ -120,18 +120,19 @@ class SproutWorldScene extends Phaser.Scene {
     g.fillStyle(0xc8dfd0, 1).fillEllipse(w * 0.82, h * 0.34, w * 1.1, h * 0.34);
     g.fillStyle(0x8eb99c, 1).fillRect(0, h * 0.56, w, h * 0.44);
 
-    // River ribbon.
     g.fillStyle(0x78b7b7, 1).fillRoundedRect(-w * 0.08, h * 0.62, w * 1.18, h * 0.23, 42);
     g.fillStyle(0x9ed0c8, 0.9).fillRoundedRect(-w * 0.05, h * 0.65, w * 1.1, h * 0.055, 26);
     g.fillStyle(0xd9eee3, 0.65).fillRoundedRect(w * 0.12, h * 0.75, w * 0.42, 7, 7);
 
-    // Banks, reeds and calm foreground life.
     g.fillStyle(0x6e9b79, 1).fillEllipse(w * 0.18, h * 0.64, w * 0.56, h * 0.2);
     g.fillStyle(0x78a982, 1).fillEllipse(w * 0.82, h * 0.83, w * 0.7, h * 0.28);
     g.lineStyle(4, 0x698d68, 0.9);
     for (let i = 0; i < 10; i += 1) {
       const x = w * (0.05 + i * 0.035);
-      g.beginPath(); g.moveTo(x, h * 0.66); g.lineTo(x + (i % 2 ? 6 : -4), h * (0.59 - (i % 3) * 0.012)); g.strokePath();
+      g.beginPath();
+      g.moveTo(x, h * 0.66);
+      g.lineTo(x + (i % 2 ? 6 : -4), h * (0.59 - (i % 3) * 0.012));
+      g.strokePath();
     }
     for (let i = 0; i < 12; i += 1) {
       const x = w * (0.56 + i * 0.038);
@@ -188,7 +189,7 @@ class SproutWorldScene extends Phaser.Scene {
   }
 
   private startRiverArrivalSequence() {
-    if (this.sequenceRunning) return;
+    if (!this.light || !this.riverGlint || this.sequenceRunning) return;
     this.sequenceRunning = true;
     const camera = this.cameras.main;
     this.tweens.killTweensOf(this.light);
