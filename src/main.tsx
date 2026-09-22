@@ -6,6 +6,7 @@ import './character-fit.css';
 import './milestone1.css';
 import './milestone2.css';
 import './platform.css';
+import './parent-center.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
