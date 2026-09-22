@@ -243,8 +243,9 @@ export function GalaxyScene({ snapshot, onEnterWorld }: { snapshot: AppSnapshot;
       type: Phaser.AUTO,
       parent: host.current,
       backgroundColor: '#070b18',
+      transparent: false,
       scale: { mode: Phaser.Scale.RESIZE, width: '100%', height: '100%' },
-      render: { antialias: true, roundPixels: false, transparent: false },
+      render: { antialias: true, roundPixels: false },
       scene: [scene],
     });
     return () => game.destroy(true);
