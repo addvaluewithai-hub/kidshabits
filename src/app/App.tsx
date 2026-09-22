@@ -2,11 +2,12 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { characters, getCharacter } from '../vendor/pixilive/core/registry.ts';
 import { loadCharacterEngine, portrait, SvgCharacter } from '../vendor/pixilive/core/SvgCharacter.ts';
 import { SessionController } from '../vendor/pixilive/core/SessionController.ts';
-import { HABIT_OPTIONS, clearSnapshot, initialSnapshot, loadSnapshot, saveSnapshot, type AppSnapshot, type StorySequence } from './state';
-import { completeHabit as applyHabitCompletion, enterWorld as applyEnterWorld, returnToWorldBrowser, runPrimaryWorldAction, settleStorySequence } from '../domain/storyProgress';
+import { HABIT_OPTIONS, clearSnapshot, getVerifiedHabitIds, initialSnapshot, loadSnapshot, saveSnapshot, type AppSnapshot, type StorySequence } from './state';
+import { approveHabit as applyHabitApproval, enterWorld as applyEnterWorld, rejectHabit as applyHabitRejection, reportHabit as applyHabitReport, returnToWorldBrowser, runPrimaryWorldAction, settleStorySequence } from '../domain/storyProgress';
 import { WorldHost } from '../world/WorldHost';
 import { InWorldCompanion } from '../world/InWorldCompanion';
 import { GalaxyBrowser } from './GalaxyBrowser';
+import { ParentCenter } from './ParentCenter';
 import { getWorldManifest } from '../worlds/registry';
 import type { WorldId } from '../worlds/types';
 
@@ -90,14 +91,14 @@ function CompanionSelection({ snapshot, update }: { snapshot: AppSnapshot; updat
 function WorldScreen({
   snapshot,
   update,
-  completeHabit,
+  reportHabit,
   settleSequence,
   primaryAction,
   backToGalaxy,
 }: {
   snapshot: AppSnapshot;
   update: (patch: Partial<AppSnapshot>) => void;
-  completeHabit: (habitId: string) => void;
+  reportHabit: (habitId: string) => void;
   settleSequence: (sequence: StorySequence) => void;
   primaryAction: () => void;
   backToGalaxy: () => void;
@@ -107,11 +108,13 @@ function WorldScreen({
   const manifest = getWorldManifest(worldId);
   const progress = snapshot.worlds[worldId];
   const selectedHabits = habitDetails(snapshot.habits);
-  const completed = progress.completedHabits.length;
+  const verifiedHabitIds = getVerifiedHabitIds(snapshot).filter(id => snapshot.habits.includes(id));
+  const completed = verifiedHabitIds.length;
   const remaining = Math.max(0, snapshot.requiredHabits - completed);
   const revealed = Boolean(progress.flags[manifest.dayOne.revealFlag]);
   const atSecondLocation = progress.locationId === manifest.dayOne.primaryAction.toLocationId;
   const locationName = manifest.locations[progress.locationId]?.nameAr ?? manifest.nameAr;
+  const anotherWorldAdvancedToday = snapshot.daily.storyAdvanceWorldId && snapshot.daily.storyAdvanceWorldId !== worldId;
 
   const whisper = !snapshot.companionIntroComplete
     ? null
@@ -123,9 +126,11 @@ function WorldScreen({
           ? manifest.dayOne.copy.secondLocationAr
           : revealed
             ? manifest.dayOne.copy.afterRevealAr
-            : remaining > 0
-              ? manifest.dayOne.copy.beforeRevealAr
-              : null;
+            : anotherWorldAdvancedToday
+              ? 'عادات النهارده حرّكت عالم تاني بالفعل. نقدر نستكشف هنا من غير ما نكرر نفس التقدم.'
+              : remaining > 0
+                ? manifest.dayOne.copy.beforeRevealAr
+                : null;
 
   return <main className={`world-screen world-v2 world-theme-${worldId}`}>
     <WorldHost worldId={worldId} progress={progress} onSequenceComplete={settleSequence} />
@@ -144,10 +149,13 @@ function WorldScreen({
     {snapshot.companionIntroComplete && !atSecondLocation && revealed && !progress.pendingSequence && <button className="journey-cta journey-cta-v2" onClick={primaryAction}><span>✦</span><b>{manifest.dayOne.primaryAction.labelAr}</b><small>{manifest.dayOne.primaryAction.hintAr}</small></button>}
 
     <section className={`habit-dock habit-dock-v2 ${!snapshot.companionIntroComplete ? 'locked' : ''}`} aria-label="عادات اليوم">
-      <div className="habit-dock-title"><div><small>النهارده</small><strong>{completed} / {snapshot.requiredHabits}</strong></div><span>{revealed ? '✦ العالم اتحرك' : snapshot.companionIntroComplete ? 'عاداتك' : 'بعد ما صاحبك يشرح'}</span></div>
+      <div className="habit-dock-title"><div><small>النهارده</small><strong>{completed} / {snapshot.requiredHabits}</strong></div><span>{snapshot.daily.storyAdvanceWorldId === worldId ? '✦ العالم اتحرك' : snapshot.companionIntroComplete ? 'عاداتك' : 'بعد ما صاحبك يشرح'}</span></div>
       <div className="habit-dock-list">{selectedHabits.map(habit => {
-        const done = progress.completedHabits.includes(habit.id);
-        return <button key={habit.id} disabled={done || !snapshot.companionIntroComplete} className={done ? 'done' : ''} onClick={() => completeHabit(habit.id)}><span>{habit.icon}</span><b>{habit.label}</b><small>{done ? '✓' : 'تم'}</small></button>;
+        const checkin = snapshot.daily.checkins[habit.id];
+        const verified = checkin?.status === 'verified';
+        const pending = checkin?.status === 'pending_parent';
+        const needsParent = snapshot.habitVerification[habit.id] === 'parent';
+        return <button key={habit.id} disabled={verified || pending || !snapshot.companionIntroComplete} className={verified ? 'done' : pending ? 'pending' : ''} onClick={() => reportHabit(habit.id)}><span>{habit.icon}</span><b>{habit.label}</b><small>{verified ? '✓' : pending ? 'مستني موافقة' : needsParent ? 'بلّغت' : 'تم'}</small></button>;
       })}</div>
     </section>
 
@@ -159,10 +167,14 @@ export function App() {
   const [snapshot, setSnapshot] = useState(loadSnapshot);
   const update = (patch: Partial<AppSnapshot>) => setSnapshot(current => ({ ...current, ...patch }));
   const enterWorld = (worldId: WorldId) => setSnapshot(current => applyEnterWorld(current, worldId));
-  const completeHabit = (habitId: string) => setSnapshot(current => applyHabitCompletion(current, habitId));
+  const reportHabit = (habitId: string) => setSnapshot(current => applyHabitReport(current, habitId));
+  const approveHabit = (habitId: string) => setSnapshot(current => applyHabitApproval(current, habitId));
+  const rejectHabit = (habitId: string) => setSnapshot(current => applyHabitRejection(current, habitId));
   const settleSequence = (sequence: StorySequence) => setSnapshot(current => settleStorySequence(current, sequence));
   const primaryAction = () => setSnapshot(current => runPrimaryWorldAction(current));
   const backToGalaxy = () => setSnapshot(current => returnToWorldBrowser(current));
+  const openParentCenter = () => setSnapshot(current => ({ ...current, phase: 'parent_center' }));
+  const closeParentCenter = () => setSnapshot(current => ({ ...current, phase: 'world_browser' }));
   useEffect(() => saveSnapshot(snapshot), [snapshot]);
 
   if (snapshot.phase === 'parent_welcome') return <ParentWelcome snapshot={snapshot} update={update} />;
@@ -170,8 +182,9 @@ export function App() {
   if (snapshot.phase === 'habit_setup') return <HabitSetup snapshot={snapshot} update={update} />;
   if (snapshot.phase === 'child_handoff') return <ChildHandoff snapshot={snapshot} update={update} />;
   if (snapshot.phase === 'companion_selection') return <CompanionSelection snapshot={snapshot} update={update} />;
-  if (snapshot.phase === 'world_browser' || !snapshot.activeWorldId) return <GalaxyBrowser snapshot={snapshot} enterWorld={enterWorld} />;
-  return <WorldScreen snapshot={snapshot} update={update} completeHabit={completeHabit} settleSequence={settleSequence} primaryAction={primaryAction} backToGalaxy={backToGalaxy} />;
+  if (snapshot.phase === 'parent_center') return <ParentCenter snapshot={snapshot} update={update} approveHabit={approveHabit} rejectHabit={rejectHabit} close={closeParentCenter} />;
+  if (snapshot.phase === 'world_browser' || !snapshot.activeWorldId) return <GalaxyBrowser snapshot={snapshot} enterWorld={enterWorld} openParentCenter={openParentCenter} />;
+  return <WorldScreen snapshot={snapshot} update={update} reportHabit={reportHabit} settleSequence={settleSequence} primaryAction={primaryAction} backToGalaxy={backToGalaxy} />;
 }
 
 export { initialSnapshot };
