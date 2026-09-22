@@ -1,0 +1,47 @@
+/*
+ * Keep the PixiLive master viewBox intact. The character engine uses that
+ * coordinate system for gestures and flight, so product framing should happen
+ * with CSS sizing rather than by rewriting the SVG viewBox.
+ */
+.character-window .character-host {
+  inset: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.character-window .character-host > svg {
+  display: block;
+  width: auto !important;
+  height: 200px !important;
+  max-width: 100%;
+  max-height: 200px;
+  overflow: visible;
+}
+
+.compact .character-window {
+  min-height: 215px;
+  overflow: visible;
+}
+
+.compact .character-window .character-host {
+  inset: 0;
+  padding: 0;
+}
+
+/* World companions use their own stage, but keep the same 200px silhouette
+ * contract so ears, feet, tails and wings never get cropped by product UI. */
+.world-character-render {
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+.world-character-render > svg {
+  display: block;
+  width: auto !important;
+  height: 200px !important;
+  max-width: 100%;
+  max-height: 200px;
+  overflow: visible;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "kidshabits",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "sync:pixilive": "node scripts/sync-pixilive-runtime.mjs",
+    "dev": "npm run sync:pixilive && vite",
+    "build": "npm run sync:pixilive && tsc --noEmit && vite build",
+    "preview": "npm run build && vite preview",
+    "check": "npm run build"
+  },
+  "dependencies": {
+    "phaser": "4.2.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20260906.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "6.1.1",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "wrangler": "4.129.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}
