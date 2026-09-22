@@ -1,6 +1,7 @@
 /*
- * Character stages are real viewports. Keep the complete PixiLive silhouette
- * inside them with breathing room; do not use the old oversized negative inset.
+ * Character framing is controlled by the SVG viewBox in CompanionStage.
+ * Keep the renderer itself at 100% so the silhouette is centered and uses the
+ * available viewport instead of looking like it has fallen to the bottom.
  */
 .character-window .character-host {
   inset: 0;
@@ -11,25 +12,20 @@
 
 .character-window .character-host > svg {
   display: block;
-  width: 78%;
-  height: 78%;
-  max-width: 78%;
-  max-height: 78%;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   overflow: visible;
-  preserveAspectRatio: xMidYMid meet;
 }
 
-/* The compact selection preview needs extra breathing room so ears, feet,
- * tails and flyer wings are visible at a glance. */
-.compact .character-window .character-host > svg {
-  width: 68%;
-  height: 68%;
-  max-width: 68%;
-  max-height: 68%;
+.compact .character-window .character-host {
+  inset: 0;
+  padding: 0;
 }
 
-/* In-world companions intentionally have no card crop and can use the full
- * overlay box; their scene placement supplies the breathing room. */
+/* In-world companions intentionally have no card crop. Their viewBox still
+ * guarantees a complete initial pose; flight can then move inside that stage. */
 .world-companion .character-host {
   inset: 0;
   padding: 0;
