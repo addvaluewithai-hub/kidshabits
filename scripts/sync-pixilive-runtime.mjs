@@ -1,17 +1,23 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
 
 const COMMIT = '92a814dc82931f0e6d6d0a532f721efe52fd8180';
 const REPO = 'https://raw.githubusercontent.com/addvaluewithai-hub/pixilive';
 const markerPath = '.pixilive-runtime-source';
 
 const files = [
+  // Browser assets used directly at runtime. Keep these in sync with the
+  // pinned PixiLive commit; missing AudioWorklet assets otherwise fall
+  // through to the SPA HTML on Cloudflare Pages and fail with a MIME error.
+  ['public/audio-capture.worklet.js', 'public/audio-capture.worklet.js'],
   ['public/character-engine/geometry.js', 'public/character-engine/geometry.js'],
   ['public/character-engine/engine.js', 'public/character-engine/engine.js'],
   ['public/character-engine/flight.js', 'public/character-engine/flight.js'],
   ['public/character-engine/motion.js', 'public/character-engine/motion.js'],
   ['public/character-engine/master.svg', 'public/character-engine/master.svg'],
+
+  // Character / Live runtime source.
   ['src/engine-app/audio/Microphone.ts', 'src/vendor/pixilive/audio/Microphone.ts'],
   ['src/engine-app/audio/PlaybackClock.ts', 'src/vendor/pixilive/audio/PlaybackClock.ts'],
   ['src/engine-app/audio/VisemeAnalyzer.ts', 'src/vendor/pixilive/audio/VisemeAnalyzer.ts'],
