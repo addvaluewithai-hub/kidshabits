@@ -9,9 +9,14 @@ export interface WorldPresentationState {
 }
 
 class SproutWorldScene extends Phaser.Scene {
-  private backdrop?: Phaser.GameObjects.Graphics;
+  private sky?: Phaser.GameObjects.Graphics;
+  private far?: Phaser.GameObjects.Graphics;
+  private mid?: Phaser.GameObjects.Graphics;
+  private ground?: Phaser.GameObjects.Graphics;
+  private detail?: Phaser.GameObjects.Graphics;
   private light?: Phaser.GameObjects.Arc;
   private riverGlint?: Phaser.GameObjects.Arc;
+  private ambient: Phaser.GameObjects.Arc[] = [];
   private worldState: WorldPresentationState;
   private sequenceRunning = false;
   private onSequenceComplete: (sequence: StorySequence) => void;
@@ -23,12 +28,23 @@ class SproutWorldScene extends Phaser.Scene {
   }
 
   create() {
-    this.backdrop = this.add.graphics();
-    this.light = this.add.circle(0, 0, 10, 0xffe9a8, 0.9).setDepth(4).setBlendMode(Phaser.BlendModes.ADD);
-    this.riverGlint = this.add.circle(0, 0, 7, 0xf6f2d0, 0.85).setDepth(4).setBlendMode(Phaser.BlendModes.ADD);
+    this.sky = this.add.graphics().setDepth(-50).setScrollFactor(0.02);
+    this.far = this.add.graphics().setDepth(-40).setScrollFactor(0.18);
+    this.mid = this.add.graphics().setDepth(-25).setScrollFactor(0.48);
+    this.ground = this.add.graphics().setDepth(-10).setScrollFactor(0.82);
+    this.detail = this.add.graphics().setDepth(1).setScrollFactor(1);
+    this.light = this.add.circle(0, 0, 10, 0xffe8a2, 0.92).setDepth(8).setBlendMode(Phaser.BlendModes.ADD);
+    this.riverGlint = this.add.circle(0, 0, 7, 0xf9f4ca, 0.9).setDepth(8).setBlendMode(Phaser.BlendModes.ADD);
+
+    this.createAmbientLife();
     this.scale.on('resize', this.redrawFromState, this);
     this.redrawFromState();
-    this.cameras.main.fadeIn(650, 239, 246, 235);
+    this.cameras.main.fadeIn(650, 237, 244, 237);
+
+    if (this.far && this.mid) {
+      this.tweens.add({ targets: this.far, x: 7, duration: 9000, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+      this.tweens.add({ targets: this.mid, x: -4, duration: 7200, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+    }
 
     if (this.worldState.pendingSequence === 'first-light') this.startFirstLightSequence();
     else if (this.worldState.pendingSequence === 'river-arrival') this.startRiverArrivalSequence();
@@ -54,95 +70,162 @@ class SproutWorldScene extends Phaser.Scene {
     }
   }
 
+  private layersReady() {
+    return Boolean(this.sky && this.far && this.mid && this.ground && this.detail && this.light && this.riverGlint);
+  }
+
+  private clearLayers() {
+    this.sky?.clear();
+    this.far?.clear();
+    this.mid?.clear();
+    this.ground?.clear();
+    this.detail?.clear();
+  }
+
   private redrawFromState = () => {
     if (this.worldState.currentLocation === 'river-clearing') this.drawRiverClearing();
     else this.drawLandingMeadow(this.worldState.firstLightRevealed && !this.sequenceRunning);
   };
 
-  private drawLandingMeadow(revealed: boolean) {
-    if (!this.backdrop || !this.light || !this.riverGlint) return;
+  private drawSky(base: number, haze: number, glow: number) {
+    if (!this.sky) return;
     const w = this.scale.width;
     const h = this.scale.height;
-    const g = this.backdrop;
-    g.clear();
+    const g = this.sky;
+    g.fillStyle(base, 1).fillRect(-80, -80, w + 160, h + 160);
+    g.fillStyle(haze, 0.45).fillEllipse(w * 0.16, h * 0.16, w * 1.0, h * 0.42);
+    g.fillStyle(glow, 0.28).fillCircle(w * 0.82, h * 0.13, Math.max(80, w * 0.25));
+    g.fillStyle(0xffffff, 0.28).fillEllipse(w * 0.19, h * 0.19, w * 0.34, 34);
+    g.fillEllipse(w * 0.79, h * 0.24, w * 0.26, 24);
+  }
 
-    g.fillStyle(revealed ? 0xf0f6ed : 0xe7efe8, 1).fillRect(0, 0, w, h);
-    g.fillStyle(revealed ? 0xdcebdd : 0xd3dfd8, 1).fillEllipse(w * 0.15, h * 0.34, w * 0.9, h * 0.32);
-    g.fillStyle(revealed ? 0xcfe6d3 : 0xc4d5ca, 1).fillEllipse(w * 0.85, h * 0.38, w * 1.15, h * 0.38);
-    g.fillStyle(revealed ? 0xa6cdb0 : 0x99baa2, 1).fillRect(0, h * 0.58, w, h * 0.42);
-    g.fillStyle(revealed ? 0x86b999 : 0x7da78b, 1).fillEllipse(w * 0.5, h * 0.72, w * 1.35, h * 0.42);
+  private drawLandingMeadow(revealed: boolean) {
+    if (!this.layersReady()) return;
+    this.clearLayers();
+    const w = this.scale.width;
+    const h = this.scale.height;
+    const far = this.far!;
+    const mid = this.mid!;
+    const ground = this.ground!;
+    const detail = this.detail!;
 
-    g.fillStyle(0x759f98, 1).fillRoundedRect(w * 0.02, h * 0.63, w * 0.96, Math.max(18, h * 0.075), 30);
-    g.fillStyle(revealed ? 0xb8ddd0 : 0xa7c8be, 1).fillRoundedRect(w * 0.02, h * 0.645, w * 0.96, Math.max(7, h * 0.028), 20);
+    this.drawSky(revealed ? 0xf2f7ee : 0xeaf2ec, 0xdfece1, revealed ? 0xffefbd : 0xf6f0d5);
 
-    const treeX = w * 0.23;
-    const treeY = h * 0.6;
-    g.fillStyle(0x7d6f54, 1).fillRoundedRect(treeX - 12, treeY - 105, 24, 120, 10);
-    g.fillStyle(revealed ? 0x74a47c : 0x6f9275, 1).fillCircle(treeX - 26, treeY - 114, 48);
-    g.fillCircle(treeX + 24, treeY - 128, 54);
-    g.fillStyle(revealed ? 0x8ab38a : 0x809b82, 1).fillCircle(treeX + 8, treeY - 88, 45);
+    far.fillStyle(revealed ? 0xd6e7d7 : 0xd7e2d9, 0.95).fillEllipse(w * 0.08, h * 0.38, w * 1.05, h * 0.36);
+    far.fillStyle(revealed ? 0xc9dfcc : 0xcbd8cd, 0.95).fillEllipse(w * 0.86, h * 0.39, w * 1.22, h * 0.4);
+    far.fillStyle(0xbfd7c6, 0.5).fillEllipse(w * 0.5, h * 0.47, w * 1.35, h * 0.34);
+
+    mid.fillStyle(revealed ? 0xa8cbb0 : 0xa5bfa9, 1).fillEllipse(w * 0.15, h * 0.7, w * 0.95, h * 0.36);
+    mid.fillStyle(revealed ? 0x94bea0 : 0x91ab99, 1).fillEllipse(w * 0.83, h * 0.71, w * 1.16, h * 0.39);
+    mid.fillStyle(0x7da98b, 0.42).fillEllipse(w * 0.52, h * 0.78, w * 1.45, h * 0.29);
+
+    ground.fillStyle(revealed ? 0x7fab8d : 0x789988, 1).fillEllipse(w * 0.5, h * 0.98, w * 1.5, h * 0.42);
+    ground.fillStyle(revealed ? 0x8fbea0 : 0x86a993, 0.92).fillEllipse(w * 0.05, h * 0.9, w * 0.72, h * 0.24);
+    ground.fillStyle(revealed ? 0x76a383 : 0x718f7d, 0.96).fillEllipse(w * 0.97, h * 0.93, w * 0.82, h * 0.27);
+
+    const treeX = w * 0.22;
+    const treeY = h * 0.71;
+    detail.fillStyle(0x806f56, 1).fillRoundedRect(treeX - 12, treeY - 126, 25, 145, 11);
+    detail.fillStyle(revealed ? 0x719d77 : 0x718d78, 1).fillCircle(treeX - 25, treeY - 137, 48);
+    detail.fillStyle(revealed ? 0x7eaa80 : 0x77947c, 1).fillCircle(treeX + 25, treeY - 151, 56);
+    detail.fillStyle(revealed ? 0x8ab68a : 0x809d82, 1).fillCircle(treeX + 7, treeY - 111, 47);
+    detail.fillStyle(0xc9d9b0, revealed ? 0.32 : 0.18).fillCircle(treeX + 18, treeY - 163, 26);
+
+    for (let i = 0; i < 18; i += 1) {
+      const x = (i / 17) * w;
+      const y = h * (0.83 + (i % 4) * 0.018);
+      const tint = i % 3 === 0 ? 0xf7e5a8 : i % 3 === 1 ? 0xe8d8ed : 0xdceecf;
+      detail.fillStyle(tint, revealed ? 0.86 : 0.42).fillCircle(x, y, 2.5 + (i % 2));
+    }
 
     if (revealed) {
-      g.lineStyle(13, 0xd7d5a7, 0.6);
-      g.beginPath();
-      g.moveTo(w * 0.54, h * 0.86);
-      g.lineTo(w * 0.62, h * 0.72);
-      g.lineTo(w * 0.73, h * 0.57);
-      g.lineTo(w * 0.78, h * 0.46);
-      g.strokePath();
-      for (let i = 0; i < 8; i += 1) {
-        const x = w * (0.48 + i * 0.045);
-        const y = h * (0.8 - i * 0.035);
-        g.fillStyle(i % 2 ? 0xf5db9f : 0xe6d5f1, 0.92).fillCircle(x, y, 4 + (i % 2));
-      }
+      detail.lineStyle(11, 0xe7dfb6, 0.38);
+      detail.beginPath();
+      detail.moveTo(w * 0.51, h * 0.92);
+      detail.lineTo(w * 0.61, h * 0.79);
+      detail.lineTo(w * 0.72, h * 0.62);
+      detail.lineTo(w * 0.79, h * 0.45);
+      detail.strokePath();
+      detail.lineStyle(3, 0xfff3c9, 0.55);
+      detail.beginPath();
+      detail.moveTo(w * 0.53, h * 0.91);
+      detail.lineTo(w * 0.63, h * 0.78);
+      detail.lineTo(w * 0.75, h * 0.58);
+      detail.strokePath();
     }
 
-    for (let i = 0; i < 14; i += 1) {
-      const x = (i / 13) * w;
-      const y = h * 0.82 + Math.sin(i * 1.7) * 10;
-      g.fillStyle(i % 3 === 0 ? 0xffefb2 : 0xe7d6ee, revealed ? 0.95 : 0.55).fillCircle(x, y, 3 + (i % 2));
-    }
-
-    this.light.setPosition(w * 0.78, h * 0.43).setVisible(revealed || this.sequenceRunning);
-    this.riverGlint.setVisible(false);
-    if (!this.sequenceRunning) this.light.setAlpha(revealed ? 0.72 : 0).setScale(1);
+    this.light!.setPosition(w * 0.79, h * 0.44).setVisible(revealed || this.sequenceRunning);
+    this.riverGlint!.setVisible(false);
+    if (!this.sequenceRunning) this.light!.setAlpha(revealed ? 0.74 : 0).setScale(1);
   }
 
   private drawRiverClearing() {
-    if (!this.backdrop || !this.light || !this.riverGlint) return;
+    if (!this.layersReady()) return;
+    this.clearLayers();
     const w = this.scale.width;
     const h = this.scale.height;
-    const g = this.backdrop;
-    g.clear();
+    const far = this.far!;
+    const mid = this.mid!;
+    const ground = this.ground!;
+    const detail = this.detail!;
 
-    g.fillStyle(0xedf5ef, 1).fillRect(0, 0, w, h);
-    g.fillStyle(0xd8e8df, 1).fillEllipse(w * 0.2, h * 0.28, w * 0.95, h * 0.28);
-    g.fillStyle(0xc8dfd0, 1).fillEllipse(w * 0.82, h * 0.34, w * 1.1, h * 0.34);
-    g.fillStyle(0x8eb99c, 1).fillRect(0, h * 0.56, w, h * 0.44);
+    this.drawSky(0xeff6ef, 0xdcebe1, 0xeef4d3);
 
-    g.fillStyle(0x78b7b7, 1).fillRoundedRect(-w * 0.08, h * 0.62, w * 1.18, h * 0.23, 42);
-    g.fillStyle(0x9ed0c8, 0.9).fillRoundedRect(-w * 0.05, h * 0.65, w * 1.1, h * 0.055, 26);
-    g.fillStyle(0xd9eee3, 0.65).fillRoundedRect(w * 0.12, h * 0.75, w * 0.42, 7, 7);
+    far.fillStyle(0xd4e7d9, 0.96).fillEllipse(w * 0.12, h * 0.34, w * 1.05, h * 0.36);
+    far.fillStyle(0xc4ddce, 0.94).fillEllipse(w * 0.88, h * 0.37, w * 1.18, h * 0.39);
+    far.fillStyle(0xb7d5c3, 0.42).fillEllipse(w * 0.53, h * 0.5, w * 1.5, h * 0.3);
 
-    g.fillStyle(0x6e9b79, 1).fillEllipse(w * 0.18, h * 0.64, w * 0.56, h * 0.2);
-    g.fillStyle(0x78a982, 1).fillEllipse(w * 0.82, h * 0.83, w * 0.7, h * 0.28);
-    g.lineStyle(4, 0x698d68, 0.9);
-    for (let i = 0; i < 10; i += 1) {
-      const x = w * (0.05 + i * 0.035);
-      g.beginPath();
-      g.moveTo(x, h * 0.66);
-      g.lineTo(x + (i % 2 ? 6 : -4), h * (0.59 - (i % 3) * 0.012));
-      g.strokePath();
+    mid.fillStyle(0x86b493, 1).fillEllipse(w * 0.1, h * 0.68, w * 0.78, h * 0.31);
+    mid.fillStyle(0x79a989, 1).fillEllipse(w * 0.92, h * 0.72, w * 0.92, h * 0.32);
+
+    ground.fillStyle(0x6ea2a2, 1).fillRoundedRect(-w * 0.1, h * 0.63, w * 1.2, h * 0.26, 58);
+    ground.fillStyle(0x87bebe, 0.92).fillRoundedRect(-w * 0.08, h * 0.665, w * 1.16, h * 0.07, 28);
+    ground.fillStyle(0xc5e2db, 0.56).fillRoundedRect(w * 0.04, h * 0.71, w * 0.45, 7, 8);
+    ground.fillStyle(0xd9eee5, 0.46).fillRoundedRect(w * 0.58, h * 0.79, w * 0.31, 5, 7);
+    ground.fillStyle(0x73a07e, 1).fillEllipse(w * 0.08, h * 0.85, w * 0.75, h * 0.28);
+    ground.fillStyle(0x7cab86, 1).fillEllipse(w * 0.94, h * 0.92, w * 0.86, h * 0.3);
+
+    detail.lineStyle(3, 0x668f69, 0.82);
+    for (let i = 0; i < 11; i += 1) {
+      const x = w * (0.03 + i * 0.035);
+      detail.beginPath();
+      detail.moveTo(x, h * 0.7);
+      detail.lineTo(x + (i % 2 ? 5 : -4), h * (0.59 - (i % 3) * 0.013));
+      detail.strokePath();
     }
-    for (let i = 0; i < 12; i += 1) {
-      const x = w * (0.56 + i * 0.038);
-      const y = h * 0.9 + Math.sin(i) * 8;
-      g.fillStyle(i % 3 === 0 ? 0xf5dfaa : 0xe4d9ef, 0.95).fillCircle(x, y, 3 + (i % 2));
+    for (let i = 0; i < 14; i += 1) {
+      const x = w * (0.55 + i * 0.035);
+      const y = h * 0.91 + Math.sin(i * 1.2) * 8;
+      detail.fillStyle(i % 3 === 0 ? 0xf5dfaa : i % 3 === 1 ? 0xe8dbef : 0xdbe9c8, 0.88).fillCircle(x, y, 2.5 + (i % 2));
     }
 
-    this.light.setVisible(false);
-    this.riverGlint.setPosition(w * 0.69, h * 0.62).setVisible(true);
-    if (!this.sequenceRunning) this.riverGlint.setAlpha(0.72).setScale(1);
+    detail.fillStyle(0xe7e4ce, 0.72).fillEllipse(w * 0.69, h * 0.64, 34, 16);
+    detail.fillStyle(0xffffff, 0.28).fillEllipse(w * 0.69, h * 0.635, 20, 6);
+
+    this.light!.setVisible(false);
+    this.riverGlint!.setPosition(w * 0.69, h * 0.615).setVisible(true);
+    if (!this.sequenceRunning) this.riverGlint!.setAlpha(0.72).setScale(1);
+  }
+
+  private createAmbientLife() {
+    const w = this.scale.width;
+    const h = this.scale.height;
+    const palette = [0xfff0b8, 0xe9ddf2, 0xd9efdf];
+    for (let i = 0; i < 9; i += 1) {
+      const mote = this.add.circle(w * (0.08 + ((i * 0.113) % 0.84)), h * (0.22 + ((i * 0.137) % 0.58)), 1.5 + (i % 3) * 0.55, palette[i % palette.length], 0.18).setDepth(5).setScrollFactor(0.72);
+      this.ambient.push(mote);
+      this.tweens.add({
+        targets: mote,
+        y: mote.y - (14 + (i % 4) * 4),
+        x: mote.x + (i % 2 ? 5 : -4),
+        alpha: { from: 0.12, to: 0.55 },
+        duration: 2600 + i * 330,
+        delay: i * 180,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.InOut',
+      });
+    }
   }
 
   private startAmbientPulse() {
@@ -150,11 +233,11 @@ class SproutWorldScene extends Phaser.Scene {
     this.tweens.killTweensOf(this.light);
     this.tweens.killTweensOf(this.riverGlint);
     if (this.worldState.currentLocation === 'river-clearing') {
-      this.riverGlint.setVisible(true).setAlpha(0.76).setScale(1);
-      this.tweens.add({ targets: this.riverGlint, alpha: 0.34, scale: 1.9, duration: 1700, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+      this.riverGlint.setVisible(true).setAlpha(0.75).setScale(1);
+      this.tweens.add({ targets: this.riverGlint, alpha: 0.3, scale: 2.05, duration: 1900, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
     } else if (this.worldState.firstLightRevealed) {
       this.light.setVisible(true).setAlpha(0.78).setScale(1);
-      this.tweens.add({ targets: this.light, alpha: 0.42, scale: 2.15, duration: 1550, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+      this.tweens.add({ targets: this.light, alpha: 0.36, scale: 2.2, duration: 1750, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
     }
   }
 
@@ -163,24 +246,24 @@ class SproutWorldScene extends Phaser.Scene {
     this.sequenceRunning = true;
     this.tweens.killTweensOf(this.light);
     this.drawLandingMeadow(false);
-    this.light.setVisible(true).setAlpha(0).setScale(0.25);
+    this.light.setVisible(true).setAlpha(0).setScale(0.22);
 
     const camera = this.cameras.main;
-    camera.zoomTo(1.12, 650, 'Sine.easeOut');
-    camera.pan(this.light.x, this.light.y, 850, 'Sine.easeInOut');
-    this.tweens.add({ targets: this.light, alpha: 1, scale: 2.8, duration: 950, ease: 'Sine.easeOut' });
+    camera.zoomTo(1.1, 700, 'Sine.easeOut');
+    camera.pan(this.light.x, this.light.y, 900, 'Sine.easeInOut');
+    this.tweens.add({ targets: this.light, alpha: 1, scale: 2.7, duration: 1000, ease: 'Sine.easeOut' });
     void this.playRevealChime();
 
-    this.time.delayedCall(900, () => {
+    this.time.delayedCall(920, () => {
       this.drawLandingMeadow(true);
       this.spawnSparkles(this.light!.x, this.light!.y);
-      this.tweens.add({ targets: this.light, alpha: 0.55, scale: 1.35, duration: 900, ease: 'Sine.easeInOut' });
+      this.tweens.add({ targets: this.light, alpha: 0.56, scale: 1.3, duration: 900, ease: 'Sine.easeInOut' });
     });
-    this.time.delayedCall(1850, () => {
-      camera.pan(this.scale.width / 2, this.scale.height / 2, 750, 'Sine.easeInOut');
-      camera.zoomTo(1, 750, 'Sine.easeInOut');
+    this.time.delayedCall(1900, () => {
+      camera.pan(this.scale.width / 2, this.scale.height / 2, 800, 'Sine.easeInOut');
+      camera.zoomTo(1, 800, 'Sine.easeInOut');
     });
-    this.time.delayedCall(2700, () => {
+    this.time.delayedCall(2800, () => {
       this.sequenceRunning = false;
       this.drawLandingMeadow(true);
       this.startAmbientPulse();
@@ -194,26 +277,26 @@ class SproutWorldScene extends Phaser.Scene {
     const camera = this.cameras.main;
     this.tweens.killTweensOf(this.light);
     this.tweens.killTweensOf(this.riverGlint);
-    camera.fadeOut(420, 222, 235, 226);
+    camera.fadeOut(430, 229, 239, 230);
 
-    this.time.delayedCall(440, () => {
+    this.time.delayedCall(450, () => {
       this.drawRiverClearing();
-      camera.setZoom(1.08);
-      camera.fadeIn(620, 234, 244, 237);
-      camera.pan(this.scale.width * 0.69, this.scale.height * 0.62, 850, 'Sine.easeInOut');
-      void this.playRevealChime(0.055);
+      camera.setZoom(1.07);
+      camera.fadeIn(650, 237, 245, 239);
+      camera.pan(this.scale.width * 0.69, this.scale.height * 0.61, 900, 'Sine.easeInOut');
+      void this.playRevealChime(0.05);
     });
-    this.time.delayedCall(1150, () => {
+    this.time.delayedCall(1200, () => {
       if (!this.riverGlint) return;
       this.spawnSparkles(this.riverGlint.x, this.riverGlint.y);
-      this.riverGlint.setAlpha(0.9).setScale(1.8);
-      this.tweens.add({ targets: this.riverGlint, scale: 1, alpha: 0.65, duration: 900, ease: 'Sine.easeOut' });
+      this.riverGlint.setAlpha(0.9).setScale(1.75);
+      this.tweens.add({ targets: this.riverGlint, scale: 1, alpha: 0.64, duration: 920, ease: 'Sine.easeOut' });
     });
-    this.time.delayedCall(2050, () => {
-      camera.pan(this.scale.width / 2, this.scale.height / 2, 650, 'Sine.easeInOut');
-      camera.zoomTo(1, 650, 'Sine.easeInOut');
+    this.time.delayedCall(2100, () => {
+      camera.pan(this.scale.width / 2, this.scale.height / 2, 700, 'Sine.easeInOut');
+      camera.zoomTo(1, 700, 'Sine.easeInOut');
     });
-    this.time.delayedCall(2850, () => {
+    this.time.delayedCall(2950, () => {
       this.sequenceRunning = false;
       this.drawRiverClearing();
       this.startAmbientPulse();
@@ -224,7 +307,7 @@ class SproutWorldScene extends Phaser.Scene {
   private spawnSparkles(x: number, y: number) {
     for (let i = 0; i < 10; i += 1) {
       const angle = (Math.PI * 2 * i) / 10;
-      const sparkle = this.add.circle(x, y, 2 + (i % 3), i % 2 ? 0xfff2b8 : 0xf5dff7, 0.95).setDepth(5);
+      const sparkle = this.add.circle(x, y, 2 + (i % 3), i % 2 ? 0xfff2b8 : 0xf5dff7, 0.95).setDepth(9);
       this.tweens.add({
         targets: sparkle,
         x: x + Math.cos(angle) * (36 + i * 4),
@@ -238,26 +321,26 @@ class SproutWorldScene extends Phaser.Scene {
     }
   }
 
-  private async playRevealChime(level = 0.08) {
+  private async playRevealChime(level = 0.075) {
     try {
       const context = new AudioContext();
       await context.resume();
       const gain = context.createGain();
       gain.gain.setValueAtTime(0.0001, context.currentTime);
       gain.gain.exponentialRampToValueAtTime(level, context.currentTime + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.65);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.7);
       gain.connect(context.destination);
-      for (const [offset, frequency] of [[0, 523.25], [0.13, 659.25], [0.27, 783.99]] as const) {
+      for (const [offset, frequency] of [[0, 523.25], [0.14, 659.25], [0.29, 783.99]] as const) {
         const oscillator = context.createOscillator();
         oscillator.type = 'sine';
         oscillator.frequency.value = frequency;
         oscillator.connect(gain);
         oscillator.start(context.currentTime + offset);
-        oscillator.stop(context.currentTime + offset + 0.35);
+        oscillator.stop(context.currentTime + offset + 0.38);
       }
-      window.setTimeout(() => void context.close(), 1200);
+      window.setTimeout(() => void context.close(), 1300);
     } catch {
-      // Visual sequence remains authoritative if autoplay policy blocks the cue.
+      // The visual reveal remains authoritative if the browser blocks audio.
     }
   }
 
