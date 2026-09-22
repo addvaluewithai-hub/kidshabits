@@ -4,9 +4,10 @@ export type ExperiencePhase =
   | 'habit_setup'
   | 'child_handoff'
   | 'companion_selection'
-  | 'companion_first_meeting'
-  | 'first_planet_introduction'
   | 'world';
+
+export type WorldLocation = 'landing-meadow' | 'river-clearing';
+export type StorySequence = 'first-light' | 'river-arrival';
 
 export interface HabitChoice {
   id: string;
@@ -36,10 +37,13 @@ export interface AppSnapshot {
   quietHours: { start: string; end: string };
   companionId: string;
   safeInterests: string[];
+  companionIntroComplete: boolean;
   planetId: 'sprout';
   storyDay: number;
+  currentLocation: WorldLocation;
   firstLightRevealed: boolean;
-  pendingSequence: 'first-light' | null;
+  riverClearingReached: boolean;
+  pendingSequence: StorySequence | null;
   storyEventsSeen: string[];
 }
 
@@ -58,9 +62,12 @@ export const initialSnapshot: AppSnapshot = {
   quietHours: { start: '20:00', end: '07:00' },
   companionId: 'lumi',
   safeInterests: [],
+  companionIntroComplete: false,
   planetId: 'sprout',
   storyDay: 1,
+  currentLocation: 'landing-meadow',
   firstLightRevealed: false,
+  riverClearingReached: false,
   pendingSequence: null,
   storyEventsSeen: [],
 };
@@ -69,16 +76,34 @@ export function loadSnapshot(): AppSnapshot {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return initialSnapshot;
-    const parsed = JSON.parse(raw) as Partial<AppSnapshot>;
+    const parsed = JSON.parse(raw) as Partial<AppSnapshot> & { phase?: string; currentLocation?: string; pendingSequence?: string };
     if (parsed.version !== 1) return initialSnapshot;
+
+    // v1 migration: the early prototype had separate companion / planet screens.
+    // Those responsibilities now live inside the world, so old previews resume there.
+    const phase: ExperiencePhase = parsed.phase === 'companion_first_meeting' || parsed.phase === 'first_planet_introduction'
+      ? 'world'
+      : ['parent_welcome', 'child_profile_setup', 'habit_setup', 'child_handoff', 'companion_selection', 'world'].includes(parsed.phase ?? '')
+        ? parsed.phase as ExperiencePhase
+        : initialSnapshot.phase;
+    const currentLocation: WorldLocation = parsed.currentLocation === 'river-clearing' ? 'river-clearing' : 'landing-meadow';
+    const pendingSequence: StorySequence | null = parsed.pendingSequence === 'first-light' || parsed.pendingSequence === 'river-arrival'
+      ? parsed.pendingSequence
+      : null;
+
     return {
       ...initialSnapshot,
       ...parsed,
+      phase,
+      currentLocation,
+      pendingSequence,
       quietHours: { ...initialSnapshot.quietHours, ...parsed.quietHours },
       completedHabits: Array.isArray(parsed.completedHabits) ? parsed.completedHabits : [],
       storyEventsSeen: Array.isArray(parsed.storyEventsSeen) ? parsed.storyEventsSeen : [],
+      safeInterests: Array.isArray(parsed.safeInterests) ? parsed.safeInterests : [],
+      companionIntroComplete: Boolean(parsed.companionIntroComplete),
       firstLightRevealed: Boolean(parsed.firstLightRevealed),
-      pendingSequence: parsed.pendingSequence === 'first-light' ? 'first-light' : null,
+      riverClearingReached: Boolean(parsed.riverClearingReached || currentLocation === 'river-clearing'),
     };
   } catch {
     return initialSnapshot;
