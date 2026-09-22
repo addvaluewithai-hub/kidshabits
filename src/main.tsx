@@ -7,6 +7,7 @@ import './milestone1.css';
 import './milestone2.css';
 import './platform.css';
 import './parent-center.css';
+import './visual-foundation.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
