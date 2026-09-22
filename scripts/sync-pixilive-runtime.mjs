@@ -2,7 +2,8 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
-const COMMIT = '92a814dc82931f0e6d6d0a532f721efe52fd8180';
+// Character engine foundation + Live turn-boundary hardening.
+const COMMIT = 'ec54aa03cc16dab1b8cfd1e7a356083cec735c82';
 const REPO = 'https://raw.githubusercontent.com/addvaluewithai-hub/pixilive';
 const markerPath = '.pixilive-runtime-source';
 
