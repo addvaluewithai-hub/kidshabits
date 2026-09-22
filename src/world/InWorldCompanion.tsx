@@ -3,6 +3,7 @@ import { getCharacter } from '../vendor/pixilive/core/registry.ts';
 import { loadCharacterEngine, SvgCharacter } from '../vendor/pixilive/core/SvgCharacter.ts';
 import { SessionController, initialSessionView } from '../vendor/pixilive/core/SessionController.ts';
 import { HABIT_OPTIONS, type AppSnapshot } from '../app/state';
+import { getWorldManifest } from '../worlds/registry';
 
 type ConversationIntent = 'idle' | 'guide' | 'chat';
 
@@ -20,6 +21,9 @@ export function InWorldCompanion({
   onGuideComplete: () => void;
 }) {
   const character = getCharacter(snapshot.companionId);
+  const worldId = snapshot.activeWorldId ?? 'sprout';
+  const manifest = getWorldManifest(worldId);
+  const progress = snapshot.worlds[worldId];
   const host = useRef<HTMLDivElement>(null);
   const session = useRef<SessionController | null>(null);
   const scriptSent = useRef(false);
@@ -51,7 +55,7 @@ export function InWorldCompanion({
   useEffect(() => {
     scriptSent.current = false;
     guideFinished.current = false;
-  }, [intent, snapshot.companionId]);
+  }, [intent, snapshot.companionId, worldId]);
 
   useEffect(() => {
     if (!engine || !host.current || !session.current) return;
@@ -72,28 +76,23 @@ export function InWorldCompanion({
     const habits = habitLabels(snapshot.habits);
     const habitsText = habits.join('، ') || 'العادات اللي اختارها ولي الأمر';
     const required = Math.max(1, Math.min(snapshot.requiredHabits, habits.length || 1));
-    const completed = habitLabels(snapshot.completedHabits);
-    const locationName = snapshot.currentLocation === 'river-clearing' ? 'فسحة النهر' : 'مرج الوصول';
+    const completed = habitLabels(progress.completedHabits);
+    const locationName = manifest.locations[progress.locationId]?.nameAr ?? manifest.nameAr;
+    const revealIsVisible = Boolean(progress.flags[manifest.dayOne.revealFlag]);
 
     if (intent === 'guide') {
       session.current.send(
-        `أنت ${character.name}، الصاحب اللي ${snapshot.childName || 'الطفل'} اختاره. إنت واقف معاه جوه كوكب البراعم نفسه، ومهمتك في أول دقيقة محددة: تشرح النظام باختصار ثم تنهي الدور. لا تعمل دردشة مفتوحة، لا تسأل سؤال، لا تطلب منه يختار عادة، ولا تخترع أي مهمة أو قصة.
-العادات المحددة من ولي الأمر هي فقط: ${habitsText}. المطلوب كل يوم ${required} من ${Math.max(1, habits.length)}.
-قول بالمصري المناسب لطفل إن لما يكمّل العدد المطلوب في الحقيقة، الوقت في الكوكب يتحرك، المكان يتغير، وجزء جديد من الحكاية يظهر. العادات مش نقاط ولا فلوس، وصداقتكم مش مشروطة بإنجازها.
-ابدأ باسمه، عرّف نفسك بسرعة، اذكر العادات بأسمائها، اشرح قاعدة ${required} من ${Math.max(1, habits.length)}، وقل إنكم دلوقتي في مرج الوصول وإن أول سر هيظهر لما المطلوب يكتمل.
-خليها 5 أو 6 جمل فقط، من غير أي سؤال في الآخر. اختم بمعنى: «يلا نسيب الكلام ونشوف العالم سوا.» استخدم perform أثناء الكلام، ولو بتطير استخدم fly مرة هادية.`,
+        `أنت ${character.name}، الصاحب اللي ${snapshot.childName || 'الطفل'} اختاره. إنت واقف معاه جوه ${manifest.nameAr}، ومهمتك في أول دقيقة محددة: تشرح نظام KidsHabits باختصار ثم تنهي الدور. لا تعمل دردشة مفتوحة، لا تسأل سؤال، لا تطلب منه يختار عادة، ولا تخترع أي مهمة أو قصة.\nالعادات المحددة من ولي الأمر هي فقط: ${habitsText}. المطلوب كل يوم ${required} من ${Math.max(1, habits.length)}.\nقول بالمصري المناسب لطفل إن لما يكمّل العدد المطلوب في الحقيقة، الوقت في العالم يتحرك، المكان يتغير، وجزء جديد من الحكاية يظهر. العادات مش نقاط ولا فلوس، وصداقتكم مش مشروطة بإنجازها.\nابدأ باسمه، عرّف نفسك بسرعة، اذكر العادات بأسمائها، اشرح قاعدة ${required} من ${Math.max(1, habits.length)}، وقل إنكم دلوقتي في ${locationName}.\nخليها 5 أو 6 جمل فقط، من غير أي سؤال في الآخر. اختم بمعنى: «يلا نسيب الكلام ونشوف العالم سوا.» استخدم perform أثناء الكلام، ولو بتطير استخدم fly مرة هادية.`,
         '[شرح بداية الرحلة داخل العالم]'
       );
       return;
     }
 
     session.current.send(
-      `إنت ${character.name}، صاحب ${snapshot.childName || 'الطفل'} جوه كوكب البراعم. إنت موجود بصوتك وشخصيتك داخل العالم، مش شات منفصل.
-الحالة الحقيقية الآن: اليوم ${snapshot.storyDay} من 30، المكان ${locationName}، العادات المحددة ${habitsText}، والمكتمل فعلًا ${completed.length ? completed.join('، ') : 'ولا عادة لسه'}. أول نور ${snapshot.firstLightRevealed ? 'ظهر' : 'لسه ما ظهرش'}، وفسحة النهر ${snapshot.riverClearingReached ? 'اتفتحت ووصلنا لها' : 'لسه ما وصلناش لها'}.
-اتكلم بالمصري الدافئ وبجمل قصيرة. اسمع الطفل ورد طبيعي، لكن لا تدّعي إن عادة اتعملت، لا تفتح مناطق، لا تغيّر progression، ولا تخترع objective أو reward. لو سألك نعمل إيه، اتكلم فقط عن اللي ظاهر فعلًا أو العادات المطلوبة. استخدم perform، ولو بتطير استخدم fly بشكل طبيعي.`,
+      `إنت ${character.name}، صاحب ${snapshot.childName || 'الطفل'} جوه ${manifest.nameAr}. إنت موجود بصوتك وشخصيتك داخل العالم، مش شات منفصل.\nالحالة الحقيقية الآن: اليوم ${progress.day} من ${manifest.totalDays}، المكان ${locationName}، العادات المحددة ${habitsText}، والمكتمل فعلًا ${completed.length ? completed.join('، ') : 'ولا عادة لسه'}. علامة اليوم الأول ${revealIsVisible ? 'ظهرت' : 'لسه ما ظهرتش'}.\nاتكلم بالمصري الدافئ وبجمل قصيرة. اسمع الطفل ورد طبيعي، لكن لا تدّعي إن عادة اتعملت، لا تفتح مناطق، لا تغيّر progression، ولا تخترع objective أو reward. لو سألك نعمل إيه، اتكلم فقط عن اللي ظاهر فعلًا أو العادات المطلوبة. استخدم perform، ولو بتطير استخدم fly بشكل طبيعي.`,
       '[فتح محادثة صوتية داخل العالم]'
     );
-  }, [intent, view.connection, character, snapshot]);
+  }, [intent, view.connection, character, snapshot, manifest, progress]);
 
   useEffect(() => {
     if (intent !== 'guide' || guideFinished.current || view.connection !== 'connected') return;
@@ -125,8 +124,7 @@ export function InWorldCompanion({
       scriptSent.current = false;
       return;
     }
-    const nextIntent: ConversationIntent = snapshot.companionIntroComplete ? 'chat' : 'guide';
-    setIntent(nextIntent);
+    setIntent(snapshot.companionIntroComplete ? 'chat' : 'guide');
     scriptSent.current = false;
     guideFinished.current = false;
     void session.current.start();
