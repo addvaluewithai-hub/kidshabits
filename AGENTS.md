@@ -4,8 +4,10 @@ Before implementing product work in this repository:
 
 1. Read [`README.md`](./README.md).
 2. Read [`project/PRODUCT_VISION.md`](./project/PRODUCT_VISION.md) as the product source of truth.
-3. Open [`project/skills/phaser/CATALOG.md`](./project/skills/phaser/CATALOG.md).
-4. Select the smallest relevant set of Phaser skills for the task and read their `SKILL.md` files before coding.
+3. Read [`project/ARCHITECTURE_PROPOSAL.md`](./project/ARCHITECTURE_PROPOSAL.md).
+4. Read [`project/ARCHITECTURE_PRODUCT_FLOW_V1_1.md`](./project/ARCHITECTURE_PRODUCT_FLOW_V1_1.md). This is a normative product-flow addendum and wins over older architecture wording where the two differ.
+5. Open [`project/skills/phaser/CATALOG.md`](./project/skills/phaser/CATALOG.md).
+6. Select the smallest relevant set of Phaser skills for the task and read their `SKILL.md` files before coding.
 
 ## Non-negotiable product rules
 
@@ -13,14 +15,22 @@ Before implementing product work in this repository:
 - Build toward the **full product vision and complete 30-day planets**, not a disposable seven-day demo architecture.
 - The child experience is a **living 2D / 2.5D story world**, not a conventional habit dashboard with game rewards.
 - Prefer reusable scene/location kits and persistent world states over one full-screen image per story day.
+- **State decides what is true. Phaser shows what is true.**
 - Story progression, habit completion, choices, unlocks, and inventory/state are deterministic application logic.
 - **Core moments are authored; conversation is live AI.**
+- AI may perform and converse, but it does not decide progression.
 - Live AI must only receive story information the child has already discovered.
 - Important choices should create visible persistent consequences while allowing the main story to converge later.
+- Nova is not a hard-coded product assumption. Companions are selected semantic actors defined through reusable companion contracts.
 - Nova / companions are independent scene actors. They should not be baked into background art.
 - Parent UX is calm, clear, and operational. Child UX is immersive and magical.
+- Parent onboarding, child handoff, companion selection, first meeting, and first-planet introduction are part of the product architecture, not temporary setup screens.
+- Companion re-engagement is deterministic product behavior. AI does not decide when to call a child.
+- Incoming companion calls must be parent-enabled, policy-gated, rate-limited, schedulable where applicable, and respectful of quiet hours.
 - No guilt, conditional affection, abandonment framing, or emotional pressure around missed habits.
-- Incoming companion calls must be parent-enabled, schedulable, mutable, and respectful of quiet hours.
+- Raw child conversation is not durable product memory by default. Persist only explicit, safe, product-useful allow-listed fields.
+- Story content is **data, not gameplay code**. Content definitions must not directly manipulate Phaser, persistence, habit state, or AI state.
+- React/mobile overlays and Phaser must follow the documented WorldHost/input/focus/audio/lifecycle contract.
 - Arabic and RTL are first-class requirements; the architecture must also remain localizable.
 - Mobile portrait is the primary target.
 
@@ -29,14 +39,18 @@ Before implementing product work in this repository:
 For any substantial new feature, first write a short implementation proposal covering:
 
 - product behavior,
+- relevant experience phase,
 - Phaser systems / skills used,
 - state model,
 - reusable assets required,
 - what can be rendered or animated in-engine,
+- content definition / schema impact,
 - mobile performance implications,
 - persistence implications,
+- React ↔ Phaser ownership if an overlay is involved,
 - AI boundary if applicable,
-- QA / debug approach.
+- re-engagement policy impact if applicable,
+- QA / debug / simulator approach.
 
 Do not blindly reproduce concept images. Use Phaser 4 capabilities to find the simplest production-quality implementation that preserves the intended emotional experience.
 
@@ -45,19 +59,44 @@ Do not blindly reproduce concept images. Use Phaser 4 capabilities to find the s
 Keep these concerns separated:
 
 ```text
+Experience routing / first-run flow
 Habit / parent logic
 Story state and story definitions
+Content validation / simulation
 World rendering
+WorldHost / overlay boundary
+Companion definitions and relationship profile
 Character runtime
 Authored sequence playback
 Live AI conversation provider
+Re-engagement policy
 Mobile platform services
 Persistence
 Audio
 Debug / authoring tools
 ```
 
-Do not hard-code a 30-day story directly into scene classes. New story days and future planets must be content-driven.
+Do not hard-code a 30-day story directly into scene classes. New story days and future planets must be content-driven, validated, simulatable, and reconstructable from durable state.
+
+## Milestone bias
+
+Do not implement many story days at once.
+
+Prove the production boundaries in this order unless the product documents are intentionally revised:
+
+```text
+Milestone 0 — First Meeting
+parent onboarding → child profile → habits → child handoff → choose companion → authored first meeting → live/mock conversation → persisted companion profile → enter first planet
+
+Milestone 1 — Landing Meadow: First Light
+habit → deterministic domain → story mutation → persistence + pendingSequence → authored sequence → camera → companion → world change → audio → reload
+
+Milestone 2 — First re-engagement
+story hook → deterministic ReengagementIntent/policy → platform delivery → accept → discovered-state conversation → correct destination
+
+Milestone 3 — First persistent choice
+choice → durable consequence → authored reveal → reload → persistent visible variant → convergence later without erasing the choice
+```
 
 ## Definition of good work
 
@@ -68,8 +107,10 @@ It should be:
 - understandable on a phone,
 - visually readable,
 - reusable,
-- state-safe after reload,
+- deterministic where progression is concerned,
+- state-safe after reload or interruption,
 - testable through developer tools,
+- authorable without unnecessary engineering work,
 - production-minded,
 - emotionally aligned with the product vision.
 
