@@ -30,6 +30,7 @@ export interface AppSnapshot {
   ageBand: '6-8' | '9-11' | 'not_set';
   habits: string[];
   requiredHabits: number;
+  completedHabits: string[];
   voiceEnabled: boolean;
   callsEnabled: boolean;
   quietHours: { start: string; end: string };
@@ -37,6 +38,9 @@ export interface AppSnapshot {
   safeInterests: string[];
   planetId: 'sprout';
   storyDay: number;
+  firstLightRevealed: boolean;
+  pendingSequence: 'first-light' | null;
+  storyEventsSeen: string[];
 }
 
 const STORAGE_KEY = 'kidshabits.snapshot.v1';
@@ -48,6 +52,7 @@ export const initialSnapshot: AppSnapshot = {
   ageBand: 'not_set',
   habits: ['water', 'reading', 'bed'],
   requiredHabits: 2,
+  completedHabits: [],
   voiceEnabled: true,
   callsEnabled: false,
   quietHours: { start: '20:00', end: '07:00' },
@@ -55,6 +60,9 @@ export const initialSnapshot: AppSnapshot = {
   safeInterests: [],
   planetId: 'sprout',
   storyDay: 1,
+  firstLightRevealed: false,
+  pendingSequence: null,
+  storyEventsSeen: [],
 };
 
 export function loadSnapshot(): AppSnapshot {
@@ -63,7 +71,15 @@ export function loadSnapshot(): AppSnapshot {
     if (!raw) return initialSnapshot;
     const parsed = JSON.parse(raw) as Partial<AppSnapshot>;
     if (parsed.version !== 1) return initialSnapshot;
-    return { ...initialSnapshot, ...parsed, quietHours: { ...initialSnapshot.quietHours, ...parsed.quietHours } };
+    return {
+      ...initialSnapshot,
+      ...parsed,
+      quietHours: { ...initialSnapshot.quietHours, ...parsed.quietHours },
+      completedHabits: Array.isArray(parsed.completedHabits) ? parsed.completedHabits : [],
+      storyEventsSeen: Array.isArray(parsed.storyEventsSeen) ? parsed.storyEventsSeen : [],
+      firstLightRevealed: Boolean(parsed.firstLightRevealed),
+      pendingSequence: parsed.pendingSequence === 'first-light' ? 'first-light' : null,
+    };
   } catch {
     return initialSnapshot;
   }
