@@ -1,28 +1,20 @@
 # KidsHabits Platform Foundation
 
-This document defines the current implementation direction after the first Sprout Planet experiments.
+This document defines the multi-world ownership boundary established after the first Sprout Planet experiments.
 
-## Product build order
+## Current stage amendment
 
-KidsHabits is a **multi-world application platform first** and a collection of authored worlds second.
+The platform-first work has now proven the core shell, parent/child setup, companion boundary, Galaxy Browser, generic WorldHost, two-world proof, habit verification, and Parent Center strongly enough to begin **Sprout Planet world-art architecture and the first seven authored days**.
 
-Do not deepen one planet into many story days before the reusable application boundaries are proven.
+This is an intentional product-order revision. It does **not** mean hard-coding Sprout into the platform. Before deep day-specific implementation, build reusable art/story contracts that future planets can use. See [`WORLD_ART_RUNTIME_FOUNDATION.md`](./WORLD_ART_RUNTIME_FOUNDATION.md).
 
-The intended order is:
+Companion phone-call / re-engagement work is intentionally deferred until later unless explicitly requested.
 
-1. app shell / lifecycle / persistence,
-2. parent and child profiles,
-3. companion platform and Live AI boundary,
-4. world registry and Galaxy Browser,
-5. generic World Runtime,
-6. at least two shallow Day-1 worlds to prove reuse,
-7. deterministic habit + verification loop,
-8. parent center,
-9. re-engagement / calls,
-10. planet lifecycle and completion,
-11. content tooling / simulation,
-12. production hardening,
-13. then deep world-by-world story design and iteration.
+## Product principle
+
+KidsHabits remains a **multi-world application platform first** and a collection of authored worlds second.
+
+The architecture must let us deeply iterate a planet without destabilizing onboarding, habit authority, companion infrastructure, persistence, or other worlds.
 
 ## Ownership rule
 
@@ -36,10 +28,11 @@ The platform owns:
 - world registry / loading,
 - durable progress storage,
 - authored-sequence orchestration,
-- notifications / companion calls,
+- notifications / companion calls when implemented later,
 - parent controls,
 - localization shell,
-- debug / simulation tooling.
+- debug / simulation tooling,
+- reusable world-art loading and composition infrastructure.
 
 A world owns:
 
@@ -47,6 +40,7 @@ A world owns:
 - its locations,
 - story definitions,
 - authored copy,
+- art manifest and illustrated assets,
 - presentation implementation / scene kit,
 - assets and audio unique to the world,
 - local choices and persistent consequences.
@@ -60,33 +54,42 @@ src/
   app/
   domain/
   world-runtime/
+    art/
   world/
   worlds/
     sprout-planet/
       manifest.ts
       presentation.ts
-      story/          # later
-      assets/         # later
-      audio/          # later
-      localization/   # later
+      art/
+        manifest.ts
+      story/
+      audio/
+      localization/
     moon-garden/
       manifest.ts
       presentation.ts
+      art/
+        manifest.ts
       ...
+
+public/
+  worlds/
+    sprout/
+      art/
 ```
 
 `world-runtime/` is shared infrastructure.
 
 `worlds/<world>/` is a content/presentation package. New planets should primarily be added here.
 
-## Current architecture proof
+## Architecture proof already established
 
-The repository currently includes two intentionally shallow worlds:
+The repository includes two intentionally shallow worlds:
 
-- **Sprout Planet** — the first product world.
+- **Sprout Planet** — the first production world.
 - **Moon Garden** — an architecture-proof world, not final content.
 
-Both expose the same Day-1 contract:
+Both currently expose the same shallow Day-1 contract:
 
 ```text
 enter world
@@ -99,24 +102,26 @@ enter world
 → progress persists independently per world
 ```
 
-The exact story and art are deliberately shallow. Their purpose is to prove the platform boundary before deeper writing and illustration work.
+That proof remains valuable, but Sprout can now deepen through reusable world packages rather than through global app changes.
 
-## World manifest contract
+## Art runtime contract
 
-A world manifest declares stable content facts such as:
+A world art package declares immutable content facts such as:
 
-- `id`
-- Arabic name / subtitle / description
-- total days
-- starting location
-- location metadata
-- Day-1 reveal event / sequence IDs
-- primary authored action
-- presentation adapter ID
+- asset IDs and runtime URLs,
+- location compositions,
+- semantic render bands,
+- normalized placement and origin,
+- fit behavior,
+- parallax,
+- alpha / blend / tint,
+- semantic idle motion,
+- state-driven visibility,
+- story focus points.
 
-The shared domain logic reads this data. It must not branch on `if world === sprout` for progression behavior.
+The shared Phaser runtime interprets this data. Content definitions do not call Phaser APIs.
 
-World-specific visual drawing is allowed to differ, but it is loaded through the shared WorldHost / presentation registry.
+High-quality transparent WebP/PNG illustration is a first-class production path. Procedural Graphics remain useful for prototypes, debug fallback, masks, generated textures, and effects, but they are not the visual-quality ceiling.
 
 ## Durable state
 
@@ -124,22 +129,23 @@ Progress is stored **per world**.
 
 Switching from one planet to another must not reset the previous planet.
 
-The minimum durable world state is:
+The minimum durable world state remains:
 
 ```text
 day
 locationId
-completedHabits
 pendingSequence
 eventsSeen
 flags
 ```
 
+Real-life habit check-ins stay in the app-level daily ledger rather than being duplicated inside world state.
+
 The app may add richer typed choice / relationship / inventory state later, but the same ownership rule applies.
 
 ## Galaxy model
 
-The child-facing meta experience is a **galaxy of planets**.
+The child-facing meta experience is a **galaxy journey of planets**.
 
 The galaxy is the navigation metaphor, not a requirement that every planet itself look like outer space.
 
@@ -149,12 +155,13 @@ The parent experience remains calm and operational rather than visually space-he
 
 ## Third-world test
 
-Before calling the platform architecture healthy, adding a third world should require approximately:
+A healthy architecture should allow a third world to be added mostly by:
 
 1. create a new folder under `src/worlds/`,
 2. add a manifest,
-3. add a presentation/content package,
-4. register the world.
+3. add an art manifest and assets,
+4. add presentation/story content,
+5. register the world.
 
 It should **not** require edits to:
 
@@ -163,15 +170,23 @@ It should **not** require edits to:
 - companion selection,
 - habit domain logic,
 - Gemini session code,
-- persistence schema shape,
+- persistence infrastructure,
 - generic WorldHost orchestration.
 
 If adding a new world requires those edits, stop and fix the platform boundary before producing more story content.
 
-## Content depth rule
+## Content depth rule — current phase
 
-Until platform milestones are complete, only build enough content inside a planet to exercise a reusable capability.
+We may now author the **first seven Sprout days** after the art/story foundation is in place, because they will be used as the first serious production-quality vertical slice.
 
-Do not build Days 2–30 merely because Day 1 exists.
+Do not jump straight to Days 8–30 until the first seven days have proven:
 
-Once the platform is stable, each planet can go through many independent story / visual iterations without destabilizing the application itself.
+- reusable illustrated locations,
+- state-driven visual variants,
+- authored sequences,
+- performance on mobile,
+- reload reconstruction,
+- companion integration,
+- clean content authoring boundaries.
+
+Once that slice is healthy, Sprout can be iterated deeply without destabilizing the application itself.
