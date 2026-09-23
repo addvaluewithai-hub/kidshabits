@@ -9,6 +9,7 @@ import './platform.css';
 import './parent-center.css';
 import './visual-foundation.css';
 import './onboarding-polish.css';
+import './galaxy-journey.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
