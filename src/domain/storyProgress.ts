@@ -39,6 +39,10 @@ export function enterWorld(snapshot: AppSnapshot, worldId: WorldId): AppSnapshot
     ...snapshot,
     activeWorldId: worldId,
     phase: 'world',
+    // Reaching a world from the guided galaxy is the durable boundary that says
+    // the one-time companion introduction has finished. The world companion can
+    // now be conversational instead of repeating onboarding.
+    companionIntroComplete: true,
     daily: {
       ...snapshot.daily,
       targetWorldId: snapshot.daily.targetWorldId ?? worldId,
