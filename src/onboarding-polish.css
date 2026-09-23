@@ -1,0 +1,18 @@
+.app-shell{padding:0;background:linear-gradient(160deg,#edf3ed 0%,#f7f2df 100%)}
+.phone-frame{width:min(100%,520px);min-height:100dvh;border:0;border-radius:0;background:linear-gradient(180deg,#fbfaf5 0%,#f6f7f2 100%);box-shadow:none}
+.mini-brand{height:62px;padding:0 22px;border-bottom:0;color:#29493f}
+.mini-brand b{font-size:16px}.brand-orb{width:30px;height:30px;border-radius:11px;background:#2f5d50;box-shadow:0 8px 20px rgba(47,93,80,.16)}
+.screen{padding:30px 24px 28px;gap:20px}
+.eyebrow{font-size:10px;letter-spacing:1.2px;color:#83948d}
+.screen h1{font-size:36px;line-height:1.35;letter-spacing:-1px}.screen h2{font-size:30px;line-height:1.38;letter-spacing:-.8px}.screen h1 em{color:#4f7b65}
+.screen>p{font-size:14px;line-height:1.85;color:#6b7d76;max-width:420px}
+.primary{min-height:52px;border-radius:17px;background:#2f5d50;box-shadow:0 12px 28px rgba(47,93,80,.18);font-size:14px}
+.parent-card,.interest-box{border:0;border-radius:24px;background:#fff;box-shadow:0 16px 44px rgba(37,67,57,.07);padding:18px}
+.parent-card label{font-size:13px}.welcome .parent-card label:nth-of-type(2),.welcome .parent-card .quiet-row{display:none}
+.field input{border:0;background:#fff;border-radius:16px;box-shadow:inset 0 0 0 1px #dde5df;padding:16px}.field input:focus{box-shadow:inset 0 0 0 1.5px #668d7a,0 0 0 4px rgba(102,141,122,.10)}
+.age-grid button,.habit,.companion-card,.chip{border:0;background:#fff;box-shadow:inset 0 0 0 1px #e0e7e1;color:#405b52}.age-grid button,.habit{min-height:48px}.age-grid button.selected,.habit.selected,.companion-card.selected,.chip.selected{border:0;background:#edf4ed;box-shadow:inset 0 0 0 1.5px #7fa089}
+.range-row{background:#edf2ed;border-radius:20px;padding:16px}.habit-grid{gap:10px}.habit{border-radius:16px;padding:13px}.habit span{font-size:21px}
+.handoff-orb{width:106px;height:106px;border-radius:38px;background:linear-gradient(145deg,#dcebcf,#f2df9f);box-shadow:0 22px 60px rgba(77,103,69,.22)}
+.companion-grid{gap:10px}.companion-card{border-radius:18px;padding:9px 5px}.portrait{width:66px;height:66px;border-radius:20px;background:#eef2ec}.companion-card strong{font-size:13px}.companion-card small{font-size:9px}
+.companion-stage{border:0;border-radius:28px;background:#eef2eb;box-shadow:inset 0 0 0 1px rgba(80,105,91,.08);padding:14px}.character-window{border-radius:24px;background:radial-gradient(circle at 50% 40%,#fffef8 0,#edf2e9 62%,#e2ebe1 100%)}
+@media(min-width:600px){.app-shell{padding:28px}.phone-frame{min-height:min(900px,calc(100dvh - 56px));border-radius:34px;box-shadow:0 28px 90px rgba(33,61,51,.16)}}
