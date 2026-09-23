@@ -4,7 +4,10 @@ import { getWorldManifest } from '../worlds/registry';
 import type { WorldId, WorldProgress } from '../worlds/types';
 import { getWorldPresentation } from '../world-runtime/presentations';
 import type { StorySequence } from '../app/state';
-import type { WorldLayers } from '../world-runtime/presentation';
+import { clearWorldLayers, type WorldLayers } from '../world-runtime/presentation';
+import { getWorldArtManifest } from '../world-runtime/art/registry';
+import { queueWorldArtAssets } from '../world-runtime/art/assets';
+import { WorldArtRuntime } from '../world-runtime/art/WorldArtRuntime';
 
 interface WorldHostProps {
   worldId: WorldId;
@@ -14,6 +17,7 @@ interface WorldHostProps {
 
 class PlanetWorldScene extends Phaser.Scene {
   private layers?: WorldLayers;
+  private artRuntime?: WorldArtRuntime;
   private focusGlow?: Phaser.GameObjects.Arc;
   private ambient: Phaser.GameObjects.Arc[] = [];
   private progress: WorldProgress;
@@ -28,6 +32,10 @@ class PlanetWorldScene extends Phaser.Scene {
     this.onSequenceComplete = onSequenceComplete;
   }
 
+  preload() {
+    queueWorldArtAssets(this, getWorldArtManifest(this.worldId));
+  }
+
   create() {
     this.layers = {
       sky: this.add.graphics().setDepth(-50).setScrollFactor(0.02),
@@ -36,6 +44,7 @@ class PlanetWorldScene extends Phaser.Scene {
       ground: this.add.graphics().setDepth(-10).setScrollFactor(0.82),
       detail: this.add.graphics().setDepth(1).setScrollFactor(1),
     };
+    this.artRuntime = new WorldArtRuntime(this, getWorldArtManifest(this.worldId));
     this.focusGlow = this.add.circle(0, 0, 9, 0xffefb0, 0).setDepth(8).setBlendMode(Phaser.BlendModes.ADD);
     this.createAmbientLife();
     this.scale.on('resize', this.redraw, this);
@@ -75,7 +84,7 @@ class PlanetWorldScene extends Phaser.Scene {
     const progress = forceReveal === undefined
       ? this.progress
       : { ...this.progress, flags: { ...this.progress.flags, [manifest.dayOne.revealFlag]: forceReveal } };
-    const result = presentation({
+    const proceduralResult = presentation({
       width: this.scale.width,
       height: this.scale.height,
       progress,
@@ -83,7 +92,18 @@ class PlanetWorldScene extends Phaser.Scene {
       sequenceRunning: this.sequenceRunning,
       layers: this.layers,
     });
-    this.focusGlow.setPosition(result.focusPoint.x, result.focusPoint.y).setFillStyle(result.ambientTint, 1);
+    const artResult = this.artRuntime?.compose(
+      progress.locationId,
+      progress,
+      this.scale.width,
+      this.scale.height,
+    );
+
+    if (artResult?.replacesProceduralBase) clearWorldLayers(this.layers);
+
+    const focusPoint = artResult?.focusPoint ?? proceduralResult.focusPoint;
+    const ambientTint = artResult?.ambientTint ?? proceduralResult.ambientTint;
+    this.focusGlow.setPosition(focusPoint.x, focusPoint.y).setFillStyle(ambientTint, 1);
     const revealed = Boolean(progress.flags[manifest.dayOne.revealFlag]);
     this.focusGlow.setVisible(revealed || this.sequenceRunning);
     if (!this.sequenceRunning) this.focusGlow.setAlpha(revealed ? 0.58 : 0).setScale(1);
@@ -241,6 +261,8 @@ class PlanetWorldScene extends Phaser.Scene {
 
   shutdown() {
     this.scale.off('resize', this.redraw, this);
+    this.artRuntime?.destroy();
+    this.artRuntime = undefined;
   }
 }
 
