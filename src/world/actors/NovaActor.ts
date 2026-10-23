@@ -18,7 +18,7 @@ export class NovaActor {
     this.glow = scene.add.circle(0, 0, 95, 0xffdea1, 0.1);
     const body = scene.add.image(0, 0, 'nova').setDisplaySize(170, 195);
     this.container.add([this.glow, body]);
-    scene.tweens.add({
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) scene.tweens.add({
       targets: body,
       y: -13,
       yoyo: true,
@@ -26,7 +26,7 @@ export class NovaActor {
       ease: 'Sine.easeInOut',
       duration: 2300,
     });
-    scene.tweens.add({
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) scene.tweens.add({
       targets: this.glow,
       alpha: 0.28,
       scale: 1.28,
@@ -39,6 +39,11 @@ export class NovaActor {
   lookAt(scene: Phaser.Scene, focus: WorldFocus): void {
     scene.tweens.killTweensOf(this.container);
     const destination = POSITIONS[focus];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.container.setPosition(destination.x, destination.y);
+      this.container.setAngle(focus === 'cottage' ? 9 : focus === 'garden' ? -8 : 0);
+      return;
+    }
     scene.tweens.add({
       targets: this.container,
       x: destination.x,
