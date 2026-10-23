@@ -14,6 +14,12 @@ We are **pivoting away from a rigid 30-day sequence of cinematic story scenes** 
 
 The previous 10-day story-only exploration in PR #7 is an experiment, **not the new product blueprint**. Preserve useful assets or lessons but do not build v2 on its hard-coded day-by-day presentation.
 
+## Resume work here — production control center
+
+**Read [STATUS.md](./STATUS.md) first** at the start of every session. It holds the active session (initially **01/25**), blockers, tested commit/run evidence, and next task. Use [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) for the fixed session-by-session roadmap and [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) for GitHub Actions screenshots and acceptance gates.
+
+**Current CI verification:** Planning validation has passed on [Actions run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598). Visual job was **skipped** because the planning branch has no runnable app; real game screenshots remain **NOT VERIFIED**.
+
 ## Read in order
 
 **ابدأ هنا بالعربي:** [PLAN_AR.md](./PLAN_AR.md) — ملخص عملي شامل للفكرة والخطوات وأول عشرة أيام.
