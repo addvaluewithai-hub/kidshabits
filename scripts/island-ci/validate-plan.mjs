@@ -19,6 +19,8 @@ const files = [
   'project/island-v2/STATUS.md',
   'project/island-v2/CI_AND_VISUAL_QA.md',
   'project/island-v2/ROADMAP_AND_ACCEPTANCE.md',
+  'project/island-v2/ENGINEERING_STANDARDS.md',
+  'scripts/island-ci/check-architecture.mjs',
   'scripts/island-ci/visual-smoke.mjs',
   '.github/workflows/island-production.yml',
 ];
