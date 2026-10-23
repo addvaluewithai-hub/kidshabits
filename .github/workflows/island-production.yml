@@ -20,7 +20,7 @@ concurrency:
 jobs:
   plan-validation:
     name: plan-validation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       has_app: ${{ steps.plan.outputs.has_app }}
     steps:
@@ -42,7 +42,7 @@ jobs:
     # The planning branch has no app. Skipped means NOT VERIFIED, not PASS.
     # All implementation PRs must include package.json + index.html + src.
     if: ${{ needs.plan-validation.outputs.has_app == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout exact commit
@@ -55,9 +55,17 @@ jobs:
         run: mkdir -p artifacts/island
 
       - name: Install app dependencies
-        run: npm install --no-audit --no-fund 2>&1 | tee artifacts/island/dependencies.log
+        run: |
+          set -o pipefail
+          npm install --no-audit --no-fund 2>&1 | tee artifacts/island/dependencies.log
       - name: Build actual production app
-        run: npm run build 2>&1 | tee artifacts/island/build.log
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee artifacts/island/build.log
+      - name: Run domain unit tests
+        run: |
+          set -o pipefail
+          npm run test:unit 2>&1 | tee artifacts/island/unit-tests.log
       - name: Install pinned Playwright runner
         run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
       - name: Install Chromium browser + Linux dependencies
