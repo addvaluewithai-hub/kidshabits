@@ -24,8 +24,8 @@
 | V2 product approved + merged to `main` | ⏳ pending | PR #8 is draft; `PRODUCT_VISION.md` still describes linear 30-day journey |
 | Actual production app baseline | ❌ not yet selected | Existing draft code PRs #2–#6 have app code on feature branches; `main` has no root package |
 | Local release build on selected v2 branch | ❌ not run | No selected implementation branch yet |
-| Github Actions game build + behavioral tests | ❌ not verified | New CI harness is proposed; must first run on real app PR |
-| GitHub Actions **real game screenshots** | ❌ not produced | Run Playwright on actual Vite app after Session 01 |
+| Github Actions game build + behavioral tests | ❌ not verified | [Run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598): plan-validation ✅, production-visual-proof **skipped** (no app) |
+| GitHub Actions **real game screenshots** | ❌ not produced | [Run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598) visual job skipped; must run Playwright against actual Vite app after Session 01 |
 | Reviewer checked screenshots | ❌ not started | Save screenshot artifact/run URL + review decision here |
 | Phone hardware performance tested | ❌ not run | Simulator/emulation alone is not device validation |
 | Child safety/live AI QA | ⏳ future | Mock conversation initially; parental opt-in and privacy before live AI |
@@ -87,4 +87,4 @@
 6. Preserve session history; if skipped/re-scoped, explain in a change log below.
 
 ### History
-- **2026-10-23** — v2 product/docs PR #8 exists; 25-session plan and tracking/visual-CI protocol drafted. Implementation progress **0/25**. Prior app code exists only on feature PR branches. First real visual CI run still pending.
+- **2026-10-23** — v2 product/docs PR #8 exists; 25-session plan and tracking/visual-CI protocol committed. GitHub Actions [run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598): **plan-validation passed**; **production-visual-proof skipped** (no app scaffold). Implementation progress **0/25**. Prior app code exists only on feature PR branches; real screenshot evidence still pending.
