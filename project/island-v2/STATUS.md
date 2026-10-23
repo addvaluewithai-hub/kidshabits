@@ -89,5 +89,5 @@
 6. Preserve session history; if skipped/re-scoped, explain in a change log below.
 
 ### History
-- **2026-10-23** — User confirmed greenfield from documentation-only `main`, review old code only as a source of selectively reusable pieces, enforce small modular modules and swappable art. [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md) and automatic architecture size/import guard added; **no runtime implementation sessions claimed**.
+- **2026-10-23** — User confirmed greenfield from documentation-only `main`, review old code only as a source of selectively reusable pieces, enforce small modular modules, flexible file sizes (no LOC hard limit), premium visual/UX detail from the first PR, and swappable art. [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md) and automatic architecture size/import guard added; **no runtime implementation sessions claimed**.
 - **2026-10-23** — v2 product/docs PR #8 exists; 25-session plan and tracking/visual-CI protocol committed. GitHub Actions [run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598): **plan-validation passed**; **production-visual-proof skipped** (no app scaffold). Implementation progress **0/25**. Prior app code exists only on feature PR branches; real screenshot evidence still pending.
