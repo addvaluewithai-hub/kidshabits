@@ -33,6 +33,8 @@ jobs:
       - name: Validate frozen plan and STATUS
         id: plan
         run: node scripts/island-ci/validate-plan.mjs
+      - name: Enforce modular source boundaries
+        run: node scripts/island-ci/check-architecture.mjs
 
   production-visual-proof:
     name: production-visual-proof
