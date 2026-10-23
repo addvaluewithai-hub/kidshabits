@@ -10,7 +10,7 @@ import { resolve, relative, sep, dirname } from 'node:path';
 const root = process.cwd();
 const src = resolve(root, 'src');
 const warningLineLimit = 220;
-const errorLineLimit = 350;
+const escalationLineLimit = 350;
 const extensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
 const ignoredFolders = new Set([
   'node_modules', 'vendor', 'generated', 'dist', 'build', 'coverage',
