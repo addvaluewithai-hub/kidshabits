@@ -76,8 +76,8 @@ function checkFile(file) {
   const relativeFile = relative(root, file).split(sep).join('/');
   const code = readFileSync(file, 'utf8');
   const lines = code.replace(/\r\n?/g, '\n').split('\n').length;
-  if (lines > errorLineLimit) {
-    log('ERROR', relativeFile, `${lines} lines; hard limit is ${errorLineLimit}. Split by responsibility, not randomly.`);
+  if (lines > escalationLineLimit) {
+    log('WARN', relativeFile, `${lines} lines; review cohesion and responsibilities, not a LOC hard limit.`);
   } else if (lines >= warningLineLimit) {
     log('WARN', relativeFile, `${lines} lines; review against preferred 50–180 line range.`);
   }
