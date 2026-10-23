@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-10-23 (baseline setup; no production session completed)  
 **Plan revision:** `SESSION_PLAN_25.md` baseline v1 (25 provisional sessions)  
-**Project status:** **SESSION 01 IMPLEMENTED IN DRAFT PR #12 — TECHNICAL CI PASSED, USER VISUAL APPROVAL PENDING**  
+**Project status:** **SESSION 01 FOUNDATION + 3D/2D A/B TESTED; PREMIUM VISUAL/ENGINE DECISION PENDING**  
 **Active session:** **01 / 25 — greenfield implementation technically verified; aesthetic review pending**  
 **Completed implementation sessions:** **0 / 25**  
-**Current status:** **TECHNICAL PASS / PRODUCT SIGN-OFF PENDING** — no change to 0/25 completed sessions until accepted  
-**Next execution issue:** [#11 — Session 01](https://github.com/addvaluewithai-hub/kidshabits/issues/11); implementation [PR #12](https://github.com/addvaluewithai-hub/kidshabits/pull/12). Art-review/further feature work tracked in [#10](https://github.com/addvaluewithai-hub/kidshabits/issues/10)  
+**Current status:** **FOUNDATION AND 3D/2D A/B TECHNICAL PASS / PRODUCT SIGN-OFF PENDING** — still 0/25 completed sessions  
+**Next execution issue:** [#14 — Three/Phaser engine decision](https://github.com/addvaluewithai-hub/kidshabits/issues/14) after [PR #13 A/B experiment](https://github.com/addvaluewithai-hub/kidshabits/pull/13); Session 01 code [PR #12](https://github.com/addvaluewithai-hub/kidshabits/pull/12) remains Draft. Premium art [#10](https://github.com/addvaluewithai-hub/kidshabits/issues/10)  
 **Master tracking issue:** [#9](https://github.com/addvaluewithai-hub/kidshabits/issues/9)  
 **Product proposal:** [PR #8](https://github.com/addvaluewithai-hub/kidshabits/pull/8) (draft; `docs/island-world-product-plan-v2`)  
 **Canonical main:** `main` remains documentation-only as last verified on Oct 23, 2026; no root `package.json` on `main`. Verify again before work.
@@ -89,6 +89,7 @@
 6. Preserve session history; if skipped/re-scoped, explain in a change log below.
 
 ### History
+- **2026-10-23 — Three.js renderer comparison:** User requested skill-guided experiment based on [cloudai-x/threejs-skills](https://github.com/cloudai-x/threejs-skills). Built [PR #13](https://github.com/addvaluewithai-hub/kidshabits/pull/13) with real Three.js r186 + R3F9 and existing Phaser 4, both tied to the same saved island and authored Nova. Verified [Actions #39990099568](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39990099568): both renderers on phone/desktop, house/garden/reload/Nova, 16 screenshots and WebGL2 pixel evidence PASSED on that tested commit. Source art is exploratory; **premium art, child UX and device FPS still unverified**. Engine choice [issue #14](https://github.com/addvaluewithai-hub/kidshabits/issues/14) OPEN; **0/25 sessions formally complete**, `main` unchanged.
 - **2026-10-23** — Session 01 greenfield implementation is in [draft PR #12](https://github.com/addvaluewithai-hub/kidshabits/pull/12), tested head `d0076c8b7113c710b6d4f019e7e03c49d6318dce`. Verified [Actions run #39984329320](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39984329320): plan guard, TypeScript + Vite build, Vitest, actual Chrome phone/desktop interactions and refresh persistence + Nova discovered-state dialogue all PASSED. Downloaded/reviewed 8 screenshots. Global-quality art review remains open; formally completed sessions **0/25**.
 - **2026-10-23** — User confirmed greenfield from documentation-only `main`, review old code only as a source of selectively reusable pieces, enforce small modular modules, flexible file sizes (no LOC hard limit), premium visual/UX detail from the first PR, and swappable art. [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md) and automatic architecture size/import guard added; **no runtime implementation sessions claimed**.
 - **2026-10-23** — v2 product/docs PR #8 exists; 25-session plan and tracking/visual-CI protocol committed. GitHub Actions [run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598): **plan-validation passed**; **production-visual-proof skipped** (no app scaffold). Implementation progress **0/25**. Prior app code exists only on feature PR branches; real screenshot evidence still pending.
