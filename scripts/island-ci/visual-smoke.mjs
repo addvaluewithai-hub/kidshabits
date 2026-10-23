@@ -22,9 +22,9 @@ let failed=false;
 
 async function visible(page,id){
  const el=page.locator('[data-testid="'+id+'"]');
+ await el.first().waitFor({state:'visible',timeout:20000});
  const count=await el.count();
  if(count!==1)throw new Error('Need exactly one '+id+', got '+count);
- await el.waitFor({state:'visible',timeout:15000});
  return el;
 }
 async function shot(page,filename){
