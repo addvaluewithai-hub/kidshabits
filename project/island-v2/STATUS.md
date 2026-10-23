@@ -6,7 +6,7 @@
 **Active session:** **01 / 25 — choose and verify a production code baseline**  
 **Completed implementation sessions:** **0 / 25**  
 **Current status:** **BLOCKED ON REVIEW + RUNNABLE BASELINE**, not green  
-**Next execution issue:** [#10 — Island + expressive Nova](https://github.com/addvaluewithai-hub/kidshabits/issues/10) (after Session 01 baseline)  
+**Next execution issue:** [#11 — Session 01: verified runnable production baseline](https://github.com/addvaluewithai-hub/kidshabits/issues/11); [#10 — Island + expressive Nova](https://github.com/addvaluewithai-hub/kidshabits/issues/10) follows  
 **Master tracking issue:** [#9](https://github.com/addvaluewithai-hub/kidshabits/issues/9)  
 **Product proposal:** [PR #8](https://github.com/addvaluewithai-hub/kidshabits/pull/8) (draft; `docs/island-world-product-plan-v2`)  
 **Canonical main:** `main` remains documentation-only as last verified on Oct 23, 2026; no root `package.json` on `main`. Verify again before work.
@@ -20,7 +20,7 @@
 | V2 product vision written | ✅ ready for review | docs PR #8; Arabic plan, blueprint, first 10 beats, Finch research |
 | 25-session execution estimate | ✅ documented | [SESSION_PLAN_25.md](./SESSION_PLAN_25.md); planning estimate only |
 | Status and one-session-at-a-time protocol | ✅ documented | this file, [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) |
-| Initial production target | ✅ defined | [issue #10](https://github.com/addvaluewithai-hub/kidshabits/issues/10) |
+| Initial production target | ✅ defined | [Session 01 issue #11](https://github.com/addvaluewithai-hub/kidshabits/issues/11) → [visual Slice 0 issue #10](https://github.com/addvaluewithai-hub/kidshabits/issues/10) |
 | V2 product approved + merged to `main` | ⏳ pending | PR #8 is draft; `PRODUCT_VISION.md` still describes linear 30-day journey |
 | Actual production app baseline | ❌ not yet selected | Existing draft code PRs #2–#6 have app code on feature branches; `main` has no root package |
 | Local release build on selected v2 branch | ❌ not run | No selected implementation branch yet |
@@ -56,7 +56,7 @@
 
 | Session | Objective | State | Branch/PR | Evidence URL/SHA | Reviewer decision |
 |---|---|---|---|---|---|
-| 01 | Choose code baseline, verified build/CI app screenshots | **NEXT / BLOCKED** | TBD | none | not reviewed |
+| 01 | Choose code baseline, verified build/CI app screenshots | **NEXT / BLOCKED** | [#11](https://github.com/addvaluewithai-hub/kidshabits/issues/11) | docs CI run #39977185598 **plan only** | not reviewed |
 | 02 | Art bible and asset style lock | NOT STARTED | — | — | — |
 | 03 | Phaser phone-first island foundation | NOT STARTED | — | — | — |
 | 04 | Animated Nova actor | NOT STARTED | — | — | — |
