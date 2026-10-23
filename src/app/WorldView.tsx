@@ -1,4 +1,4 @@
-import { WorldHost } from '../world/WorldHost';
+import { WorldRenderer, activeEngine } from '../world/WorldRenderer';
 import type { IslandSnapshot, WorldFocus } from '../domain/island/model';
 import { getNovaTeaser } from '../content/island/novaLines';
 
@@ -10,13 +10,14 @@ interface Props {
 }
 
 export function WorldView({ island, focus, onCottage, onGarden }: Props) {
+  const engine = activeEngine();
   const restored = island.cottage === 'restored';
   const blooming = island.garden === 'blooming';
 
   return (
     <section className="world-frame" aria-label="الجزيرة التفاعلية">
-      <div className="world-scene" data-testid="island-world">
-        <WorldHost island={island} focus={focus} />
+      <div className={`world-scene world-scene--${engine}`} data-testid="island-world" data-engine={engine}>
+        <WorldRenderer engine={engine} island={island} focus={focus} onCottage={onCottage} onGarden={onGarden}/>
 
         <div className="scene-kicker">
           <span className="scene-kicker__orb" aria-hidden="true">✦</span>
@@ -50,8 +51,11 @@ export function WorldView({ island, focus, onCottage, onGarden }: Props) {
         <div className="world-skyline" aria-hidden="true">✧ <span>عالم بيتغيّر باختياراتك</span> ✧</div>
       </div>
       <div className="world-caption">
-        <span><span className="caption-dot" /> LIVE WORLD PREVIEW</span>
-        <span>Prototype · Session 01</span>
+        <span><span className="caption-dot" /> RENDERER COMPARISON</span>
+        <nav className="engine-switch" aria-label="اختاري طريقة عرض الجزيرة">
+          <a href="?engine=three" aria-current={engine==='three'?'page':undefined} data-testid="engine-three">3D · Three.js</a>
+          <a href="?engine=phaser" aria-current={engine==='phaser'?'page':undefined} data-testid="engine-phaser">2D · Phaser</a>
+        </nav>
       </div>
     </section>
   );
