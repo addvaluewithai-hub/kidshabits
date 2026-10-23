@@ -16,7 +16,7 @@ The previous 10-day story-only exploration in PR #7 is an experiment, **not the 
 
 ## Resume work here — production control center
 
-**Read [STATUS.md](./STATUS.md) first** at the start of every session. It holds the active session (initially **01/25**), blockers, tested commit/run evidence, and next task. Apply **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** as our clean-build, modular-file and swappable-art contract. Use [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) for the fixed session-by-session roadmap and [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) for GitHub Actions screenshots and acceptance gates.
+**Read [STATUS.md](./STATUS.md) first** at the start of every session. It holds the active session (initially **01/25**), blockers, tested commit/run evidence, and next task. Apply **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** as our clean-build, modular-file, premium worldwide quality and swappable-art contract. Use [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) for the fixed session-by-session roadmap and [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) for GitHub Actions screenshots and acceptance gates.
 
 **Current CI verification:** Planning validation has passed on [Actions run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598). Visual job was **skipped** because the planning branch has no runnable app; real game screenshots remain **NOT VERIFIED**.
 
