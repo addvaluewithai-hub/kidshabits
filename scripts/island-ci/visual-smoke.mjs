@@ -95,6 +95,10 @@ try {
       await mustBeVisible(page, 'cottage-change');
       await mustBeVisible(page, 'garden-change');
       await mustBeVisible(page, 'nova-actor');
+      const greeting = await (await mustBeVisible(page, 'nova-dialogue')).innerText();
+      if (!greeting.includes('جزيرتك') || greeting.includes('أخيرًا وصلنا')) {
+        throw new Error('Nova did not recognize the persisted island on return: ' + greeting);
+      }
       await shot(page, viewport.id + '-after-reload.png');
 
       if (pageErrors.length > 0) throw new Error('Uncaught browser errors: ' + pageErrors.join(' | '));
