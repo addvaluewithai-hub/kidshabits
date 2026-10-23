@@ -5,9 +5,9 @@ import type { WorldFocus } from '../../domain/island/model';
 import type { ThreePalette } from '../style/islandPalette';
 
 const TARGETS: Record<WorldFocus,THREE.Vector3>={
-  idle:new THREE.Vector3(.05,2.55,1.15),
-  cottage:new THREE.Vector3(.55,2.55,.85),
-  garden:new THREE.Vector3(-.35,2.00,1.74),
+  idle:new THREE.Vector3(.52,2.65,1.90),
+  cottage:new THREE.Vector3(1.05,2.75,1.40),
+  garden:new THREE.Vector3(.15,2.20,2.00),
 };
 const eyes=[-.19,.19];
 function Wing({side}:{side:-1|1}){
@@ -38,7 +38,7 @@ export function NovaSpirit({focus,palette}:{focus:WorldFocus;palette:ThreePalett
     body.current.rotation.z=reduced?0:Math.sin(clock.elapsedTime*1.25)*.065;
     body.current.rotation.y=THREE.MathUtils.damp(body.current.rotation.y,focus === 'cottage' ? -0.45 : focus === 'garden' ? 0.42 : 0,2.2,delta);
   });
-  return <group ref={root} position={[TARGETS.idle.x,TARGETS.idle.y,TARGETS.idle.z]}>
+  return <group ref={root} position={[TARGETS.idle.x,TARGETS.idle.y,TARGETS.idle.z]} scale={1.15}>
     <pointLight color="#ffe3bd" intensity={29} distance={4} position={[0,0,.4]}/>
     <group ref={body}>
       <Wing side={-1}/><Wing side={1}/>
