@@ -3,7 +3,7 @@
 const story=window.SPROUT_STORY;
 if(!story||!window.KidsHabitsDemo)throw Error('Missing story or Day 1 canvas demo');
 const $=id=>document.getElementById(id), KEY='sprout-10day-lab-v1';
-const css=\`
+const css=`
 html,body{direction:rtl;font-family:Tahoma,"Segoe UI",sans-serif}
 .page{grid-template-columns:minmax(320px,540px) minmax(340px,490px);gap:clamp(22px,4vw,60px);direction:ltr}
 .visual,.story-map{direction:rtl}.visual{justify-self:center}
@@ -30,7 +30,7 @@ html,body{direction:rtl;font-family:Tahoma,"Segoe UI",sans-serif}
 .map-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.map-tools button{padding:11px;border:1px solid rgba(215,249,225,.25);color:#dfefdf;border-radius:10px;background:rgba(255,255,255,.07);font-size:11px}
 @media(max-width:900px){.page{grid-template-columns:1fr;padding:15px;max-width:600px}.story-map{max-height:none;overflow:visible}.visual{width:min(100%,520px)}}
 @media(max-width:550px){.page{display:flex;flex-direction:column;padding:0;gap:0}.visual{width:100%}.frame{height:100svh;min-height:600px;border-radius:0}.story-map{padding:25px 20px 38px}.lab-top{top:max(30px,env(safe-area-inset-top))}.lab-top h2{font-size:28px}.lab-box{bottom:max(13px,env(safe-area-inset-bottom));padding:17px 16px;min-height:202px}.lab-line{min-height:72px}.sound{top:95px;left:20px}}
-\`.trim();
+`.trim();
 const sty=document.createElement('style');sty.textContent=css;document.head.append(sty);
 document.documentElement.lang='ar';document.documentElement.dir='rtl';
 document.title='KidsHabits — أول عشرة أيام من كوكب سبراوت';
