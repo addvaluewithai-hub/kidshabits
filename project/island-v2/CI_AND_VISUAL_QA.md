@@ -5,7 +5,7 @@
 The original `main` branch is **documentation-only** as of 2026-10-23. Runnable app files (`package.json`, Phaser/Vite/React sources) exist on earlier **draft feature PR branches**, not on `main`. Therefore **no valid production screenshot can be generated from this planning PR alone**.
 
 This folder adds a staged CI pipeline:
-1. **plan-validation:** executes immediately, checks frozen 25-session plan, tracker and mandatory documentation contracts.
+1. **plan-validation:** executes immediately, checks frozen 25-session plan, tracker and mandatory documentation contracts, then **runs the modular source guard**. When no \`src/\` exists it reports SKIP, not code-quality pass.
 2. **production-visual-proof:** executes **only when a root production `package.json` exists**, builds the real Vite app, drives it using Chromium/Playwright, captures **phone + desktop screenshots**, and fails when specified interactions are absent. It never uses a placeholder HTML fixture or takes a screenshot of the documentation.
 3. If app is absent, this workflow records a **skipped visual job**. Skipped is **NOT A VISUAL PASS**. The STATUS ledger stays blocked.
 
@@ -15,6 +15,7 @@ Do not configure branch required-checks until this actual production job is prov
 
 - `.github/workflows/island-production.yml` — CI pipeline for PRs and main.
 - `scripts/island-ci/validate-plan.mjs` — zero-dependency frozen session plan/status validator and detection of an actual app.
+- `scripts/island-ci/check-architecture.mjs` — guards production source files (220-line review warning, >350-line failure, forbidden domain→React/Phaser/world imports). This is not a replacement for architecture review.
 - `scripts/island-ci/wait-for-server.mjs` — wait for built app preview to respond.
 - `scripts/island-ci/visual-smoke.mjs` — Playwright user-journey contract and screenshots.
 - `project/island-v2/STATUS.md` — human-reviewed result and evidence ledger.
