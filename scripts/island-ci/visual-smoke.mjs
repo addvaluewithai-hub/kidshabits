@@ -45,7 +45,7 @@ async function shot(page, filename) {
 }
 
 try {
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: true, ...(process.env.CI ? { channel: 'chrome' } : {}) });
   for (const viewport of viewports) {
     const context = await browser.newContext({
       viewport: { width: viewport.width, height: viewport.height },
@@ -58,7 +58,10 @@ try {
     const page = await context.newPage();
     page.setDefaultTimeout(15000);
     const pageErrors = [];
-    page.on('pageerror', err => pageErrors.push(String(err)));
+    const consoleErrors = [];
+    page.on('pageerror', err => pageErrors.push(String(err.stack || err)));
+    page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+    page.on('requestfailed', request => consoleErrors.push('request failed: ' + request.url() + ' ' + request.failure()?.errorText));
     const run = { viewport: viewport.id, stage: 'starting', ok: false };
     evidence.checks.push(run);
 
@@ -86,6 +89,18 @@ try {
       await verifyChanged(page, 'garden');
       await shot(page, viewport.id + '-garden.png');
 
+      // Production reload must reconstruct durable presentation from saved semantic state.
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await mustBeVisible(page, 'island-world');
+      await mustBeVisible(page, 'cottage-change');
+      await mustBeVisible(page, 'garden-change');
+      await mustBeVisible(page, 'nova-actor');
+      const greeting = await (await mustBeVisible(page, 'nova-dialogue')).innerText();
+      if (!greeting.includes('جزيرتك') || greeting.includes('أخيرًا وصلنا')) {
+        throw new Error('Nova did not recognize the persisted island on return: ' + greeting);
+      }
+      await shot(page, viewport.id + '-after-reload.png');
+
       if (pageErrors.length > 0) throw new Error('Uncaught browser errors: ' + pageErrors.join(' | '));
       run.stage = 'completed';
       run.ok = true;
@@ -93,7 +108,11 @@ try {
     } catch (error) {
       failed = true;
       run.error = String(error.stack || error);
-      console.error('FAIL visual interactions:', viewport.id, run.stage, run.error);
+      run.pageErrors = pageErrors;
+      run.consoleErrors = consoleErrors;
+      try { run.bodyExcerpt = (await page.locator('body').innerHTML()).slice(0, 1200); } catch { /* navigation failed */ }
+      console.error('FAIL visual interactions:', viewport.id, run.stage, run.error,
+        'BROWSER ERRORS:', JSON.stringify({ pageErrors, consoleErrors, body: run.bodyExcerpt }));
       try { await shot(page, viewport.id + '-failure.png'); } catch { /* preview may have crashed */ }
     } finally {
       await context.close();

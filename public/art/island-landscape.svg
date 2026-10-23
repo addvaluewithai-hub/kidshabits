@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1150" viewBox="0 0 900 1150">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#102137"/><stop offset=".48" stop-color="#214455"/><stop offset=".82" stop-color="#497777"/><stop offset="1" stop-color="#8b9e88"/></linearGradient>
+  <radialGradient id="dawn"><stop stop-color="#ffdcaa" stop-opacity=".72"/><stop offset=".32" stop-color="#efbe92" stop-opacity=".35"/><stop offset="1" stop-color="#d8b98e" stop-opacity="0"/></radialGradient>
+  <radialGradient id="earth"><stop stop-color="#566d55"/><stop offset=".72" stop-color="#243f3c"/><stop offset="1" stop-color="#172b32"/></radialGradient>
+  <linearGradient id="grass" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#98ba83"/><stop offset=".4" stop-color="#608e78"/><stop offset="1" stop-color="#315d5b"/></linearGradient>
+  <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#829b94"/><stop offset="1" stop-color="#385355"/></linearGradient>
+  <radialGradient id="mist"><stop stop-color="#f9e5c4" stop-opacity=".22"/><stop offset="1" stop-color="#d6f8ff" stop-opacity="0"/></radialGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="soft6"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>
+<rect width="900" height="1150" fill="url(#sky)"/>
+<circle cx="690" cy="285" r="360" fill="url(#dawn)"/>
+<circle cx="685" cy="278" r="64" fill="#f8dba9" opacity=".55" filter="url(#soft)"/>
+<circle cx="683" cy="271" r="31" fill="#ffe8c0" opacity=".72"/>
+<g fill="#d9e6d8" opacity=".65">
+  <circle cx="97" cy="88" r="2"/><circle cx="227" cy="145" r="1.8"/><circle cx="401" cy="91" r="1.5"/><circle cx="524" cy="160" r="2"/><circle cx="830" cy="104" r="2"/><circle cx="765" cy="182" r="1.3"/><circle cx="309" cy="228" r="1.2"/><circle cx="143" cy="268" r="1.7"/><circle cx="540" cy="55" r="1.6"/><circle cx="853" cy="308" r="1.4"/>
+</g>
+<!-- distant islands and hills -->
+<path d="M-60 489 Q98 357 216 440 T484 436 T960 427 V700 H-60Z" fill="#334f5a" opacity=".45"/>
+<path d="M-30 556 Q109 449 258 528 T567 504 T958 485 V716 H-30Z" fill="#31515a" opacity=".64"/>
+<path d="M-45 632 Q176 531 330 582 T594 548 T954 605 V757 H-45Z" fill="#23444d" opacity=".64"/>
+<ellipse cx="192" cy="506" rx="245" ry="52" fill="#b0d2b6" opacity=".13" filter="url(#soft)"/>
+<ellipse cx="762" cy="553" rx="185" ry="44" fill="#dde5c5" opacity=".15" filter="url(#soft)"/>
+<g opacity=".55" fill="#2d5964"><path d="M43 541q16-25 33 0l-16 52z"/><path d="M775 526q26-56 48 0l-20 72z"/></g>
+<!-- glowing low clouds -->
+<ellipse cx="168" cy="704" rx="267" ry="75" fill="url(#mist)"/>
+<ellipse cx="750" cy="752" rx="242" ry="92" fill="url(#mist)"/>
+<!-- island shadow / floating rocky base -->
+<ellipse cx="449" cy="917" rx="382" ry="125" fill="#101f2d" opacity=".40" filter="url(#soft)"/>
+<path d="M58 762 C87 735 210 684 438 692 C684 682 825 735 849 789 C818 872 769 923 681 968 C598 1003 583 1075 490 1104 C437 1122 401 1059 341 1052 C257 1039 219 974 147 941 C82 911 54 844 58 762Z" fill="url(#earth)" stroke="#6c8d80" stroke-width="8"/>
+<path d="M95 853 C182 905 246 913 328 959 C398 987 430 1082 478 1089 C518 1091 569 986 649 945 C715 913 771 859 824 812" fill="none" stroke="#aac1a0" opacity=".17" stroke-width="8"/>
+<path d="M183 910L246 976L268 950L286 1009L330 1032M717 884L667 943L638 931L606 1005M440 967L471 1034L494 1002" fill="none" stroke="#d8c6a6" stroke-width="5" opacity=".28"/>
+<!-- top lawn -->
+<path d="M60 760C93 688 255 645 448 642C655 638 806 688 842 763C864 830 713 903 467 910C222 915 50 856 60 760Z" fill="url(#grass)" stroke="#8eae8e" stroke-width="10"/>
+<path d="M94 737Q255 658 451 671Q693 649 816 740" fill="none" stroke="#c7d5a5" stroke-opacity=".22" stroke-width="12"/>
+<path d="M306 903 C374 860 403 849 447 821 C478 790 550 772 611 760" fill="none" stroke="#baa782" opacity=".43" stroke-width="70" stroke-linecap="round"/>
+<path d="M306 900 C377 855 421 835 454 810 C499 778 564 759 611 753" fill="none" stroke="#e6d4a4" opacity=".30" stroke-width="33" stroke-linecap="round"/>
+<!-- little decorative land shelves -->
+<ellipse cx="150" cy="799" rx="73" ry="25" fill="#244a4d" opacity=".33"/>
+<ellipse cx="752" cy="836" rx="64" ry="23" fill="#284c4c" opacity=".36"/>
+<g fill="#d7b78b" opacity=".72">
+  <ellipse cx="408" cy="858" rx="37" ry="11" transform="rotate(-16 408 858)"/><ellipse cx="491" cy="810" rx="32" ry="10" transform="rotate(-24 491 810)"/>
+</g>
+<!-- bushes -->
+<g fill="#295e54">
+<ellipse cx="121" cy="752" rx="54" ry="27"/><ellipse cx="169" cy="765" rx="35" ry="21"/><ellipse cx="759" cy="779" rx="50" ry="29"/><ellipse cx="802" cy="760" rx="31" ry="20"/>
+</g>
+<g fill="#6da481" opacity=".83">
+<ellipse cx="112" cy="739" rx="35" ry="13"/><ellipse cx="761" cy="767" rx="32" ry="15"/><ellipse cx="799" cy="754" rx="18" ry="11"/>
+</g>
+<!-- tiny tiny flowers and seed sparks -->
+<g fill="#f9d3ae" opacity=".9"><circle cx="134" cy="807" r="5"/><circle cx="186" cy="841" r="4"/><circle cx="745" cy="858" r="6"/><circle cx="795" cy="805" r="4"/><circle cx="351" cy="713" r="3"/></g>
+<g stroke="#d1dec0" stroke-width="3" opacity=".45">
+<path d="M138 808l-8-15m8 15l6-16M745 859l-9-18m9 18l9-22M186 842l-5-15m5 15l8-11"/>
+</g>
+<g fill="#ffeeaf">
+  <circle cx="95" cy="644" r="3"/><circle cx="312" cy="612" r="3"/><circle cx="594" cy="575" r="2.5"/><circle cx="828" cy="654" r="4"/>
+</g>
+<circle cx="527" cy="715" r="150" fill="url(#mist)"/>
+<!-- grasses along the bottom foreground -->
+<g stroke="#96bb86" stroke-width="5" stroke-linecap="round" opacity=".66">
+  <path d="M115 871q-7-40-27-49m27 49q11-31 29-36M190 889q-5-36-23-45M714 881q14-40 37-51m-37 51q-10-27-32-42"/>
+</g>
+</svg>
