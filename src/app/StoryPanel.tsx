@@ -19,7 +19,7 @@ export function StoryPanel({ island, focus, onReset }: {
 
       <div className="dialogue" aria-live="polite" aria-atomic="true">
         <div className="dialogue__head"><span className="dialogue__avatar">✦</span><div><strong>نوفا</strong><small>رفيقتك في المغامرة</small></div><span className="dialogue__wave">◡̈</span></div>
-        <p>{getNovaLine(island, focus)}</p>
+        <p data-testid="nova-dialogue">{getNovaLine(island, focus)}</p>
       </div>
 
       <div className="story-panel__progress">
