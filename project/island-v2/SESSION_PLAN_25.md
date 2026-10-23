@@ -6,13 +6,13 @@
 **Authority:** [PRODUCT_BLUEPRINT.md](./PRODUCT_BLUEPRINT.md) · [NOVA_COMPANION.md](./NOVA_COMPANION.md) · [FIRST_10_DAYS.md](./FIRST_10_DAYS.md).  
 **Live operational ledger:** [STATUS.md](./STATUS.md). Update after **every** session; update with verified facts, never auto-mark green from prose.
 
-The numbers below are *planning slots*, not promised dates. Each session produces code or a reviewable artifact in its own PR/commits with CI evidence. **No proceeding to the next phase without its gate.** This plan may be revised by a new PR, preserving the older version and recording the reason.
+The numbers below are *planning slots*, not promised dates. Each session produces code or a reviewable artifact in its own PR/commits with CI evidence. **No proceeding to the next phase without its gate.** **Architecture rule:** all new code follows [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md): small focused modules, clean import direction, stable semantic state, and replaceable art packs. Its source guard runs in CI. This plan may be revised by a new PR, preserving the older version and recording the reason.
 
 ## Phase 1 — production baseline and visual slice (sessions 01–07)
 
 | Session | Specific deliverable | Evidence / acceptance |
 |---|---|---|
-| **01** | Select runnable Git baseline: audit existing draft PRs (#2–#7), adopt/reconcile v2 architecture, preserve working code, confirm local/CI build and source-of-truth docs | Working `npm run build` from selected branch; documented baseline/ref; screenshots only if actual app exists |
+| **01** | **Greenfield clean scaffold from main**, audit existing PRs (#2–#7) only for selective modular reuse, enforce [engineering standards](./ENGINEERING_STANDARDS.md), confirm local/CI build and source-of-truth docs | Working `npm run build` from selected branch; documented baseline/ref; screenshots only if actual app exists |
 | **02** | Art bible: island perspective/palette/lighting/asset dimensions; Nova expressions/motion spec; choose first cottage + garden composition | Reviewed before/after keyframes at phone width; asset list; no placeholder art approved as final |
 | **03** | Phaser 4 world boot, portrait responsive safe areas, separated background/foreground/hotspots | Dev URL + working mobile viewport screenshot; no console errors |
 | **04** | Nova independent world actor: correct movement/flight, gaze toward cottage/garden, expression poses | Actor visible on portrait and desktop, screenshots + automated actor state check |
@@ -64,7 +64,7 @@ The numbers below are *planning slots*, not promised dates. Each session produce
 - Production assets and animation are major risks and may need external creation/iterations. No inflated promise of studio quality in 25 sessions.
 - The first 10 "days" are **ten unlock/content beats**, not calendar streaks. No obligation for daily log-in; missed days do not punish.
 - World should genuinely support building and gardening, not just 10 similar scenes.
-- Prior draft PRs may need selective cherry-pick/reconciliation. **Never merge all blindly.**
+- Prior draft PRs are **reference implementations**, not a baseline. Start from clean main; reimplement or selectively reuse reviewed small modules only. **Never merge all blindly.**
 - Current `main` is documentation-only; Session 01 must create a verified runnable baseline first.
 
 ## PR / session protocol
