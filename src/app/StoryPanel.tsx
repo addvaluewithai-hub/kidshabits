@@ -1,10 +1,5 @@
 import type { IslandSnapshot, WorldFocus } from '../domain/island/model';
-
-const SAYINGS: Record<WorldFocus, string> = {
-  idle: 'أخيرًا وصلنا! بس... هو إحنا هنعيش فين؟ بصّي البيت القديم ده! أنا عندي فكرة... إيه رأيك نخلي الجزيرة دي بتاعتنا؟',
-  cottage: 'يا سلام! البيت بدأ يصحى تاني! شفتي النور اللي ظهر في الشبابيك؟ عندك ذوق خطير.',
-  garden: 'واااو! أول زهرة في جزيرتنا! تخيّلي لما يبقى هنا حديقة كاملة من اختيارك.',
-};
+import { getNovaLine } from '../content/island/novaLines';
 
 export function StoryPanel({ island, focus, onReset }: {
   island: IslandSnapshot;
@@ -24,7 +19,7 @@ export function StoryPanel({ island, focus, onReset }: {
 
       <div className="dialogue" aria-live="polite" aria-atomic="true">
         <div className="dialogue__head"><span className="dialogue__avatar">✦</span><div><strong>نوفا</strong><small>رفيقتك في المغامرة</small></div><span className="dialogue__wave">◡̈</span></div>
-        <p>{SAYINGS[focus]}</p>
+        <p>{getNovaLine(island, focus)}</p>
       </div>
 
       <div className="story-panel__progress">
