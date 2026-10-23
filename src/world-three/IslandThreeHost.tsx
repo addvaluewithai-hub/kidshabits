@@ -24,7 +24,7 @@ export function IslandThreeHost({island,focus,onCottage,onGarden}:Props){
      camera={{position:[9,10,15],zoom:41,near:.1,far:80}}
      dpr={[1,1.75]}
      gl={{antialias:true,alpha:true,powerPreference:'high-performance'}}
-     onCreated={({camera})=>{camera.lookAt(0,.65,0);camera.updateProjectionMatrix();setReady(true);}}
+     onCreated={({camera})=>{camera.lookAt(0,.65,0);setReady(true);}}
    >
      <ThreeWorldScene island={island} focus={focus} onCottage={onCottage} onGarden={onGarden}/>
    </Canvas>
