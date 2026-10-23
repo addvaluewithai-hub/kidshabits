@@ -4,6 +4,7 @@ export interface IslandArtPack {
   layers: {
     backdrop: string;
     cottage: string;
+    restoredCottage: string;
     tree: string;
     nova: string;
     flower: string;
@@ -19,6 +20,7 @@ export const STORYBOOK_ART: IslandArtPack = {
   layers: {
     backdrop: '/art/island-landscape.svg',
     cottage: '/art/old-cottage.svg',
+    restoredCottage: '/art/restored-cottage.svg',
     tree: '/art/ancient-tree.svg',
     nova: '/art/nova.svg',
     flower: '/art/luminous-flower.svg',
