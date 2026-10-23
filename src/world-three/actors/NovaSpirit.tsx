@@ -30,7 +30,7 @@ export function NovaSpirit({focus,palette}:{focus:WorldFocus;palette:ThreePalett
   const root=useRef<THREE.Group>(null);
   const body=useRef<THREE.Group>(null);
   const reduced=typeof window!=='undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  useFrame(({clock},delta})=>{
+  useFrame(({clock},delta)=>{
     if(!root.current || !body.current)return;
     const target=TARGETS[focus];
     root.current.position.lerp(target,1-Math.exp(-delta*(reduced?100:2.3)));
