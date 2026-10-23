@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import * as THREE from 'three';
 import type { IslandSnapshot } from '../../domain/island/model';
 import type { ThreePalette } from '../style/islandPalette';
 
