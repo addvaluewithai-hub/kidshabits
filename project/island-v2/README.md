@@ -16,7 +16,7 @@ The previous 10-day story-only exploration in PR #7 is an experiment, **not the 
 
 ## Resume work here — production control center
 
-**Read [STATUS.md](./STATUS.md) first** at the start of every session. It holds the active session (initially **01/25**), blockers, tested commit/run evidence, and next task. Use [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) for the fixed session-by-session roadmap and [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) for GitHub Actions screenshots and acceptance gates.
+**Read [STATUS.md](./STATUS.md) first** at the start of every session. It holds the active session (initially **01/25**), blockers, tested commit/run evidence, and next task. Apply **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** as our clean-build, modular-file and swappable-art contract. Use [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) for the fixed session-by-session roadmap and [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) for GitHub Actions screenshots and acceptance gates.
 
 **Current CI verification:** Planning validation has passed on [Actions run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598). Visual job was **skipped** because the planning branch has no runnable app; real game screenshots remain **NOT VERIFIED**.
 
@@ -30,7 +30,8 @@ The previous 10-day story-only exploration in PR #7 is an experiment, **not the 
 4. [FIRST_10_DAYS.md](./FIRST_10_DAYS.md) — playable ten-day outline with building, choice, mystery and state.
 5. [ART_AND_CONTENT_PIPELINE.md](./ART_AND_CONTENT_PIPELINE.md) — cohesive art, sprites/video/p5, production assets.
 6. [TECHNICAL_CONTRACTS.md](./TECHNICAL_CONTRACTS.md) — state, game architecture, integration and save rules.
-7. [ROADMAP_AND_ACCEPTANCE.md](./ROADMAP_AND_ACCEPTANCE.md) — small GitHub deliverables, tests, gates, next PR.
+7. **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** — clean-from-main codebase; modular architecture, file limits and art theme boundaries.
+8. [ROADMAP_AND_ACCEPTANCE.md](./ROADMAP_AND_ACCEPTANCE.md) — small GitHub deliverables, tests, gates, next PR.
 
 ## Repository alignment / precedence
 
