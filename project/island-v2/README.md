@@ -19,11 +19,12 @@ The previous 10-day story-only exploration in PR #7 is an experiment, **not the 
 **ابدأ هنا بالعربي:** [PLAN_AR.md](./PLAN_AR.md) — ملخص عملي شامل للفكرة والخطوات وأول عشرة أيام.
 
 1. [PRODUCT_BLUEPRINT.md](./PRODUCT_BLUEPRINT.md) — audience, game loops, emotional goals, family boundaries.
-2. [NOVA_COMPANION.md](./NOVA_COMPANION.md) — character behavior, live AI, authored dialogue, safety.
-3. [FIRST_10_DAYS.md](./FIRST_10_DAYS.md) — playable ten-day outline with building, choice, mystery and state.
-4. [ART_AND_CONTENT_PIPELINE.md](./ART_AND_CONTENT_PIPELINE.md) — cohesive art, sprites/video/p5, production assets.
-5. [TECHNICAL_CONTRACTS.md](./TECHNICAL_CONTRACTS.md) — state, game architecture, integration and save rules.
-6. [ROADMAP_AND_ACCEPTANCE.md](./ROADMAP_AND_ACCEPTANCE.md) — small GitHub deliverables, tests, gates, next PR.
+2. **[FINCH_COMPETITOR_STUDY_AR.md](./FINCH_COMPETITOR_STUDY_AR.md)** — تحليل المنافس Finch وماذا نتعلم منه وأين نختلف، بمصادر رسمية وتحذير أنه 13+.
+3. [NOVA_COMPANION.md](./NOVA_COMPANION.md) — character behavior, live AI, authored dialogue, safety.
+4. [FIRST_10_DAYS.md](./FIRST_10_DAYS.md) — playable ten-day outline with building, choice, mystery and state.
+5. [ART_AND_CONTENT_PIPELINE.md](./ART_AND_CONTENT_PIPELINE.md) — cohesive art, sprites/video/p5, production assets.
+6. [TECHNICAL_CONTRACTS.md](./TECHNICAL_CONTRACTS.md) — state, game architecture, integration and save rules.
+7. [ROADMAP_AND_ACCEPTANCE.md](./ROADMAP_AND_ACCEPTANCE.md) — small GitHub deliverables, tests, gates, next PR.
 
 ## Repository alignment / precedence
 
