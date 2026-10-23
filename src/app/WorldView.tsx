@@ -22,7 +22,7 @@ export function WorldView({ island, focus, onCottage, onGarden }: Props) {
           <span>ISLAND 001</span><span className="scene-kicker__dot">·</span><span>البداية</span>
         </div>
 
-        <div className="nova-label" data-testid="nova-actor" data-focus={focus}>
+        <div className={`nova-label nova-label--${focus}`} data-testid="nova-actor" data-focus={focus}>
           <span className="nova-label__light" aria-hidden="true" /> نوفا هنا معاك
         </div>
 
