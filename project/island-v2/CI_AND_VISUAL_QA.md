@@ -15,7 +15,7 @@ Do not configure branch required-checks until this actual production job is prov
 
 - `.github/workflows/island-production.yml` — CI pipeline for PRs and main.
 - `scripts/island-ci/validate-plan.mjs` — zero-dependency frozen session plan/status validator and detection of an actual app.
-- `scripts/island-ci/check-architecture.mjs` — guards production source files (220-line review warning, >350-line failure, forbidden domain→React/Phaser/world imports). This is not a replacement for architecture review.
+- `scripts/island-ci/check-architecture.mjs` — guards production source files (220-line review warning, >350-line stronger advisory warning; **no LOC hard-fail**, forbidden domain→React/Phaser/world imports). This is not a replacement for architecture review.
 - `scripts/island-ci/wait-for-server.mjs` — wait for built app preview to respond.
 - `scripts/island-ci/visual-smoke.mjs` — Playwright user-journey contract and screenshots.
 - `project/island-v2/STATUS.md` — human-reviewed result and evidence ledger.
