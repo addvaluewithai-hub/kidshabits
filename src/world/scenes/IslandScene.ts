@@ -47,7 +47,7 @@ export class IslandScene extends Phaser.Scene {
     this.add.circle(781, 531, 4, this.art.colors.glow, 0.71).setDepth(20);
     this.nova = new NovaActor(this);
 
-    this.tweens.add({
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) this.tweens.add({
       targets: [this.doorLight, this.gardenLight],
       scale: 1.15,
       yoyo: true,
