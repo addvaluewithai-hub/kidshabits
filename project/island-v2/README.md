@@ -16,6 +16,8 @@ The previous 10-day story-only exploration in PR #7 is an experiment, **not the 
 
 ## Read in order
 
+**ابدأ هنا بالعربي:** [PLAN_AR.md](./PLAN_AR.md) — ملخص عملي شامل للفكرة والخطوات وأول عشرة أيام.
+
 1. [PRODUCT_BLUEPRINT.md](./PRODUCT_BLUEPRINT.md) — audience, game loops, emotional goals, family boundaries.
 2. [NOVA_COMPANION.md](./NOVA_COMPANION.md) — character behavior, live AI, authored dialogue, safety.
 3. [FIRST_10_DAYS.md](./FIRST_10_DAYS.md) — playable ten-day outline with building, choice, mystery and state.
