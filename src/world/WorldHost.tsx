@@ -25,10 +25,7 @@ export function WorldHost({ island, focus }: { island: IslandSnapshot; focus: Wo
       scene: [worldScene],
       render: { antialias: true },
     });
-    const sync = () => worldScene.applySnapshot(latest.current.island, latest.current.focus);
-    worldScene.events.on(Phaser.Scenes.Events.CREATE, sync);
     return () => {
-      worldScene.events.off(Phaser.Scenes.Events.CREATE, sync);
       scene.current = null;
       game.destroy(true);
     };
