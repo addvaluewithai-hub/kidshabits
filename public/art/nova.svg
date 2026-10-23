@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="275" viewBox="0 0 240 275">
+<defs>
+<radialGradient id="aura"><stop stop-color="#ffd7a0" stop-opacity=".64"/><stop offset=".5" stop-color="#ffe8ab" stop-opacity=".21"/><stop offset="1" stop-color="#f8cf9f" stop-opacity="0"/></radialGradient>
+<radialGradient id="body"><stop stop-color="#fffdf0"/><stop offset=".52" stop-color="#f8eac3"/><stop offset="1" stop-color="#f2b886"/></radialGradient>
+<linearGradient id="wing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5fff0" stop-opacity=".93"/><stop offset="1" stop-color="#8dc0c7" stop-opacity=".52"/></linearGradient>
+<filter id="blur"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>
+<circle cx="120" cy="132" r="118" fill="url(#aura)"/>
+<path d="M83 119C42 69 12 116 37 161C49 181 78 185 91 156" fill="url(#wing)" stroke="#bff0dc" stroke-width="3" opacity=".85"/>
+<path d="M157 119C198 69 228 116 203 161C191 181 162 185 149 156" fill="url(#wing)" stroke="#bff0dc" stroke-width="3" opacity=".85"/>
+<path d="M116 70Q100 39 118 31Q140 34 126 69" fill="none" stroke="#ffdda8" stroke-width="8" stroke-linecap="round"/>
+<circle cx="123" cy="25" r="15" fill="#fff1bc" opacity=".85"/>
+<path d="M122 64C171 64 196 104 185 155C177 193 156 221 118 236C83 215 55 187 53 146C50 95 75 66 122 64Z" fill="url(#body)" stroke="#f7eec9" stroke-width="4"/>
+<ellipse cx="120" cy="133" rx="58" ry="64" fill="#fff8dd" opacity=".38"/>
+<ellipse cx="90" cy="136" rx="13" ry="17" fill="#304b50"/>
+<ellipse cx="149" cy="136" rx="13" ry="17" fill="#304b50"/>
+<circle cx="94" cy="130" r="4" fill="white"/><circle cx="153" cy="130" r="4" fill="white"/>
+<path d="M108 163Q122 175 137 162" fill="none" stroke="#ab766c" stroke-linecap="round" stroke-width="5"/>
+<ellipse cx="72" cy="158" rx="15" ry="8" fill="#eeae9e" opacity=".55"/>
+<ellipse cx="170" cy="158" rx="15" ry="8" fill="#eeae9e" opacity=".55"/>
+<path d="M65 180Q34 181 34 201" fill="none" stroke="#fce9c8" stroke-width="13" stroke-linecap="round"/>
+<path d="M175 180Q207 179 212 196" fill="none" stroke="#fce9c8" stroke-width="13" stroke-linecap="round"/>
+<path d="M102 226Q91 239 93 244M142 225Q147 240 141 245" fill="none" stroke="#f2c998" stroke-width="9" stroke-linecap="round"/>
+<g fill="#fff9be" opacity=".9"><circle cx="26" cy="55" r="5"/><circle cx="215" cy="65" r="4"/><circle cx="42" cy="222" r="3"/></g>
+</svg>
