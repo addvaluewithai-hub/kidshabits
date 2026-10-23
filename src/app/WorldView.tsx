@@ -1,5 +1,6 @@
 import { WorldHost } from '../world/WorldHost';
 import type { IslandSnapshot, WorldFocus } from '../domain/island/model';
+import { getNovaTeaser } from '../content/island/novaLines';
 
 interface Props {
   island: IslandSnapshot;
@@ -22,6 +23,7 @@ export function WorldView({ island, focus, onCottage, onGarden }: Props) {
           <span>ISLAND 001</span><span className="scene-kicker__dot">·</span><span>البداية</span>
         </div>
 
+        <div className="nova-speech" aria-hidden="true">{getNovaTeaser(island, focus)}</div>
         <div className={`nova-label nova-label--${focus}`} data-testid="nova-actor" data-focus={focus}>
           <span className="nova-label__light" aria-hidden="true" /> نوفا هنا معاك
         </div>
