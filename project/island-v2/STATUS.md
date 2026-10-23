@@ -19,6 +19,7 @@
 |---|---|---|
 | V2 product vision written | ✅ ready for review | docs PR #8; Arabic plan, blueprint, first 10 beats, Finch research |
 | 25-session execution estimate | ✅ documented | [SESSION_PLAN_25.md](./SESSION_PLAN_25.md); planning estimate only |
+| Modular clean code / swappable art standards | ✅ documented, not yet applied to app | [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md); CI source guard added, app implementation not started |
 | Status and one-session-at-a-time protocol | ✅ documented | this file, [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) |
 | Initial production target | ✅ defined | [Session 01 issue #11](https://github.com/addvaluewithai-hub/kidshabits/issues/11) → [visual Slice 0 issue #10](https://github.com/addvaluewithai-hub/kidshabits/issues/10) |
 | V2 product approved + merged to `main` | ⏳ pending | PR #8 is draft; `PRODUCT_VISION.md` still describes linear 30-day journey |
@@ -33,9 +34,10 @@
 ## Pre-session 01 checklist
 
 - [ ] Review/approve proposed v2 doc changes; decide fate of old story lab PR #7.
-- [ ] Audit code branches PRs #2–#6: compare overlap and dependency; choose clean code integration strategy, not blind merging.
+- [ ] Audit code branches PRs #2–#6: compare overlap and dependency; **start clean from main and selectively reimplement/reuse only reviewed modular pieces**, never wholesale merge.
 - [ ] Explicitly reconcile canonical `project/PRODUCT_VISION.md`, `AGENTS.md`, and any new tech docs with island-led v2.
 - [ ] Choose **one** source branch/SHA for the first real app. Record below.
+- [ ] Build a small clean app scaffold starting from main; obey [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md), no monolithic App.tsx, engine/domain coupling, or art baked into state.
 - [ ] Clone/build with `npm run build`, capture build log and tested commit SHA.
 - [ ] Enable visual CI on that app PR; satisfy stable test IDs and interaction contracts.
 - [ ] Run CI; verify actual screenshots downloadable from artifact; inspect visuals.
@@ -87,4 +89,5 @@
 6. Preserve session history; if skipped/re-scoped, explain in a change log below.
 
 ### History
+- **2026-10-23** — User confirmed greenfield from documentation-only `main`, review old code only as a source of selectively reusable pieces, enforce small modular modules and swappable art. [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md) and automatic architecture size/import guard added; **no runtime implementation sessions claimed**.
 - **2026-10-23** — v2 product/docs PR #8 exists; 25-session plan and tracking/visual-CI protocol committed. GitHub Actions [run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598): **plan-validation passed**; **production-visual-proof skipped** (no app scaffold). Implementation progress **0/25**. Prior app code exists only on feature PR branches; real screenshot evidence still pending.
