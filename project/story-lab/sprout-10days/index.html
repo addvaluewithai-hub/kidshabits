@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#091625" />
+<title>KidsHabits — Story Lab, First Ten Days</title>
+<style>
+:root{color-scheme:dark;--cream:#f5edda;--mint:#b4ecd6;--border:rgba(196,245,222,.17)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#081421;color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}body{overflow-x:hidden}
+.page{min-height:100svh;display:grid;grid-template-columns:minmax(400px,680px) minmax(360px,500px);gap:clamp(30px,5.5vw,90px);justify-content:center;align-items:center;max-width:1510px;margin:auto;padding:28px clamp(22px,4vw,68px)}
+.visual{width:min(100%,540px);justify-self:end}.frame{position:relative;overflow:hidden;isolation:isolate;background:#102238;border:1px solid rgba(207,249,228,.25);border-radius:30px;aspect-ratio:720/1180;box-shadow:0 26px 105px rgba(0,0,0,.50),0 0 0 8px rgba(195,239,218,.025),inset 0 0 90px rgba(5,11,19,.5)}
+.frame canvas{width:100%;height:100%;display:block;touch-action:manipulation}.frame::after{position:absolute;inset:0;content:"";pointer-events:none;box-shadow:inset 0 0 100px rgba(5,9,21,.34);border-radius:inherit}
+.top-hud{position:absolute;top:clamp(19px,3.7%,40px);left:clamp(17px,5%,36px);right:clamp(17px,5%,36px);display:flex;justify-content:space-between;align-items:flex-start;z-index:2;gap:8px;pointer-events:none}.eyebrow{font-size:clamp(9px,.9vw,11px);font-weight:800;letter-spacing:.24em;color:#b6e6d8;text-shadow:0 1px 10px #091826}.day-title{font-family:Georgia,Times,serif;font-size:clamp(27px,3.2vw,44px);line-height:.95;letter-spacing:-.05em;font-weight:400;margin:9px 0 0;text-shadow:0 3px 24px rgba(2,9,20,.6)}.day-title em{color:#f6dfab;font-weight:400}.pill{border:1px solid rgba(212,253,220,.32);border-radius:30px;background:rgba(5,28,34,.43);padding:8px 11px;letter-spacing:.12em;font-size:10px;font-weight:800;color:#d4f9e8;white-space:nowrap;backdrop-filter:blur(12px)}
+.sound{position:absolute;right:24px;top:112px;z-index:5;border:1px solid rgba(255,255,255,.24);background:rgba(3,26,35,.38);backdrop-filter:blur(12px);color:#f1f4e3;border-radius:50%;width:40px;height:40px;font-size:17px;cursor:pointer}.sound:hover{background:rgba(63,113,106,.55)}
+.callout{position:absolute;top:24%;left:7%;max-width:270px;z-index:3;opacity:0;transform:translateY(8px);transition:opacity .55s,transform .55s;pointer-events:none}.callout.show{opacity:1;transform:translateY(0)}.callout span{display:block;font-family:Georgia,serif;font-style:italic;font-size:clamp(17px,2vw,28px);text-shadow:0 2px 15px #071629;line-height:1.3;color:#fdf0d6}
+.seed-hint{position:absolute;left:50%;top:66%;transform:translate(-50%,-50%);opacity:0;pointer-events:none;z-index:4;transition:opacity .4s;text-align:center}.seed-hint.visible{opacity:1}.seed-hint .ring{width:79px;height:79px;border-radius:50%;border:1px solid rgba(246,241,185,.7);box-shadow:0 0 0 7px rgba(255,228,159,.055),0 0 25px rgba(255,226,150,.22);animation:ring 2s ease-in-out infinite;display:grid;place-items:center;font-size:28px;text-shadow:0 0 20px #eafdbd}.seed-hint b{display:block;font-size:10px;white-space:nowrap;margin-top:16px;letter-spacing:.16em;text-shadow:0 1px 12px #071a20}@keyframes ring{50%{box-shadow:0 0 0 13px rgba(255,228,159,.08),0 0 44px rgba(255,226,150,.36);transform:scale(1.06)}}
+.story-panel{position:absolute;left:clamp(12px,3.7%,30px);right:clamp(12px,3.7%,30px);bottom:clamp(13px,3%,31px);z-index:8;background:linear-gradient(125deg,rgba(10,35,39,.90),rgba(7,27,35,.85));border:1px solid rgba(210,254,221,.25);border-radius:22px;padding:clamp(17px,3.8%,28px);backdrop-filter:blur(24px);box-shadow:0 20px 38px rgba(2,8,14,.35)}
+.story-kicker{font-size:10px;color:#c7dfc4;letter-spacing:.22em;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:9px}.story-kicker::before{content:"";height:5px;width:5px;background:#b7f0c8;border-radius:50%;box-shadow:0 0 9px #a1f5ca}
+.story-panel h2{font-family:Georgia,Times,serif;font-weight:400;font-size:clamp(22px,3vw,31px);letter-spacing:-.025em;line-height:1.08;margin:0 0 9px;color:#fff6e2}
+.story-panel p{font-size:clamp(11px,1.26vw,13px);line-height:1.65;color:#d4e3d8;margin:0 0 15px;min-height:37px}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.primary{appearance:none;border:0;border-radius:12px;background:linear-gradient(115deg,#fae5aa,#f0c987);font-weight:800;color:#173936;padding:13px 18px;min-height:45px;cursor:pointer;box-shadow:0 4px 20px rgba(255,228,147,.17);font-size:12px;letter-spacing:.015em}.primary:hover{filter:brightness(1.07)}.primary:active{transform:translateY(1px)}.quiet{border:1px solid rgba(231,249,230,.19);padding:12px 15px;color:#d3efe1;background:rgba(255,255,255,.045);font-size:11px;font-weight:650;cursor:pointer;border-radius:11px}.quiet:hover{background:rgba(255,255,255,.1)}
+.progress{position:absolute;bottom:calc(3% + 190px);right:5%;z-index:3;display:flex;gap:7px;opacity:.86}.progress i{width:23px;height:3px;background:rgba(237,249,230,.36);border-radius:3px}.progress i.on{background:#ffdd98;box-shadow:0 0 8px #ffe7a0}
+.reveal-title{position:absolute;z-index:7;top:35%;width:100%;padding:0 8%;text-align:center;opacity:0;transform:translateY(14px);transition:opacity .9s,transform .9s;pointer-events:none}.reveal-title.show{opacity:1;transform:translateY(0)}.reveal-title small{display:block;color:#f7eab6;font-weight:800;font-size:11px;letter-spacing:.34em;margin-bottom:13px;text-shadow:0 2px 14px #134031}.reveal-title strong{display:block;font-family:Georgia,serif;font-weight:400;line-height:1.08;font-size:clamp(30px,4vw,49px);text-shadow:0 4px 28px #193a39}
+.info{padding:22px 0}.overline{font-size:11px;letter-spacing:.26em;font-weight:850;color:#9dd5c0}.info h1{font-family:Georgia,serif;font-size:clamp(39px,4.4vw,69px);letter-spacing:-.065em;line-height:1.02;font-weight:400;margin:17px 0 20px}.info h1 i{color:#f6dfac;font-weight:400}.summary{font-size:clamp(16px,1.5vw,18px);line-height:1.7;color:#c2d4cf;max-width:480px;margin:0 0 28px}.rule{height:1px;background:linear-gradient(90deg,rgba(197,240,218,.3),transparent);margin:24px 0}.feature{display:flex;gap:16px;padding:12px 0}.feature b{font-weight:700;color:#f4ebd9}.feature p{color:#96b3b1;font-size:13px;line-height:1.55;margin:6px 0 0}.number{display:grid;place-items:center;border:1px solid rgba(195,251,217,.22);background:rgba(185,255,207,.055);color:#b6e8d0;border-radius:12px;flex:0 0 40px;height:40px;font-family:Georgia,serif;font-size:18px}.footnote{font-size:12px;color:#84a4a0;line-height:1.55;margin-top:19px}.topline{display:flex;gap:9px;align-items:center;margin-bottom:24px;font-weight:750;color:#cee8dc;letter-spacing:.09em;font-size:12px}.brandmark{background:#b9ecd6;color:#06332c;width:27px;height:27px;border-radius:9px;display:grid;place-items:center;font-size:15px}
+@media(max-width:900px){.page{grid-template-columns:1fr;gap:22px;padding:15px}.visual{justify-self:center;width:min(100%,530px)}.info{width:min(100%,530px);justify-self:center;padding:16px 5px 30px}.info h1{font-size:40px;margin:12px 0}.topline{margin-bottom:12px}.summary{font-size:15px;margin-bottom:15px}.frame{border-radius:22px}.sound{right:18px;top:102px}}@media(max-width:550px){.page{padding:0;display:block}.visual{width:100%}.frame{width:100%;border-radius:0;border:0;aspect-ratio:auto;height:100svh;min-height:620px}.info{padding:25px 23px 50px}.frame canvas{width:100%;height:100%;object-fit:cover}.story-panel{padding:17px 19px;bottom:max(15px,env(safe-area-inset-bottom))}.top-hud{top:29px;left:23px;right:23px}.day-title{font-size:32px}.pill{font-size:9px}.sound{top:105px}.progress{display:none}.seed-hint{top:66%}.callout{top:21%}.info h1{font-size:39px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="page">
+ <section class="visual" aria-label="Interactive Day 1 Sprout Planet story">
+  <div class="frame" id="frame">
+   <div class="top-hud"><div><div class="eyebrow">KIDSHABITS · SPROUT PLANET</div><div class="day-title">The <em>First Light</em></div></div><span class="pill" id="dayBadge">DAY 01 / 30</span></div>
+   <button class="sound" id="sound" type="button" aria-label="Enable sound" title="Sound off">♪̸</button>
+   <div class="callout" id="callout"><span id="thought">“I think this planet is dreaming.”</span></div>
+   <div class="seed-hint" id="seedHint"><div class="ring">✦</div><b>TAP THE GLOW</b></div>
+   <div class="reveal-title" id="reveal"><small>THE WORLD REMEMBERS</small><strong>One small act.<br>A little more light.</strong></div>
+   <div class="progress" id="progress"><i class="on"></i><i></i><i></i></div>
+   <div class="story-panel" aria-live="polite"><div class="story-kicker" id="speaker">NOVA · YOUR COMPANION</div><h2 id="panelTitle">A world waiting to wake.</h2><p id="panelText">A quiet meadow. A mysterious light. And a new friend with a little secret to share.</p><div class="actions"><button id="primary" class="primary">Begin the story ↗</button><button id="secondary" class="quiet" hidden>Replay</button></div></div>
+  </div>
+ </section>
+ <aside class="info"><div class="topline"><span class="brandmark">✦</span> KIDSHABITS / PLAYABLE STORY LAB</div><div class="overline">CINEMATIC VERTICAL SLICE · DAY ONE</div><h1>What if a habit could <i>wake a world?</i></h1><p class="summary">Meet Nova in a sleeping meadow. Find the first seed. Then see one everyday action transform the planet around you.</p><div class="rule"></div>
+ <div class="feature"><span class="number">01</span><div><b>Explore</b><p>Parallax-inspired scenery, ambient movement, a floating companion, and a hidden light.</p></div></div>
+ <div class="feature"><span class="number">02</span><div><b>Act</b><p>Simulate completing a real-world habit. In the finished product, a parent can set the verification rule.</p></div></div>
+ <div class="feature"><span class="number">03</span><div><b>Watch the world remember</b><p>Color, plants, light, and Nova's reaction shift together in an authored cinematic reveal.</p></div></div>
+ <div class="rule"></div><div class="footnote">A self-contained interactive art/animation prototype, designed to demonstrate the target feeling. Uses p5.js when available and a canvas fallback offline. Production integration with the Phaser story engine comes after the visual direction is validated.</div>
+ </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/p5@2.3.4/lib/p5.min.js" onerror="window.__p5Unavailable=true"></script>
+<script>
+(()=>{
+'use strict';
+const W=720,H=1180,TAU=Math.PI*2;
+const frame=document.getElementById('frame'),el=id=>document.getElementById(id);
+let canvas,ctx,t=0,prev=0,stage='intro',stageAt=0,magic=0,glow=0,sceneShift=0,soundOn=false,audio=null,lead=0,flowerT=0,blink=0,transitionPlayed=false;
+let particles=[],petals=[],seed=12034,stars=[],motes=[],grass=[],flowers=[],clouds=[];
+function rng(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}function r(a,b){return a+rng()*(b-a)}
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));const mix=(a,b,t)=>a+(b-a)*t;const ease=x=>1-Math.pow(1-clamp(x),3);const smooth=x=>{x=clamp(x);return x*x*(3-2*x)};
+for(let i=0;i<130;i++)stars.push({x:r(0,W),y:r(0,660),p:r(0,TAU),s:r(.3,1.9),tw:r(.3,2.2)});
+for(let i=0;i<110;i++)motes.push({x:r(0,W),y:r(260,1080),p:r(0,TAU),s:r(.4,1.7),v:r(.2,.9),depth:r(.25,1)});
+for(let i=0;i<155;i++)grass.push({x:r(-20,740),y:r(830,1120),h:r(9,39),p:r(0,TAU),q:r(.5,1.4)});
+for(let i=0;i<40;i++)flowers.push({x:r(0,W),y:r(750,1110),s:r(.5,1.25),c:i%4,p:r(0,TAU)});
+for(let i=0;i<25;i++)petals.push({x:r(-50,800),y:r(-120,1180),p:r(0,TAU),v:r(5,25),s:r(2,6)});
+for(let i=0;i<5;i++)clouds.push({x:r(-200,800),y:r(160,380),size:r(100,230),speed:r(.7,2.5)});
+function fill(c){ctx.fillStyle=c}function stroke(c,w){ctx.strokeStyle=c;ctx.lineWidth=w}function circle(x,y,rx,ry,color){if(color)fill(color);ctx.beginPath();ctx.ellipse(x,y,Math.max(.001,Math.abs(rx)),Math.max(.001,Math.abs(ry)),0,0,TAU);ctx.fill()}
+function path(draw,color){ctx.beginPath();draw(ctx);if(color){fill(color);ctx.fill()}}
+function line(draw,color,width=1){ctx.beginPath();draw(ctx);stroke(color,width);ctx.stroke()}
+function grad(x,y,x2,y2,stops){const g=ctx.createLinearGradient(x,y,x2,y2);for(const [p,c] of stops)g.addColorStop(p,c);return g}
+function halo(x,y,rad,rgb,a=1){if(a<=0)return;let g=ctx.createRadialGradient(x,y,0,x,y,rad);g.addColorStop(0,`rgba(${rgb},${.52*a})`);g.addColorStop(.32,`rgba(${rgb},${.22*a})`);g.addColorStop(1,`rgba(${rgb},0)`);fill(g);ctx.fillRect(x-rad,y-rad,rad*2,rad*2)}
+function star(x,y,s,a){ctx.save();ctx.translate(x,y);ctx.globalAlpha=a;stroke('#e5f8dc',1.2);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-s*3,0);ctx.lineTo(s*3,0);ctx.moveTo(0,-s*3);ctx.lineTo(0,s*3);ctx.stroke();circle(0,0,s,s,'#ffffd9');ctx.restore()}
+function cubic(a,b,c,d,t){return (1-t)**3*a+3*(1-t)**2*t*b+3*(1-t)*t*t*c+t**3*d}
+function renderSky(){let k=magic;let s=ctx.createLinearGradient(0,0,0,H);s.addColorStop(0,k<.01?'#091827':`rgb(${Math.round(mix(9,29,k))},${Math.round(mix(24,43,k))},${Math.round(mix(39,62,k))})`);s.addColorStop(.45,`rgb(${Math.round(mix(36,94,k))},${Math.round(mix(59,106,k))},${Math.round(mix(79,116,k))})`);s.addColorStop(.78,`rgb(${Math.round(mix(91,180,k))},${Math.round(mix(103,161,k))},${Math.round(mix(116,126,k))})`);s.addColorStop(1,'#193f4a');fill(s);ctx.fillRect(0,0,W,H);
+ halo(565,327,310,'179,189,255',.32*(1-k));halo(398,563,440,'255,207,139',.06+.29*k);
+ for(const st of stars){const a=(.18+.52*(.5+.5*Math.sin(t*st.tw+st.p)))*(1-k*.88);circle(st.x,st.y,st.s,st.s,`rgba(235,248,225,${a})`)}
+ // rising moon
+ halo(523,240,105,'232,239,198',.3*(1-k));circle(523,240,35,35,`rgba(249,244,211,${1-k*.3})`);circle(511,228,37,36,`rgba(176,188,206,${.45*(1-k)})`);
+ // glints and horizontal fine star lines
+ for(let i=0;i<9;i++){const x=(i*101+59)%W,y=135+i*42;star(x,y,1.2+i%3*.3,(.4+.4*Math.sin(t+i))*(1-k))}
+ for(const cl of clouds){ctx.save();ctx.globalAlpha=.045+.025*k;const xx=(cl.x+t*cl.speed)%(W+cl.size*3)-cl.size;circle(xx,cl.y,cl.size,22,'#fff7d4');circle(xx+cl.size*.35,cl.y-14,cl.size*.58,29,'#fffbe6');ctx.restore()}
+}
+function renderRay(){const k=smooth((magic-.06)/.86);if(k<=0)return;ctx.save();ctx.globalCompositeOperation='screen';ctx.translate(415,480);ctx.rotate(Math.sin(t*.04)*.04);for(let i=0;i<13;i++){let a=-2.65+i*.245,rr=730,w=i%3===0?.17:.07;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a-.025)*rr,Math.sin(a-.025)*rr);ctx.lineTo(Math.cos(a+.025)*rr,Math.sin(a+.025)*rr);ctx.closePath();ctx.fillStyle=`rgba(255,233,151,${w*k})`;ctx.fill()}ctx.restore();halo(415,480,345,'255,235,173',.45*k)}
+function renderMountains(){const sh=Math.sin(t*.12)*4;path(p=>{p.moveTo(0,669);p.lineTo(0,504);p.bezierCurveTo(94,478,132,550,207,499);p.bezierCurveTo(287,449,315,527,380,486);p.bezierCurveTo(478,432,528,537,618,487);p.lineTo(720,459);p.lineTo(720,800);p.closePath()},'#365963');
+ path(p=>{p.moveTo(0,708);p.lineTo(0,588+sh);p.bezierCurveTo(76,522,124,584,203,559);p.bezierCurveTo(263,528,329,596,400,550);p.bezierCurveTo(525,512,554,585,634,558);p.lineTo(720,542);p.lineTo(720,798);p.closePath()},'#274e55');
+ path(p=>{p.moveTo(0,840);p.lineTo(0,684);p.bezierCurveTo(102,636,165,686,256,645);p.bezierCurveTo(360,612,425,663,501,635);p.bezierCurveTo(620,610,662,669,720,620);p.lineTo(720,905);p.closePath()},'#1d4b50');
+ // distant woodland silhouettes
+ for(let i=0;i<30;i++){let x=(i*41+23)%740,y=625+Math.sin(i*4.92)*21,s=.45+(i%5)*.09;ctx.save();ctx.translate(x,y);ctx.scale(s,s);stroke('#1d444a',8);ctx.beginPath();ctx.moveTo(0,40);ctx.lineTo(0,-58);ctx.stroke();path(p=>{p.moveTo(-41,-16);p.lineTo(0,-102);p.lineTo(43,-16);p.closePath()},'#1d444a');ctx.restore()}
+ for(let i=0;i<4;i++){ctx.globalAlpha=.07;circle(365,682+i*60,420,33,'#e4f4cd');ctx.globalAlpha=1}
+}
+function vine(points,color,w){line(p=>{p.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)p.quadraticCurveTo(points[i-1][0],points[i-1][1],(points[i][0]+points[i-1][0])/2,(points[i][1]+points[i-1][1])/2);p.lineTo(...points[points.length-1])},color,w)}
+function leaves(x,y,s,c,a=1){ctx.save();ctx.translate(x,y);ctx.rotate(a);circle(-s*.26,0,s*.82,s*.34,c);circle(s*.24,-s*.09,s*.83,s*.42,c);ctx.restore()}
+function renderTree(){let k=magic;let sway=Math.sin(t*.36)*1.9;ctx.save();ctx.translate(sway,0);
+ // crown depth silhouettes
+ const crowns=[[76,478,110,73],[162,423,112,90],[293,391,145,110],[429,417,113,91],[510,469,100,84],[341,322,104,84],[222,328,101,85],[104,383,90,70],[474,339,92,79]];
+ for(let i=0;i<crowns.length;i++){const [x,y,rx,ry]=crowns[i];circle(x,y,rx+9,ry+8,'#133e43')}
+ // trunk silhouette with roots
+ path(p=>{p.moveTo(239,827);p.bezierCurveTo(259,741,261,664,269,586);p.bezierCurveTo(278,530,264,501,250,469);p.lineTo(292,457);p.bezierCurveTo(311,519,313,559,321,606);p.bezierCurveTo(336,552,352,509,351,438);p.lineTo(388,456);p.bezierCurveTo(367,559,349,614,354,697);p.bezierCurveTo(365,773,392,826,413,838);p.bezierCurveTo(380,838,355,816,335,803);p.bezierCurveTo(301,818,297,826,273,840);p.closePath()},grad(212,550,390,750,[[0,'#244b4b'],[.4,'#2c5853'],[1,'#14393c']]));
+ // roots branch
+ for(const rr of [[275,747,198,830],[320,746,450,837],[336,708,394,797]])vine([[rr[0],rr[1]],[rr[0]-5,rr[1]+37],[rr[2],rr[3]]],'#204b46',10);
+ const branches=[[[283,556],[211,451],[97,435]],[[292,523],[275,401],[226,326]],[[321,532],[371,444],[487,440]],[[351,493],[413,350],[476,333]],[[310,473],[360,349],[339,285]],[[255,622],[169,508],[100,500]]];for(const pts of branches)vine(pts,'#244d4d',19);
+ // crown layered scallops
+ for(let i=0;i<crowns.length;i++){const [x,y,rx,ry]=crowns[i];const shades=['#195452','#20605b','#24625b','#2b655c','#1d5552','#2b6156','#225b55','#1e5551','#2a665b'];circle(x,y,rx,ry,shades[i]);circle(x-rx*.14,y-ry*.18,rx*.7,ry*.61,`rgba(88,148,111,${.11+.055*k})`)}
+ // organic leaf clusters
+ for(let j=0;j<74;j++){let a=j*2.399,x=290+Math.sin(a*3.3)*215*Math.sqrt((j+1)/75),y=405+Math.cos(a*2.1)*108*Math.sqrt((j+1)/75);const leafScale=4+(j%6)*1.15;leaves(x,y,leafScale,j%4?'rgba(88,139,103,.39)':'rgba(119,158,105,.35)',Math.sin(j)*.7)}
+ // bark textures
+ for(let j=0;j<12;j++){const x=286+j%5*13,y=570+j*17;line(p=>{p.moveTo(x,y);p.bezierCurveTo(x-4,y+10,x+7,y+20,x+1,y+29)},'rgba(175,193,137,.11)',1.7)}
+ // magic veins respond to wakeup
+ if(k>0){ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<7;i++){let points=branches[i%branches.length];const alpha=(.08+.24*k);vine(points,`rgba(189,252,170,${alpha})`,1.5);halo(points[2][0],points[2][1],38,'194,255,166',.18*k)}ctx.restore()}
+ // hollow face of ancient tree
+ circle(319,670,35,53,'#153e40');circle(322,667,25,42,'#0c3539');halo(323,675,60,'222,238,133',.10+.58*k);circle(321,682,5,15,`rgba(240,250,169,${.45+.5*k})`);
+ // jeweled blossoms blooming in crown
+ for(let i=0;i<25;i++){const a=i*2.4,x=295+Math.sin(a)*ranged(i,190)+Math.sin(i*9)*27,y=395+Math.cos(a*1.15)*ranged(i+4,95);let q=ease((k-.08-(i%5)*.055)/.5);if(q>0){halo(x,y,21,'255,235,143',q*.4);ctx.save();ctx.translate(x,y);ctx.rotate(t*.08+i);for(let p=0;p<5;p++){ctx.save();ctx.rotate(p*TAU/5);circle(0,-6*q,2.6*q,6*q,`rgba(${i%3?'253,226,167':'205,254,195'},${.5*q})`);ctx.restore()}circle(0,0,2.4*q,2.4*q,'#ffffd9');ctx.restore()}}
+ ctx.restore();}
+function ranged(i,scale){return scale*(.7+.3*Math.sin(i*3.3))}
+function renderGround(){let k=magic;path(p=>{p.moveTo(0,784);p.bezierCurveTo(119,734,212,805,314,792);p.bezierCurveTo(415,768,539,752,720,783);p.lineTo(720,H);p.lineTo(0,H);p.closePath()},grad(0,780,0,1180,[[0,'#244b49'],[.47,'#123e3c'],[1,'#0b2c31']]));
+ // left upper grasses
+ for(let i=0;i<21;i++){let x=i*43-30,yy=802+Math.sin(i*3.1)*17;circle(x,yy,41,25,i%3===0?'#285b51':'#194a48')}
+ // winding trail
+ path(p=>{p.moveTo(332,797);p.bezierCurveTo(373,858,425,869,432,915);p.bezierCurveTo(437,962,383,1021,431,1180);p.lineTo(244,1180);p.bezierCurveTo(281,1087,365,982,353,934);p.bezierCurveTo(347,892,296,863,288,808);p.closePath()},grad(298,790,390,1180,[[0,'#5b7162'],[1,'#314e48']]));
+ path(p=>{p.moveTo(325,799);p.bezierCurveTo(361,850,412,881,415,928);p.bezierCurveTo(428,976,330,1085,348,1180);p.lineTo(275,1180);p.bezierCurveTo(290,1062,394,959,363,924);p.bezierCurveTo(339,895,317,862,305,814);p.closePath()},'rgba(184,174,123,.12)');
+ // lagoon
+ halo(614,928,140,'128,234,219',.09+.16*k);path(p=>{p.ellipse(619,952,142,53,-.16,0,TAU)},'#123f48');circle(614,945,131,36,grad(525,909,645,988,[[0,'#3a716c'],[1,'#20525e']]));for(let i=0;i<16;i++){let x=524+i*12,y=934+Math.sin(i*1.94)*17;line(p=>{p.moveTo(x-9,y);p.quadraticCurveTo(x,y+1,x+13,y)},`rgba(186,249,216,${.11+.12*Math.sin(t*1.2+i)})`,1.3)}
+ // pond lily leaves
+ for(let i=0;i<5;i++){const x=568+i*31,y=937+Math.sin(i*9)*22;circle(x,y,12,5,'#427d67');circle(x+3,y-1,7,3,'#5f9480')}
+ // stones
+ for(let i=0;i<17;i++){let x=70+i*43+Math.sin(i*4)*13,y=1034+Math.sin(i*5)*85;circle(x,y,13+(i%4)*3,6+(i%3)*3,i%4===0?'#42645b':'#254a48');circle(x-2,y-2,8,2,'rgba(199,197,156,.09)')}
+ // ground texture
+ for(const b of grass){if(b.y<810+Math.sin(b.x*.01)*30)continue;const sway=Math.sin(t*b.q+b.p)*4;line(p=>{p.moveTo(b.x,b.y);p.quadraticCurveTo(b.x+sway-4,b.y-b.h*.55,b.x+sway-12,b.y-b.h)},'rgba(107,164,124,.35)',1.5);line(p=>{p.moveTo(b.x,b.y);p.quadraticCurveTo(b.x+sway+1,b.y-b.h*.45,b.x+sway+5,b.y-b.h*.85)},'rgba(112,165,136,.39)',1.3)}
+}
+function renderTinyFlower(f,index){const k=magic,p=ease((k-.04-(index%7)*.025)*2.1);if(p<=0)return;let x=f.x,y=f.y;if(x>230&&x<450&&y>850) return;const s=f.s*p;ctx.save();ctx.translate(x,y);ctx.scale(s,s);line(p=>{p.moveTo(0,0);p.quadraticCurveTo(-5,-13,1,-31)},'#579b76',2.4);leaves(-4,-17,6,'#56a17d',-.4);ctx.translate(1,-33);halo(0,0,17,'255,245,179',.27);for(let i=0;i<5;i++){ctx.save();ctx.rotate(i*TAU/5);circle(0,-7,3.2,8,index%4?'#d1eaa6':'#f2c6ab');ctx.restore()}circle(0,0,4,4,'#ffefaa');ctx.restore()}
+function flower(x,y,size,amount){const q=ease(amount);if(q<=0)return;ctx.save();ctx.translate(x,y);ctx.scale(size,size);const rise=q*150;line(p=>{p.moveTo(0,12);p.bezierCurveTo(-27,-25,21,-rise*.65,0,-rise)},'#6ca17f',10);line(p=>{p.moveTo(1,10);p.bezierCurveTo(-27,-25,21,-rise*.65,0,-rise)},'rgba(199,249,165,.35)',3);
+ leaves(-14,-rise*.36,24*q,'#83bda0',-.45);leaves(16,-rise*.65,26*q,'#74ad8f',.58);
+ ctx.translate(0,-rise);halo(0,0,85,'249,245,154',q*.48);ctx.save();ctx.rotate(Math.sin(t*.4)*.045);for(let i=0;i<8;i++){ctx.save();ctx.rotate(i*TAU/8);circle(0,-24*q,13*q,33*q,i%2===0?'#e4e9af':'#f7e1ac');circle(0,-21*q,6*q,23*q,'rgba(251,238,191,.51)');ctx.restore()}circle(0,0,18*q,18*q,'#f8d48e');circle(0,0,12*q,12*q,'#fff0b5');for(let i=0;i<9;i++){let a=i*TAU/9;circle(Math.cos(a)*8*q,Math.sin(a)*8*q,1.3*q,1.3*q,'#b98f57')}ctx.restore();ctx.restore()}
+function renderSeed(){let k=magic;halo(380,798,75,'239,230,153',.28+(.45*k));circle(382,796+Math.sin(t*2.1)*4,6.5,11,'#e8efad');star(382,791+Math.sin(t*2.1)*4,3.3,.55+.4*Math.sin(t*2));
+ // sleeping seed plinth
+ circle(382,821,62,15,'#254c4a');circle(380,819,42,9,'#406c5d');flower(382,828,1.03,flowerT);
+}
+function renderForeground(){const k=magic;for(let i=0;i<34;i++){let x=(i*27+16)%W,yy=1070+Math.sin(i*2.87)*41;const w=5+(i%4)*2;path(p=>{p.moveTo(x,yy+60);p.quadraticCurveTo(x-22,yy+7,x-w*2,yy-38);p.quadraticCurveTo(x+5,yy-20,x+9,yy+53);p.closePath()},i%3===0?'#174541':'#143a3c')}
+ // foreground fern fronds, left and right
+ for(let side of [-1,1]){let bx=side<0?-26:746,by=1090;ctx.save();ctx.translate(bx,by);ctx.scale(side,1);for(let i=0;i<8;i++){let a=-1.30+i*.19;const len=150+(i%3)*16;line(p=>{p.moveTo(0,70);p.quadraticCurveTo(-50,-45,Math.cos(a)*len,Math.sin(a)*len)},'#174c45',5);for(let j=1;j<=6;j++){let q=j/6,x=mix(0,Math.cos(a)*len,q),y=mix(70,Math.sin(a)*len,q)-18*Math.sin(q*Math.PI);leaves(x-8,y,13*(1-q*.5),'#20534b',-.5);leaves(x+8,y,12*(1-q*.5),'#23594f',.4)}}ctx.restore()}
+ for(let i=0;i<22;i++){let x=(i*51+Math.sin(i*17)*20)%W,y=1140+Math.sin(i*2.2)*40;circle(x,y,38,15,'#143d39')}
+ // dark cinematic lower vignette
+ let g=ctx.createLinearGradient(0,720,0,1180);g.addColorStop(0,'rgba(3,14,22,0)');g.addColorStop(.85,'rgba(3,14,22,.18)');g.addColorStop(1,'rgba(3,14,22,.4)');fill(g);ctx.fillRect(0,720,W,460)
+}
+function renderNova(){let k=magic;let cx=528+Math.sin(t*.6)*21,cy=687+Math.sin(t*1.7)*12-(stage==='cinema'?Math.sin(smooth((t-stageAt)/5)*Math.PI)*35:0);
+ // trailing dust
+ for(let i=0;i<6;i++){let ang=t*.7-i*.67;circle(cx+Math.cos(ang)*61,cy+Math.sin(ang)*39,1.6,1.6,`rgba(210,249,196,${.30+.35*(.5+.5*Math.sin(t*2+i))})`)}
+ halo(cx,cy,112,'156,253,226',.32+.1*k);
+ ctx.save();ctx.translate(cx,cy);ctx.rotate(Math.sin(t*.55)*.06);const flap=Math.sin(t*9)*.15;
+ // floppy star-leaf ears
+ path(p=>{p.moveTo(-35,-31);p.bezierCurveTo(-86,-75,-72,-112,-34,-72);p.quadraticCurveTo(-15,-52,-15,-34);p.closePath()},'#82d1b9');path(p=>{p.moveTo(34,-31);p.bezierCurveTo(81,-80,66,-119,30,-73);p.quadraticCurveTo(16,-50,15,-34);p.closePath()},'#77bbaa');
+ // wings
+ for(const s of [-1,1]){ctx.save();ctx.scale(s,1);ctx.rotate(flap*s);circle(49,8,37,20,'rgba(206,249,214,.58)');circle(46,-8,33,16,'rgba(157,236,219,.66)');circle(61,0,22,10,'rgba(232,255,232,.38)');ctx.restore()}
+ // body and gradient
+ let body=ctx.createRadialGradient(-18,-28,8,5,9,66);body.addColorStop(0,'#fcfce2');body.addColorStop(.33,'#d5fbe5');body.addColorStop(.8,'#80c7ba');body.addColorStop(1,'#4a999e');circle(0,4,48,52,body);
+ // lower tail
+ path(p=>{p.moveTo(-15,44);p.quadraticCurveTo(2,71,20,45);p.closePath()},'#6baead');
+ circle(-17,-22,17,11,'rgba(255,255,255,.30)');
+ // tiny antenna
+ line(p=>{p.moveTo(0,-46);p.quadraticCurveTo(-10,-68,5+Math.sin(t)*7,-80)},'#adf8d4',3);star(5+Math.sin(t)*7,-80,3.5,.75);
+ // expressive face
+ let blinkNow=Math.abs(Math.sin(t*.45))*10>.998?1:0;
+ if(blinkNow){for(const dx of [-17,17])line(p=>{p.moveTo(dx-8,2);p.quadraticCurveTo(dx,7,dx+8,2)},'#244b51',3.4)} else {circle(-17,1,5,8,'#21454e');circle(17,1,5,8,'#21454e');circle(-18,-2,1.5,2.4,'#fff');circle(16,-2,1.5,2.4,'#fff')}
+ circle(-28,18,9,4.2,'rgba(255,133,137,.34)');circle(28,18,9,4.2,'rgba(255,133,137,.34)');
+ line(p=>{if(k>.4){p.arc(0,17,8,0,Math.PI)}else{p.moveTo(-6,18);p.quadraticCurveTo(0,24,7,18)}},'#43635c',2.6);
+ // arms
+ line(p=>{p.moveTo(-42,19);p.quadraticCurveTo(-56,24+Math.sin(t*2)*3,-59,11)},'#9ee4cb',6);line(p=>{p.moveTo(42,19);p.quadraticCurveTo(58,23+Math.sin(t*1.7)*4,62,10)},'#9ee4cb',6);circle(-59,11,5,5,'#ceeee0');circle(62,10,5,5,'#ceeee0');ctx.restore();
+}
+function renderAtmosphere(){let k=magic;for(const m of motes){let xx=m.x+Math.sin(t*m.v+m.p)*24*m.depth,yy=m.y+Math.cos(t*m.v*.7+m.p)*21*m.depth-t*.7*m.depth;yy=((yy+1100)%1100+1100)%1100+60;let alpha=(.11+.20*Math.sin(t+m.p)**2)*(.6+.85*k);if(m.s>1.2)halo(xx,yy,9,'243,241,158',alpha*.4);circle(xx,yy,m.s,m.s,`rgba(242,250,181,${alpha})`)}
+ for(const p of petals){let q=clamp((k-.18)*2);if(q<=0)continue;let xx=((p.x+t*p.v*.45)%810+810)%810-40,yy=((p.y+t*p.v*.8)%1240+1240)%1240-40;ctx.save();ctx.translate(xx,yy);ctx.rotate(t+p.p);ctx.globalAlpha=q*.44;circle(0,0,p.s,p.s*.5,'#fbe6c0');ctx.restore()}
+ for(const p of particles){p.age+=(1/60);let q=clamp(1-p.age/p.life);halo(p.x+p.vx*p.age,p.y+p.vy*p.age,12,'255,234,155',q*.5);circle(p.x+p.vx*p.age,p.y+p.vy*p.age,p.s*q,p.s*q,`rgba(255,245,183,${q})`)}particles=particles.filter(x=>x.age<x.life);
+}
+function renderVignette(){let g=ctx.createRadialGradient(365,510,180,360,540,720);g.addColorStop(0,'rgba(2,10,20,0)');g.addColorStop(1,'rgba(1,11,18,.52)');fill(g);ctx.fillRect(0,0,W,H)}
+function render(dt){const seconds=Math.min(dt,.045);t+=seconds;
+ if(stage==='cinema'){
+  const age=t-stageAt;magic=ease((age-.25)/7.2);flowerT=ease((age-1.3)/4.2);
+  if(age>1.1&&!transitionPlayed){transitionPlayed=true;chord()}
+  if(age>8.2&&stage==='cinema')finish();
+ }
+ ctx.clearRect(0,0,W,H);ctx.save();let shake=(stage==='cinema'&&t-stageAt<1.1)?Math.sin(t*18)*1.1:0;ctx.translate(shake,0);const z=1+(stage==='cinema'?.028*Math.sin(Math.min(1,(t-stageAt)/9)*Math.PI):.0);ctx.translate((W-W*z)/2,(H-H*z)/2);ctx.scale(z,z);
+ renderSky();renderRay();renderMountains();renderTree();renderGround();renderSeed();for(let i=0;i<flowers.length;i++)renderTinyFlower(flowers[i],i);renderNova();renderAtmosphere();renderForeground();renderVignette();ctx.restore();
+}
+function burst(x=390,y=710,n=100){for(let i=0;i<n;i++){let a=r(0,TAU),v=r(35,220);particles.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-45,life:r(.6,2.7),age:0,s:r(1.3,4.1)})}}
+function setPanel(title,text,button,label='NOVA · YOUR COMPANION'){el('panelTitle').textContent=title;el('panelText').textContent=text;el('primary').textContent=button;el('speaker').textContent=label}
+function setCallout(v){el('thought').textContent=v;el('callout').classList.add('show')}
+function setStage(v){stage=v;stageAt=t;el('seedHint').classList.toggle('visible',v==='explore');el('reveal').classList.remove('show');el('callout').classList.remove('show')}
+function start(){setStage('explore');setPanel('A tiny light is hiding…','Nova: “I saw something glowing near the old tree. Can you find it?”','Show me the light →');setCallout('“Over there! Something is glowing…”');el('primary').onclick=findSeed;el('secondary').hidden=true;ping(480)}
+function findSeed(){setStage('habit');setPanel('You found the sleeping seed!','Nova: “It wants to grow… but it needs a little kindness from your world first.”','I drank water today ✦','ONE REAL-WORLD HABIT · DEMO');setCallout('“Even the smallest action can make magic.”');el('primary').onclick=awaken;el('secondary').hidden=false;el('secondary').textContent='Back to explore';el('secondary').onclick=()=>start();ping(660);burst(384,790,36)}
+function awaken(){setStage('cinema');transitionPlayed=false;magic=0;flowerT=0;el('secondary').hidden=true;setPanel('Something is changing…','The meadow hears your progress. Watch the first light return.','The world is waking up…','DAY 01 · STORY REVEAL');el('primary').disabled=true;el('primary').style.opacity='.65';setCallout('“Look! The whole meadow is waking up!”');
+ setTimeout(()=>{if(stage==='cinema')el('reveal').classList.add('show')},2500);
+ setTimeout(()=>{if(stage==='cinema')el('reveal').classList.remove('show')},6800);
+ burst(384,760,140);ping(520);try{localStorage.setItem('kidshabits-day1-demo','awakened')}catch(e){}
+}
+function finish(){setStage('complete');magic=1;flowerT=1;el('primary').disabled=false;el('primary').style.opacity='1';el('dayBadge').textContent='DAY 01 ✓';el('progress').children[1].classList.add('on');setPanel('Day one. A new beginning.','Nova: “We did it! The meadow will remember. And tomorrow… I think that hidden path will open.”','Replay the transformation ↺','SPROUT PLANET · 01 OF 30');el('primary').onclick=()=>{setStage('habit');magic=0;flowerT=0;setPanel('The sleeping seed is ready.','One simple habit brings light back to Sprout Planet.','I drank water today ✦','ONE REAL-WORLD HABIT · DEMO');el('primary').onclick=awaken;el('dayBadge').textContent='DAY 01 / 30'};el('secondary').hidden=false;el('secondary').textContent='Start over';el('secondary').onclick=reset;setCallout('“What do you think we’ll find tomorrow?”');chord()}
+function reset(){magic=0;flowerT=0;particles=[];setStage('intro');setPanel('A world waiting to wake.','A quiet meadow. A mysterious light. And a new friend with a little secret to share.','Begin the story ↗');el('primary').onclick=start;el('secondary').hidden=true;el('dayBadge').textContent='DAY 01 / 30';for(const i of el('progress').children)i.classList.remove('on');el('progress').children[0].classList.add('on');try{localStorage.removeItem('kidshabits-day1-demo')}catch(e){}}
+function soundInit(){if(!audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC){audio=new AC();audio.resume()}}}
+function tone(freq,dur=.4,when=0,volume=.065){if(!soundOn)return;try{soundInit();if(!audio)return;const osc=audio.createOscillator(),gain=audio.createGain(),filter=audio.createBiquadFilter();osc.type='sine';osc.frequency.setValueAtTime(freq,audio.currentTime+when);filter.type='lowpass';filter.frequency.setValueAtTime(1300,audio.currentTime+when);gain.gain.setValueAtTime(.00001,audio.currentTime+when);gain.gain.exponentialRampToValueAtTime(volume,audio.currentTime+when+.04);gain.gain.exponentialRampToValueAtTime(.00001,audio.currentTime+when+dur);osc.connect(filter);filter.connect(gain);gain.connect(audio.destination);osc.start(audio.currentTime+when);osc.stop(audio.currentTime+when+dur+.01)}catch(e){}}
+function ping(freq=640){tone(freq,.4);tone(freq*1.5,.65,.1,.045)}function chord(){for(let i=0;i<6;i++)tone([293.66,369.99,440,587.33,739.99,880][i],2.8,i*.14,.038)}
+function handleClick(e){if(stage!=='explore')return;const r=canvas.getBoundingClientRect();const x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;if(Math.hypot(x-382,(y-797)*.9)<145)findSeed();else{burst(x,y,12);ping(455)}}
+function initCtx(c){canvas=c;ctx=c.getContext('2d',{alpha:false});if(!ctx)throw Error('Canvas unavailable');canvas.addEventListener('pointerdown',handleClick)}
+function native(){let c=document.createElement('canvas');c.width=W;c.height=H;frame.prepend(c);initCtx(c);let prev=performance.now();function run(now){render((now-prev)/1000);prev=now;requestAnimationFrame(run)}requestAnimationFrame(run)}
+function p5run(){new p5(p=>{p.setup=()=>{let c=p.createCanvas(W,H);c.parent(frame);c.elt.style.position='absolute';c.elt.style.inset='0';frame.prepend(c.elt);p.pixelDensity(1);p.frameRate(50);initCtx(c.elt)};p.draw=()=>render(p.deltaTime/1000)})}
+el('primary').onclick=start;el('sound').addEventListener('click',()=>{soundOn=!soundOn;el('sound').textContent=soundOn?'♫':'♪̸';el('sound').title=soundOn?'Sound on':'Sound off';el('sound').setAttribute('aria-label',soundOn?'Disable sound':'Enable sound');if(soundOn)ping(620)});
+window.KidsHabitsDemo={start,findSeed,awaken,finish,reset,state:()=>({stage,magic,flowerT}),skipReveal:()=>{if(stage==='cinema')finish()}};
+if(window.p5)p5run();else native();
+// Completing the demonstration is durable, just like the real story-world state.
+try{if(localStorage.getItem('kidshabits-day1-demo')==='awakened'){finish();setPanel('Your meadow remembered.','Nova: “The first light is still here! Want to relive how we found it?”','Replay the transformation ↺','DAY 01 COMPLETE · SAVED IN THIS BROWSER')}}catch(e){}
+})();
+</script>
+<script src="./story-content.js"></script>
+<script src="./story-lab.js"></script>
+</body>
+</html>
