@@ -67,7 +67,7 @@ jobs:
           set -o pipefail
           npm run test:unit 2>&1 | tee artifacts/island/unit-tests.log
       - name: Install pinned Playwright runner
-        run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
+        run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1 pngjs@7.0.0
       - name: Verify runner Chrome installation
         run: |
           google-chrome --version

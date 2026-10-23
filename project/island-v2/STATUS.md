@@ -2,16 +2,16 @@
 
 **Last updated:** 2026-10-23 (baseline setup; no production session completed)  
 **Plan revision:** `SESSION_PLAN_25.md` baseline v1 (25 provisional sessions)  
-**Project status:** **SESSION 01 IN PROGRESS — PRODUCTION APP SCAFFOLD EXISTS, VISUAL CI NOT YET VERIFIED**  
+**Project status:** **SESSION 01 FOUNDATION CI PASS + RENDERER A/B TECHNICAL PASS — ENGINE DECISION PENDING**  
 **Active session:** **01 / 25 — greenfield foundation + verify real browser screenshots**  
 **Completed implementation sessions:** **0 / 25**  
-**Current status:** **IN PROGRESS / LATEST SHA AND USER ART REVIEW PENDING** — automated visual+reload passed on previous snapshot; the current Nova/dialogue polish must be verified separately.  
+**Current status:** **A/B GAMEPLAY/SCREENSHOT PASS ON TESTED SHA; ENGINE + PREMIUM ART OWNER SIGN-OFF PENDING** — 0/25 sessions formally accepted.  
 **Next execution issue:** [#11 — Session 01: verified runnable production baseline](https://github.com/addvaluewithai-hub/kidshabits/issues/11); [#10 — Island + expressive Nova](https://github.com/addvaluewithai-hub/kidshabits/issues/10) follows  
 **Master tracking issue:** [#9](https://github.com/addvaluewithai-hub/kidshabits/issues/9)  
 **Product proposal:** [PR #8](https://github.com/addvaluewithai-hub/kidshabits/pull/8) (draft; `docs/island-world-product-plan-v2`)  
 **Canonical main:** `main` remains documentation-only. Session 01 code is on **draft PR #12** targeting docs proposal branch; it is NOT merged to main.
 
-> **⚠️ Important:** GitHub CI may validate the planning files today, but **NO production game screenshot or playable new-island build has passed CI yet**. Never mark Session 01 done based solely on documentation/CI infrastructure passing.
+> **✅ Current evidence:** [GitHub Actions #39990099568](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39990099568) PASS for both Three.js and Phaser 4 on built real app, phone+desktop, house/garden, reload, Nova return line and real WebGL pixels. [16 screenshots](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39990099568) reviewed. **No hardware performance test or flagship art sign-off yet.** Engine choice is OPEN ([issue #14](https://github.com/addvaluewithai-hub/kidshabits/issues/14)). 0/25 sessions formally closed.
 
 ## Current factual snapshot
 
@@ -89,6 +89,7 @@
 6. Preserve session history; if skipped/re-scoped, explain in a change log below.
 
 ### History
+- **2026-10-23 — Renderer A/B spike:** [PR #13](https://github.com/addvaluewithai-hub/kidshabits/pull/13) adds real R3F 9.8 / Three r186 parallel to Phaser 4. Same domain and local save. [Actions #39990099568](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39990099568) PASS: 16 screenshot artifacts and genuine WebGL2 pixel proof. Reviewed screenshot difference: 3D has actual depth/lighting but Nova/art/UX still rough. See [THREEJS_EXPERIMENT.md](./THREEJS_EXPERIMENT.md), [issue #14](https://github.com/addvaluewithai-hub/kidshabits/issues/14). **No auto-migration and no advance from 0/25.**
 - **2026-10-23 (Session 01 — reviewed)** — [run #39983478004](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39983478004) passed build, unit, phone+desktop click flow and persisted-state reload. Downloaded and visually inspected eight real app screenshots. User-facing critique: scene is coherent but still uses simplified illustration and has HUD/typography/first-fold storytelling debts. Added [SESSION_01_IMPLEMENTATION.md](./SESSION_01_IMPLEMENTATION.md), Nova return-aware dialogue and in-scene short subtitles, plus unit/Playwright assertions. **Latest commit not yet proven. 0/25 sessions formally closed until user approval.**
 - **2026-10-23 (Session 01)** — PR #12 created from the docs-only plan branch: fresh Vite/React/Phaser 4 runtime, island domain/storage separation, Nova actor, first illustrated SVG art pack, house/garden interactions and test hooks. **Actions run #39981298570:** production build and Vitest pass, visual browser test failed with blank screen; logged Phaser Scene.events lifecycle bug, fixed commit `8d7ba81d37a9f87c5300f11c3787471d635f6c07`. Chrome-based follow-up run [#39982682638](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39982682638) not yet verified. **Implementation complete sessions = 0/25; no visual sign-off.**
 - **2026-10-23** — User confirmed greenfield from documentation-only `main`, review old code only as a source of selectively reusable pieces, enforce small modular modules, flexible file sizes (no LOC hard limit), premium visual/UX detail from the first PR, and swappable art. [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md) and automatic architecture size/import guard added; **no runtime implementation sessions claimed**.

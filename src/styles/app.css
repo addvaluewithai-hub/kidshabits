@@ -211,3 +211,23 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* Three.js style study: same responsive frame, world geometry is genuine 3D. */
+.world-scene--three {
+  background: radial-gradient(ellipse 82% 76% at 60% 34%, #578a87 0%, #365c65 39%, #182f48 82%, #0b2237 100%);
+}
+.world-canvas--three > div { width: 100%; height: 100%; }
+.three-loading { display: grid; place-items: center; color: #f2dfbd; font-size: 13px; }
+.engine-switch { display: flex; align-items: center; gap: 6px; direction: ltr; }
+.engine-switch a { border: 1px solid rgba(219,236,206,.27); border-radius: 99px; text-decoration: none; padding: 7px 9px;
+  letter-spacing: .1px; white-space: nowrap; font: 11px "Trebuchet MS", sans-serif; color: #9eb7ad; }
+.engine-switch a[aria-current="page"] { border-color: #e9cb94; color: #f5e0b1; background: rgba(227,197,142,.13); }
+.engine-switch a:hover { background: rgba(227,197,142,.18); color: #fff5d9; }
+@media (max-width: 690px) {
+ .world-caption { align-items: flex-start; font-size: 9px; letter-spacing: .2px; }
+ .engine-switch a { font-size: 10px; padding: 7px; }
+ .world-scene--three .nova-label { top: 26%; left: 48%; }
+ .world-scene--three .nova-speech { top: 14%; }
+ .world-scene--three .world-hotspot--garden { left: 39%; top: 81%; }
+ .world-scene--three .world-hotspot--cottage { left: 79%; top: 72%; }
+}
