@@ -36,7 +36,7 @@ export function NovaSpirit({focus,palette}:{focus:WorldFocus;palette:ThreePalett
     root.current.position.lerp(target,1-Math.exp(-delta*(reduced?100:2.3)));
     body.current.position.y=reduced?0:Math.sin(clock.elapsedTime*2.1)*.12;
     body.current.rotation.z=reduced?0:Math.sin(clock.elapsedTime*1.25)*.065;
-    body.current.rotation.y=THREE.MathUtils.damp(body.current.rotation.y,focus==='cottage'?-.45:focus==='garden'?.42:0,2.2,delta);
+    body.current.rotation.y=THREE.MathUtils.damp(body.current.rotation.y,focus === 'cottage' ? -0.45 : focus === 'garden' ? 0.42 : 0,2.2,delta);
   });
   return <group ref={root} position={[TARGETS.idle.x,TARGETS.idle.y,TARGETS.idle.z]}>
     <pointLight color="#ffe3bd" intensity={29} distance={4} position={[0,0,.4]}/>
