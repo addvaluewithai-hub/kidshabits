@@ -89,6 +89,14 @@ try {
       await verifyChanged(page, 'garden');
       await shot(page, viewport.id + '-garden.png');
 
+      // Production reload must reconstruct durable presentation from saved semantic state.
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await mustBeVisible(page, 'island-world');
+      await mustBeVisible(page, 'cottage-change');
+      await mustBeVisible(page, 'garden-change');
+      await mustBeVisible(page, 'nova-actor');
+      await shot(page, viewport.id + '-after-reload.png');
+
       if (pageErrors.length > 0) throw new Error('Uncaught browser errors: ' + pageErrors.join(' | '));
       run.stage = 'completed';
       run.ok = true;
