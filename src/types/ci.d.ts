@@ -4,7 +4,7 @@ declare global{
   __KH_CI__?:{
    scene:Scene;
    camera:Camera;
-   snapshot:()=>{objects:{cottage:unknown;garden:unknown};sceneObjectCount:number};
+   snapshot:()=>{objects:{cottage:unknown;garden:unknown};sceneObjectCount:number;cameraPose:{isPerspective:boolean;position:number[]}};
   };
  }
 }
