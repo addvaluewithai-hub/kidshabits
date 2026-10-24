@@ -1,105 +1,72 @@
-# GitHub Actions + screenshot proof protocol (Island v2)
+# CI & Visual QA — Full-screen Three.js World
 
-## The critical distinction
+**Effective:** 24 October 2026. Supersedes Phaser/framed-diorama screenshot checks.
 
-The original `main` branch is **documentation-only** as of 2026-10-23. Runnable app files (`package.json`, Phaser/Vite/React sources) exist on earlier **draft feature PR branches**, not on `main`. Therefore **no valid production screenshot can be generated from this planning PR alone**.
+## Two distinct proofs — never conflate them
 
-This folder adds a staged CI pipeline:
-1. **plan-validation:** executes immediately, checks frozen 25-session plan, tracker and mandatory documentation contracts, then **runs the modular source guard**. When no \`src/\` exists it reports SKIP, not code-quality pass.
-2. **production-visual-proof:** executes **only when a root production `package.json` exists**, builds the real Vite app, drives it using Chromium/Playwright, captures **phone + desktop screenshots**, and fails when specified interactions are absent. It never uses a placeholder HTML fixture or takes a screenshot of the documentation.
-3. If app is absent, this workflow records a **skipped visual job**. Skipped is **NOT A VISUAL PASS**. The STATUS ledger stays blocked.
+1. `plan-validation` on documentation-only branch verifies **25 session rows**, STATUS active/complete consistency, decision/spec/engineering docs and source dependency rules. This is **not** a gameplay pass.
+2. `production-visual-proof` only when a real root application (`package.json`, `index.html`, `src/`) exists. It installs/builds/tests, runs Chrome against the **production build**, and records **actual Three.js world canvas pixels + interactive state and screenshots**. A skipped job is **not PASS**.
 
-Do not configure branch required-checks until this actual production job is proven on a real app commit. GitHub required checks need repository ruleset/branch protection configured separately; a YAML workflow on its own does not prevent merges.
+GitHub Actions in PR #13 verified a **floating-island 3D spike**, not the new immersive world. Preserve those results as history. **Never re-label them as full-screen camera acceptance.**
 
-## Files
+## New required browser contract (Session 01)
 
-- `.github/workflows/island-production.yml` — CI pipeline for PRs and main.
-- `scripts/island-ci/validate-plan.mjs` — zero-dependency frozen session plan/status validator and detection of an actual app.
-- `scripts/island-ci/check-architecture.mjs` — guards production source files (220-line review warning, >350-line stronger advisory warning; **no LOC hard-fail**, forbidden domain→React/Phaser/world imports). This is not a replacement for architecture review.
-- `scripts/island-ci/wait-for-server.mjs` — wait for built app preview to respond.
-- `scripts/island-ci/visual-smoke.mjs` — Playwright user-journey contract and screenshots.
-- `project/island-v2/STATUS.md` — human-reviewed result and evidence ledger.
+Use stable accessibility labels and minimal `?ci=1` read-only debug signals. Don't place hidden DOM labels over a broken canvas and declare victory.
 
-## Minimum app scripts (expected once Session 01 selects baseline)
-
-```json
-{
-  "scripts": {
-    "build": "tsc --noEmit && vite build"
-  }
-}
-```
-
-Existing feature branches use `npm run build` with an additional `sync:pixilive` step that fetches assets from another repository. This **may require connectivity/permission**; Session 01 must decide on a reliable pinned dependency/asset strategy if that step fails CI. Don't hide failure by removing the build step.
-
-CI installs Node 22, dependencies, then Chromium/Playwright; it builds once and serves Vite's built output at `http://127.0.0.1:4173`. Production screenshots come from **that build**, not Vite dev server and not sample HTML.
-
-## App visual test contract (to implement during Sessions 03–06)
-
-A product code PR implementing the new island exposes **small, stable accessibility-friendly test hooks**. These are not a substitute for accessibility semantics (role/button labels):
-
-| Hook | Required behavior |
+| Signal | Meaning |
 |---|---|
-| `data-testid="island-world"` | visible root for actual interactive island |
-| `data-testid="nova-actor"` | visible Nova world actor (or accessible overlay bound to visual actor); `data-focus="idle"` before any tap |
-| `data-testid="cottage-hotspot"` | clickable, visible control representing real cottage |
-| `data-testid="garden-hotspot"` | clickable, visible control representing real garden |
-| `data-testid="cottage-change"` | visible only after real cottage change; includes meaningful text/state |
-| `data-testid="garden-change"` | visible only after real garden change; includes meaningful text/state |
-| Nova `data-focus` attribute | equals `"cottage"` after cottage tap, `"garden"` after garden tap |
+| `[data-testid="world-viewport"]` | visible actual full-screen container; bounding rect near viewport in both axes and no document scroll |
+| `[data-testid="world-canvas"] canvas` | live Three WebGL canvas rendered; actual pixels sampled with meaningful variation |
+| `[data-testid="camera-debug"]` | readonly: `data-camera-mode="perspective"`, `data-camera-rig` and `data-camera-settled`; no orthographic camera in production |
+| `[data-testid="nova-actor"]` | accessible representation tied to live in-world Nova actor/focus, not a standalone fake character |
+| `[data-testid="cottage-hotspot"]` | accessible cottage focus/repair action; raycast object should call same application command |
+| `[data-testid="garden-hotspot"]` | accessible garden focus/plant action |
+| `[data-testid="cottage-change"]`, `garden-change` | state-visible outcomes **backed by actual 3D changes**, never only labels |
+| `[data-testid="nova-dialogue"]` | authored contextual subtitle, including return after reload |
 
-**Do not insert invisible flags only to satisfy tests.** Screenshot reviewer must see that actual artwork changes, not just hidden DOM text. Feature implementation should use ARIA accessible real buttons where practical, even when the renderer is Phaser/canvas.
+**Test-only read-only bridge** may publish scene root/mesh semantic IDs and camera numbers (e.g. `window.__KH_CI__?.snapshot()`) **only** in opt-in CI mode; no power to issue arbitrary mutations or reveal private child info. The Playwright test compares before/after scene mesh/material/visibility snapshots plus screenshot, not only text.
 
-Future tests add stable demo/debug URL overrides for predetermined world snapshots and deterministic day-jump; screenshot tests run under `?ci=1` in a safe mock mode with no live AI or real child info.
+## Exact screenshots and journeys
 
-## Expected screenshots per run
+For **360×740, 390×844, and desktop 1280×800**:
+1. first load: path, horizon, sky, house, tree and garden, Nova visible. Perspective camera at safe arrival pose.
+2. focus cottage: camera transitions to `cottage_front` at ground viewing angle; visible home state changes.
+3. focus garden: transition to `garden_edge`, real 3D plant/soil state changes, Nova reacts.
+4. refresh: same world state, authored return dialogue and safe camera reset.
 
+Expected artifact paths (per viewport):
 ```text
-artifacts/island/
-  phone-390x844-initial.png
-  phone-390x844-cottage.png
-  phone-390x844-garden.png
-  desktop-1280x800-initial.png
-  desktop-1280x800-cottage.png
-  desktop-1280x800-garden.png
+artifacts/immersive/
+  phone-360x740-arrival.png
+  phone-360x740-cottage.png
+  phone-360x740-garden.png
+  phone-360x740-reload.png
+  phone-390x844-arrival.png
+  ...
+  desktop-1280x800-arrival.png
+  ...
   ci-result.json
+  build.log / unit-tests.log
 ```
 
-Screenshots are kept even on test failure as long as the app loaded. If it cannot build/start, no screenshots can be created, and the CI run fails with logs — **never claim screenshots exist when they don't**.
+Tests also assert no JavaScript console exceptions, no horizontal/vertical page overflow, interaction controls visible and hit targets adequately sized and inside safe areas. Use `reducedMotion: 'reduce'` as one test mode and normal motion at least once to catch missing camera transitions; screenshot only *after animation settled*, never race lazy loading. Check mute/subtitles/RTL. Future sessions add interiors/tree/Lumi/creek and alternate art style assertions.
 
-CI asserts selectors and changes; visual **beauty, composition, emotion, and child suitability still require a person looking at screenshots and short video**. GitHub Actions screenshot artifacts are proof of rendering, not an automatic aesthetic sign-off.
+**Hard design gate requiring human review:** does it look like walking into a continuous world? The screenshot should not reveal a floating island rim or underside, a mini diorama, overhead camera or game card embedded between large text panels. These are visual judgments — no automated screenshot check alone guarantees them.
 
-## Local reproducibility once a working app branch is chosen
+## Performance evidence
 
-```bash
-npm install
-npm run build
-npm install --no-save --no-package-lock playwright@1.56.1
-npx playwright install chromium
-./node_modules/.bin/vite preview --host 127.0.0.1 --port 4173 &
-node scripts/island-ci/wait-for-server.mjs
-node scripts/island-ci/visual-smoke.mjs
-```
+- Track per-route JS size, actual canvas render readiness, WebGL warnings and photo artifacts in CI. These are browser metrics, not device frame rates.
+- At least one real representative phone for first performance gate (Session 07 if available), and more devices for Session 22: frame times under camera movement, GLB load, battery/thermal observations, DPR/LOD fallbacks.
+- If the build loses WebGL, provide graceful fallback rather than blank screen; clearly separate fallback screenshot from passing WebGL test.
 
-CI uses `npx playwright install --with-deps chromium` because the runner needs Linux browser dependencies. Versions pinned for reproducibility of the **test runner only**; update deliberately in a PR.
+## Production branch and Actions
 
-## Session gate procedure
+- Node pinned, TypeScript + unit tests, source guard. **No line-count hard failures.**
+- With only docs, plan test passes and production visual job **skips**, labelled as such; do not mark session 01 done.
+- Once new Three app exists, CI should enforce above test selectors/behavior in `scripts/island-ci/visual-smoke.mjs`. Review or replace old Phaser/Three comparison smoke — it is no longer production acceptance.
+- Use built Vite preview (not dev), Chrome/Playwright with JS errors captured, upload artifacts **even if tests fail**.
+- Add branch protection/ruleset requiring review and successful **real app** checks *after* these jobs actually pass on the intended branch, with skipped visual check never counted as proof.
 
-1. PR opened from correctly chosen production baseline.
-2. Check `plan-validation` and `production-visual-proof`.
-3. Confirm visual job did not skip and succeeded **on the same commit SHA** intended for merge.
-4. Download `island-screenshots-*` from that run and look at them, plus any screen recording.
-5. Review interaction change, Nova focus, responsive layout, Arabic/RTL, cropping, eye lines, loading placeholder and visual quality.
-6. Update [STATUS.md](./STATUS.md) with commit SHA, run URL, artifact, screenshot outcome, review decision and next session.
-7. Only then move to next session.
+## Session handoff
 
-### When we're ready: GitHub protected branch setup
-
-Repository owner/admin should configure Settings → Rules → Rulesets (or branch protection for `main`) to require a successful **actual app** `production-visual-proof` check and build/unit checks, require PR review, and prevent force pushes. Do this *after* that check runs successfully on integrated baseline; skipped checks must not be mistaken for passing tests.
-
-## Known limitations
-
-- The CI is authored as part of this planning PR; no workflow run has been verified just by committing files. Inspect Actions run/jobs before calling setup complete.
-- Existing feature PR builds may need authenticated retrieval of pinned PixiLive private resources; report failures openly.
-- Screenshot rendering on Ubuntu Chromium ≠ real-device iOS/Android QA. Manual device checks are separately mandatory.
-- A static image or canvas screenshot alone cannot prove depth of interactivity. We assert real DOM interaction signals and save/reload in subsequent sessions.
+Record exact commit SHA, Actions run URL, screenshot artifact, actual interactive checks, screenshots seen, subjective visual critique (including Nova/camera/terrain/UI) and hardware unknowns in [STATUS.md](./STATUS.md) **before** advancing. No status change from just writing code or CI config.
