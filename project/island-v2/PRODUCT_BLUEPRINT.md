@@ -1,17 +1,19 @@
-# KidsHabits v2 — Product Blueprint (Island Builder + Companion)
+# KidsHabits — Product Blueprint (Immersive World + Nova, v3)
+
+**2026-10-24 override:** The experience is now **full-screen grounded Three.js**, *inside* the world with child-height perspective camera, guided travel and minimal accessible HUD. The floating island/diorama presentation described in early drafts is **superseded** by [IMMERSIVE_WORLD_SPEC.md](./IMMERSIVE_WORLD_SPEC.md) and [ADR-001](./ADR_001_THREEJS_IMMERSIVE.md).
 
 **Document type:** Product design proposal; decisions are reversible until validated by a playable slice.
 
 ## 1. North star
 
-**Child promise:** "دي جزيرتي. أنا اللي بغيّرها، ونوفا بتستكشفها معايا."
+**Child promise:** "دي دنياي. أنا اللي بغيّرها، ونوفا بتستكشفها معايا."
 
 **Parent promise:** "أحدد عادات بسيطة وأراجع اللي محتاج موافقتي بسرعة، من غير ضغط أو زن."
 
 Instead of `habit → coins → chest` or `habit → watch the next cutscene`, the loop becomes:
 
 ```text
-Child visits THEIR island
+Child returns to THEIR grounded immersive world
   → Nova notices the current world and responds
   → Child plays/builds/explores freely
   → Real-life habit is completed (trust or parent-approved)
@@ -33,9 +35,9 @@ Habit completion is **not** a price tag for Nova's attention or affection. Play 
 
 ## 3. Fantasy, setting and emotional arc
 
-**Working fiction:** child and Nova discover a small floating island with an old house, a quiet tree and patches of empty land. They can restore it **together**, at the child's own pace. Magical life arrives as the island changes.
+**Working fiction:** child and Nova arrive **on a path inside a larger magical world**, reaching a quiet clearing with an old cottage, a mysterious tree and space for a garden. The ground and scenery continue into the distance. They restore and personalize a home **together**, while gentle magical life appears through persistent changes.
 
-The island is a home to inhabit and a place of discovery, *not* a mandatory 30-day quest. A light mystery ("ليه الشجرة القديمة بتنوّر أحيانًا؟") creates curiosity. New rooms/biomes/characters can open later, but there must always be meaningful things to do in the current place.
+The connected clearing/world is a home to inhabit and a place of discovery, *not* a mandatory 30-day quest. A light mystery ("ليه الشجرة القديمة بتنوّر أحيانًا؟") creates curiosity. New rooms/biomes/characters can open later, but there must always be meaningful things to do in the current place.
 
 **Intro script sample (authored, colloquial Arabic):**
 
