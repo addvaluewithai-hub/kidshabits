@@ -2,7 +2,7 @@
 
 **2026-10-24 override:** The experience is now **full-screen grounded Three.js**, *inside* the world with child-height perspective camera, guided travel and minimal accessible HUD. The floating island/diorama presentation described in early drafts is **superseded** by [IMMERSIVE_WORLD_SPEC.md](./IMMERSIVE_WORLD_SPEC.md) and [ADR-001](./ADR_001_THREEJS_IMMERSIVE.md).
 
-**Document type:** Product design proposal; decisions are reversible until validated by a playable slice.
+**Document type:** Product design proposal; decisions are reversible until validated by a playable slice. **Home-first RFC-002 (2026-10-24):** first ten beats slowly repair the **same** exterior cottage/yard, garden and first interior room; external adventures start at beat 11+. See [RFC-002](./HOME_AND_GARDEN_FIRST_10_RFC.md).
 
 ## 1. North star
 
@@ -43,7 +43,7 @@ The connected clearing/world is a home to inhabit and a place of discovery, *not
 
 > نوفا: "إحنا وصلنا! ... استني، هو البيت ده كان مستنينا؟"
 >
-> نوفا: "تفتكري لو صلحناه وزرعنا جنبه كام حاجة، الجزيرة دي هتبقى عاملة إزاي؟ القرار قرارِك!"
+> نوفا: "تفتكري لو صلّحنا البيت حتة حتة وزرعنا الأرض دي، المكان هيبقى عامل إزاي؟ القرار قرارِك!"
 >
 > Choices: "نبدأ بالبيت" / "نبدأ بالحديقة".
 
@@ -61,7 +61,7 @@ No promise of a particular scene until the actual visual/audio quality is proven
 ### B. Healthy progress loop — at most one authored transformation beat when qualified
 - Parent selects 2–3 relevant habits; rule e.g. 2 of 3 to unlock a new **creative possibility**, not purchase currency.
 - Trust mode or parent confirmation; pending approval never treated as completed.
-- Milestone unlocks may include a new plant type, room part, environmental transformation or visitor event.
+- First-ten milestone unlocks should primarily be **one small repair stage**, a new prepared garden bed, plant variety or starter room furnishing; **visitors/new zones** begin after beat 10.
 - No decay, no loss of friend, no "you disappointed me" messaging. A missed day simply leaves the island there.
 
 ### C. Discovery loop — occasional surprises
@@ -73,12 +73,12 @@ No promise of a particular scene until the actual visual/audio quality is proven
 
 | System | Child experience | V1 boundary |
 |---|---|---|
-| Island/world | a cozy, beautifully art-directed persistent island | one main location, 2–3 evolving zones, no huge open world |
+| Island/world | a grounded persistent home/yard becoming lovely gradually | one main location, 2–3 evolving zones, no huge open world |
 | House | restore exterior + personalize one small room | curated snap anchors, limited furniture, not freeform 3D crafting |
 | Garden | choose and place plants; plants stay and animate | no plant death, no watering penalties |
 | Companion | Nova visually present, reacts, has safe conversational mode | one polished character first; architecture supports more |
 | Habits | parent config / child marks done / parent may approve | deterministic, simple, transparent |
-| Discoveries | gentle mystery, visiting creature, one secret path | story fragments, not 30 unique cutscenes |
+| Discoveries | small clues in house/yard; world beyond hints only | major visitors, tree/creek missions and gate after first 10-beat home chapter |
 | Memories | display chosen objects, visitors, special moments | structured allow-listed events only |
 | Parent area | profile, habits, approval, AI/mic permissions, quiet hours | not inside the child world |
 | Developer tools | jump day, add/remove item, mock AI, reset | required before large content production |
@@ -92,7 +92,7 @@ No promise of a particular scene until the actual visual/audio quality is proven
 5. Child chooses *what* or *where* to build/plant. World saves.
 6. Nova responds, invites exploration without pressure; child can leave freely.
 
-Session should reward 3–8 enjoyable minutes but **not** optimize for trapping attention. Parent can configure quiet hours and reminders.
+Each beat should offer a satisfying short hands-on action, with **one meaningful main structural change**, not one tap and done, and allow free rearrangement; sessions can be brief and must **not** optimize for trapping attention. Parent can configure quiet hours and reminders.
 
 ## 7. The "building" rules (avoid grind)
 
@@ -100,7 +100,7 @@ Session should reward 3–8 enjoyable minutes but **not** optimize for trapping 
 - Starter kit is generous; initial session has real autonomy.
 - A plant placed by the child remains; location is recorded.
 - Objects have a coherent scale, collision/placement rules, anchors, styles, animation states.
-- Main story may converge but choices remain visible in the island.
+- All steps build cumulatively on the same house/garden and child's distinct choices remain visible after 10 beats, then during Chapter 2 adventures.
 - A decorative choice is reversible; major world choices clearly indicate permanence.
 - No randomized paid rewards, purchases, social trading or infinite inventory loops.
 
