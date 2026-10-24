@@ -89,10 +89,8 @@ async function change(page,kind,before){
  const after=await sceneSnapshot(page);
  if(!before||!after||!before.objects||!after.objects)throw Error('Missing read-only scene object evidence');
  if(JSON.stringify(before.objects[kind])===JSON.stringify(after.objects[kind]))throw Error('Only UI changed; actual '+kind+' Three scene did not');
- if((await required(page,'nova-actor')).getAttribute('data-focus')!==kind) {
-  const focus=await (await required(page,'nova-actor')).getAttribute('data-focus');
-  if(focus!==kind)throw Error('Nova not focused on '+kind);
- }
+ const focus=await (await required(page,'nova-actor')).getAttribute('data-focus');
+ if(focus!==kind)throw Error('Nova not focused on '+kind);
  return after;
 }
 try{
