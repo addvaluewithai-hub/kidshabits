@@ -30,9 +30,9 @@ export function App(){
       <span className="glow-dot"/>{titles[focus]}
     </div>
   </header>
-  <div className="chapter-label" aria-hidden="true">
+  {focus==='arrival_path'&&<div className="chapter-label" aria-hidden="true">
     <small>الفصل الأول</small><span>هنا تبدأ الحكاية</span>
-  </div>
+  </div>}
   <section className="immersive-hud" aria-label="نوفا وخيارات الاستكشاف">
     <div className="subtitle-wrap">
       <span className="nova-presence" data-testid="nova-actor" data-focus={focus}>✦ نوفا</span>
