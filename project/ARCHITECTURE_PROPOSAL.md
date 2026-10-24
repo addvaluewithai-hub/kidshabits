@@ -1,3 +1,5 @@
+> **HISTORICAL v1 — SUPERSEDED FOR NEW PRODUCTION (2026-10-24).** The Phaser 4 / linear planet / 2D scene assumptions below are archival. For all new coding use [current Product Vision](./PRODUCT_VISION.md), [Immersive Three.js spec](./island-v2/IMMERSIVE_WORLD_SPEC.md), [ADR-001](./island-v2/ADR_001_THREEJS_IMMERSIVE.md), [25-session plan](./island-v2/SESSION_PLAN_25.md) and [AGENTS.md](../AGENTS.md). Only nonconflicting safety/domain separation principles are reusable.
+
 # KidsHabits — Product Architecture Proposal v1
 
 **Status:** Proposal for review  
