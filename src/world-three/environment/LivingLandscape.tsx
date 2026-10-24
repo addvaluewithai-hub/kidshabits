@@ -53,7 +53,7 @@ export function LivingLandscape(){
  return <>
   <color attach="background" args={['#b4d7d4']}/>
   <fog attach="fog" args={['#b4d7d4',38,135]}/>
-  <hemisphereLight skyColor="#f6f3d6" groundColor="#55766b" intensity={1.8}/>
+  <hemisphereLight color="#f6f3d6" groundColor="#55766b" intensity={1.8}/>
   <ambientLight intensity={.27}/>
   <directionalLight position={[-11,18,13]} intensity={3.1} color="#ffe1b2" castShadow
    shadow-mapSize={[1024,1024]} shadow-bias={-.00045}
