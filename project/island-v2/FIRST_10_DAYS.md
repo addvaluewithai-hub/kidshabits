@@ -1,141 +1,66 @@
-# First 10 Progress Beats — Grounded Immersive World Journey
+# First Ten Progress Beats — Our Home Grows, One Piece at a Time
 
-**Updated 2026-10-24:** Each beat happens **inside a full-screen continuous Three.js world**, with perspective camera at a child's comfortable view height. No floating islands, roof-level top-down shots, or separate boxed story-card scenes; see [Immersive spec](./IMMERSIVE_WORLD_SPEC.md).
+**Proposal 2026-10-24, pending review.** Supersedes the *proposed* first-ten traversal into creek/bridge/Lumi/gate. The first ~10 qualifying progression steps happen in **one full-screen Three.js grounded home, barren garden and eventual cottage interior**, at child-height perspective. **No outside adventure until the home becomes a place the child truly loves.**
 
-**This is not 10 separate full-screen videos.** One connected grounded magical world evolves through building, decorating, gardening, small visitor events and a few authored cinematic beats. Every day offers optional free-play; story progress is based on **qualified progress events**, not the passage of calendar dates alone.
+Read the complete rationale, staged component schema, player choices and test hypotheses in [RFC-002 — Home & Garden First](./HOME_AND_GARDEN_FIRST_10_RFC.md).
 
-## The first grounded-world kit
+## Player fantasy
 
-- **Old Cottage** — exterior + starter indoor corner.
-- **Quiet Tree** — a mystery object that reacts as the island changes.
-- **Garden Patch** — first planting and light VFX.
-- **Creek Edge** — initially far background, later accessible.
-- **Secret Gate** — visual tease, locked until an authored milestone.
-- **Nova** — persistent actor and interaction partner.
-- **Lumi** — first small visitor discovered later in the arc.
+On first arrival, the little cottage looks neglected and not quite usable, with a roof leak, broken door, dusty windows and a small barren, weedy yard. It is warm and safe, not frightening or a home the child must rescue urgently. Nova and the child restore a **small but visible part** of it at a time. Over the first ten steps, they turn it into a delightful furnished starter home surrounded by a lush garden they *chose and arranged*. The tiny outdoor region is a familiar home base, not an entire map.
 
-All objects are stateful placements in the **same grounded world**, not discarded scene art. Named guided perspective rigs move between arrival path, cottage, garden, tree and later creek/interior; **not** ten flat screens. Distant scenery makes the clearing feel continuous.
+**One main transformation per qualified beat**, backed by several tactile mini-actions and a choice; optional free decorating/exploration can continue between beats. Avoid a one-tap house transformation or ten repetitive "tap to repair" videos. No required ten-day consecutive streak: a `beat` is a qualified progress opportunity according to the family's goal policy; if a day is missed, progress stays safe.
 
-## Story / building beat outline
+## Before / middle / after: 3D visual evolution
 
-### Day 1 — "دي دنيتنا!"
-- **Cold open:** child-height arrival-path camera walks forward through continuous terrain with sky/horizon; cottage and old tree ahead; Nova physically flies into world view and greets child.
-- **Action:** name their place; tap **cottage** or **garden** as first guided camera destination (no free-roam joystick).
-- **World result:** first sign, selected focus highlighted and first editable object placed.
-- **Nova:** "تفتكري نبدأ بالبيت ولا بالحديقة؟ أنا نفسي أشوف هتعملي إيه."
-- **Saved:** `world.name`, `first_focus`, `placedObjects`; semantic state preserved across viewport changes. Choice affects current guided destination, not access to core content.
-- **Tomorrow hook:** faint glow behind old tree.
+| Stage | Cottage outside | Garden/yard | Cottage inside |
+|---|---|---|---|
+| 01 | tiny weathered home, damaged door/window/roof | dry patch, weeds and poor path | closed at first |
+| 03 | usable door and cleaner window, obvious roof work remains | first prepared plant bed | glimpse of a dusty room |
+| 05 | patched roof/porch steps, chosen trim and small welcoming sign | first seedling + second empty bed | ready to enter |
+| 07 | recognizable charming house entrance | leaves and second species planted | repaired wall/floor, first rug/lamp |
+| 09 | inviting little cottage with child-chosen details | several flower/plant kinds, stone path/lantern | cozy window nook/books/art corner |
+| 10 | bright, personalized, **complete starter** cottage | varied, colorful, clearly child-designed garden | welcoming furnished first room |
 
-### Day 2 — "البيت القديم"
-- **Action:** travel via `cottage_front` camera rig and restore cottage doorway and choose one roof/door color combination.
-- **Result:** house exterior visibly changes; small dust/sparkle reveal.
-- **Nova:** "دلوقتي بقي له شكل! عارفة؟ الباب ده كأنه كان مستنيكي."
-- **Mystery:** a tiny scratched symbol near doorframe.
-- **Saved:** `cottage.style`, `cottage.repaired_door`.
+This is cumulative geometry/material/lighting change — not changing DOM badges or swapping a single canned before/after image. The finished starter home may gain new optional rooms or a greenhouse in future chapters. No wilting/death from absence.
 
-### Day 3 — "أول حاجة خضرا"
-- **Action:** guide camera to `garden_edge` and choose 1 of 2 starter plants; place in one of several validated garden spots.
-- **Result:** animated sprout, subtle ambient VFX; plant location persists.
-- **Nova:** "دي أول زرعة هنا! نحطها جنب البيت ولا جنب الشجرة؟"
-- **Saved:** `plants[{type,anchor,stage}]`.
-- **Note:** plant does not wither if child skips a day.
+## Ten meaningful progression beats
 
-### Day 4 — "الغرفة اللي جوا"
-- **Action:** go through guided cottage entrance transition and enter starter room and choose desk/rug/lamp placement from anchors.
-- **Result:** interior genuinely resembles the child's choice.
-- **Nova:** "أنا كنت متخيلة النور هنا... بس إنتِ عندك فكرة أحلى؟"
-- **Saved:** `room.layout`.
-- **World event:** tree light pulses once outside (tease).
+| Beat | Main gameplay action | One main world transformation | Supporting touch / own choice | Nova & next curiosity |
+|---|---|---|---|---|
+| **1 — "البيت اللي لقيناه"** | Meet Nova; examine house damage; sweep **one short section** of front path and name the place. | Access path restored, house still very broken. | Choose where to place home sign. | "شايفة قد إيه المكان محتاجنا؟ نبدأ حتة حتة." Curious loose door. |
+| **2 — "أول باب جديد"** | Fit a door plank/knob by placing parts. | Broken door becomes working door. | Door color/handle, clear a tiny weedy plot outside. | Nova opens it; window stays cracked. |
+| **3 — "الشباك والنور"** | Restore windowpane/shutters. | Light enters visibly. | Choose shutters and set edge of first garden bed. | Roof drip invites investigation. |
+| **4 — "سقف يحمي بيتنا"** | Repair just one damaged roof section with simple placement. | Roof no longer leaks in that area; other aging details remain. | Choose and plant first seed in one bed; growth starts tiny. | "يااه! المطر مش هينزل من هنا تاني." |
+| **5 — "سلم البيت"** | Rebuild uneven front steps/porch. | Entrance becomes welcoming; still a small unfinished cottage. | Choose sign/steps; first plant becomes small leaves. | Nova suggests peeking indoors. |
+| **6 — "أول أوضة"** | Guided doorway visit; clean floor and repair one wall. | Previously dusty starter room usable. | Choose wall/floor finish; prepare second bed outdoors. | Empty nook awaits child's own ideas. |
+| **7 — "ركن دافي"** | Place rug + lamp/table in safe layout anchors. | First comfortable living corner and warm light. | Pick rug/lampshade, plant a **second different** seed. | Nova notices child's chosen arrangement. |
+| **8 — "على ذوقنا"** | Paint an interior wall and add curtains/shelf. | House has distinctive personal interior style. | Lay small garden path/edging outside. | "الأوضة دي بقت شبهك!" |
+| **9 — "بيتنا بقى له روح"** | Build a reading/craft nook by the window. | Furnished useful starter room. | Flower bed now varied; choose small trellis/lantern/plant arrangement. | Nova notices several results, not day count. |
+| **10 — "شوفي عملنا إيه!"** | Final small home-and-garden flourish; interactive, skippable walk-through. | **Starter house & first room** charming, garden lush and varied, with real saved choices. | Child chooses final personal emblem/placement; before/after gallery. | Nova celebrates the world they made, then subtly points to a **future outer path**. No outside mission yet. |
 
-### Day 5 — "سر الشجرة"
-- **Action:** touch the tree's old symbol after a qualified daily goal.
-- **Authored scene:** short camera close-up, roots shimmer, a small lantern-like seed emerges.
-- **Nova:** "استني! هو الرمز ده نفس اللي على باب البيت؟"
-- **Saved:** `discoveredFacts.tree_symbol`, `inventory.storySeed` (no arbitrary coins).
-- **Hook:** where should the seed live?
+**External adventures begin after beat 10**: path toward tree/forest, creek, Lumi and related characters/mysteries are now **Chapter 2 (beat 11+)**, not within these ten. The home remains a beloved return destination; adventures can bring optional new decor or plant species *back to* the house.
 
-### Day 6 — "اختيار مكان النور"
-- **Choice:** place story seed **by cottage** or **near creek** (meaningful but bounded).
-- **World result:** different permanent plant/light variant for each branch.
-- **Nova:** bespoke line recognizing the selected location.
-- **Saved:** `choices.seedPlacement`, `worldVariants.seedBloom`.
-- **Narrative:** branch → persistent consequence → converge later.
+## "A real play moment", not an unlock screen
 
-### Day 7 — "ضيف صغير"
-- **Action:** inspect newly moving leaves / glowing object.
-- **Authored reveal:** Lumi appears; Nova gestures to child and visitor.
-- **Nova:** "هو... الكائن الصغير ده طلع من النور؟ شكلنا مش لوحدنا!"
-- **Interaction:** choose a safe little resting place for Lumi.
-- **Saved:** `visitors.lumiDiscovered`, `lumi.homeAnchor`.
+Every beat has at least one short repeatable/practicable activity: remove obstructing objects, align/place a part, paint/choose a material, set a planter, plant and position, arrange movable furniture, inspect a physical change. Use a guided eye-level camera, meaningful feedback/FX and Nova cues; do not force a ten-second video and call it gameplay.
 
-### Day 8 — "ركن لومي"
-- **Action:** build tiny shelter for Lumi or set a garden path to the shelter.
-- **World result:** Lumi can visit/curl up; Nova reacts to the placement.
-- **Nova:** "أنا شايفة إنه مرتاح هنا. تحبي نخليه جنب الزرع؟"
-- **Saved:** `builds.lumiNook`, `paths`.
-- **No emotional manipulation:** never claim Lumi is sad or abandoned if child doesn't return.
+Qualifying real-world habits open a **new repair/planting/design opportunity**. Existing furniture, grown plants and play tools remain usable **even if no new habit is verified**. No coins, streaks, daily countdowns, animal abandonment messages or penalties. Family-defined cadence may give a small step per day, but "day" is a storytelling convention and must not force engagement.
 
-### Day 9 — "المية اللي بتلمع"
-- **Action:** follow guided ground-level route to creek; place a footbridge or three path stones to unlock closer creek view.
-- **World result:** flowing water particles and a second interactable zone.
-- **Nova:** "هو النور ماشي مع المية؟ يلا نبص من هنا!"
-- **Saved:** `creek.pathComplete`, `zones.creekVisible`.
-- **Hook:** secret gate reflection appears in creek.
+## Content/data pipeline for implementation
 
-### Day 10 — "ورا الجذور"
-- **Moment:** milestone reveal, tree canopy shimmers and ancient gate gains a glowing mark; *do not yet force a new planet*.
-- **Choice:** leave mystery for tomorrow or approach and inspect; both valid.
-- **Nova:** "فيه حاجة جديدة اتفتحت... بس الأجمل إن الجزيرة بقت بالشكل اللي إنتِ عملتيه!"
-- **Saved:** `discoveries.gateHint`, `worldStage.firstChapterComplete`.
-- **Reward:** world feels transformed; child continues to have freedom to decorate and play.
+Store `houseParts[{partId,stage,styleId}]`, `gardenBeds[]`, `plants[{instanceId,speciesId,anchorId,stage}]`, `interiorPlaceables[]`, `completedBeatIds[]`, `discoveredFacts[]`, and semantic positions. Avoid `dayN` booleans coupled to renderer code. Stage changes and animation events should be versioned and idempotent, reversible decoration distinct from permanent repaired structure. No saved mesh IDs, CSS pixels or re-completion bug.
 
-## Pacing: 10 days are not 10 forced sessions
+Camera rigs focus on `arrival_path`, `front_door`, `roof_repair` (still physically child-level), `garden_bed`, `living_room_entry`, `living_corner` and `garden_overview_from_path`. Never switch to high bird's-eye/orthographic just to show home progress. Keep Nova at correct eye-line, skippable authored reactions and quiet moments.
 
-- A day means a **qualifying progress step** within a parent's chosen goal policy.
-- Prototype debug tools can jump to any step and pre-populate world state without actual waiting.
-- The child may freely decorate, observe and converse on days with no unlock.
-- Delay is okay; no streak loss, no NPC sadness, no decaying plants.
-- Allow catch-up in a controlled way if product tests show a calendar-daily restriction is frustrating.
+**Existing Session 01 code** does instant `RESTORE_COTTAGE` and `PLANT_GARDEN`; this was an approved technical scene prototype, **not** the ten-beat product mechanic. Add a domain migration to incremental repairs in a later focused PR; don't silently rewrite the accepted 01/25 evidence.
 
-## Content structure for each beat
+## Testing priorities
 
-```yaml
-id: sprout_day_05
-zone: island_clearing
-requires: [progress_qualified, cottage_visible]
-playOnce: true
-onCommit:
-  facts: [tree_symbol_discovered]
-  inventory: [story_seed]
-sequence:
-  - camera: focus_tree
-  - nova: authored_line_tree_symbol
-  - effect: roots_glow
-  - object: reveal_story_seed
-after:
-  freePlay: true
-  nextHook: choose_seed_home
-```
+1. Can a 9-year-old describe the next **small thing they personally want to fix** before any prompt or reward?
+2. Are steps 2–4 meaningfully different mini-actions, not identical repetitive tapping?
+3. Can a child tell that after 3/5/10 qualifying steps the *same* home grew gradually — neither instant palace nor disappointing imperceptible change?
+4. Does chosen door color, first plant position, room layout persist after reload and affect the 10th reveal?
+5. Does free-play work if progress doesn't qualify today? No guilt, no decay, no pressing child to return tomorrow.
+6. Does the child genuinely want to go **home** after Chapter 2 adventures?
 
-This schema is illustrative; implement and validate as typed content before authoring production days.
-
-## Content list to produce (minimum meaningful set)
-
-- Opening encounter (30–60 sec interactive, not a compulsory long video).
-- 10 small progress definitions with 1–3 optional interactions each.
-- 2 meaningful choices: first build focus and permanent seed placement.
-- 1 visitor (Lumi), 1 friendly mystery, 2 satisfying authored reveals.
-- 2–3 reusable world compositions with multiple state variants.
-- Nova reaction lines for: placement, color change, discovery, returning session, progress qualification, refusal to continue.
-- Voice/subtitles and sound cues for important moments; silence/ambient space between lines.
-
-## Playtest questions after first 3 days, not after all 10
-
-1. Does a nine-year-old understand "this is mine" and choose freely?
-2. Are building actions fun enough without a story cutscene?
-3. Does Nova feel like a true in-world character?
-4. Is the pacing too slow, too scripted or too babyish?
-5. Does the child notice their house/plant stayed the way they left it?
-6. Does the parent understand the relationship between real habits and in-world unlocks?
-
-**Gate:** don't commission all ten polished days before these questions are answered with a playable Slice 0–2.
+**Gate:** test a 3-stage cottage/garden vertical slice before producing ten premium states; stage 10 art should be a readable, inviting reference target from the start. See [Roadmap](./ROADMAP_AND_ACCEPTANCE.md), [25-session plan](./SESSION_PLAN_25.md), [STATUS](./STATUS.md).

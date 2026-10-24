@@ -46,20 +46,24 @@ Nova is a 3D world actor with coherent scale, expressions, look targets, movemen
 
 **Never give AI story/habit authority**. Core choices, story facts, family permissions, re-engagement and unlocks are deterministic domain behavior. AI sees discovered facts only. The child knows Nova is an AI character, not a real person or replacement for trusted humans.
 
-## 5. First ten progression steps
+## 5. First ten progression steps — home first (proposal)
 
-1. Meet Nova on arrival path; name world and choose first focus.
-2. Repair/customize cottage doorway and roof.
-3. Plant first garden flower at a real spatial anchor.
-4. Decorate starter interior through a guided doorway scene.
-5. Discover ancient-tree symbol / mysterious seed.
-6. Place story seed by home or creek; branch persists.
-7. Lumi appears as a gentle new visitor.
-8. Create a little nook and path for Lumi.
-9. Open creek path / small bridge, guided camera along route.
-10. Reveal a hidden gate clue in a still-growing connected world.
+**24 October 2026 proposed product change:** First ~10 meaningful qualified steps invest in the **same small, noticeably damaged cottage, barren yard/garden and starter interior**, not fast travel across several external mystery locations. Child repairs **one visible part** at a time. Indoor furnishing begins after the entrance becomes safe; a lush, personally arranged first garden and cozy furnished starter home culminate at beat 10. See [RFC-002](./island-v2/HOME_AND_GARDEN_FIRST_10_RFC.md).
 
-**Beats are not compulsory calendar days.** Free creative play always remains available; no ten mandatory videos. See [FIRST_10_DAYS.md](./island-v2/FIRST_10_DAYS.md).
+1. Arrive at the tiny weathered cottage, bare garden and overgrown approach; clear first portion of path and name home.
+2. Repair first broken door/handle and choose its style.
+3. Fix window/shutters and prepare first tiny garden bed.
+4. Repair one roof section and plant first seed.
+5. Mend steps/porch; first seed becomes visible seedling.
+6. Open house for first visit, clean/fix first interior wall/floor.
+7. Make living corner cozy with rug/lamp; plant different second species.
+8. Paint/dress room with curtain/shelf; add small garden path.
+9. Build reading/craft corner; garden now diverse and flowering.
+10. Personalize final details and take a skippable grounded walk-through of **your** completed starter home and garden.
+
+**After beat 10:** external adventures, deeper tree mystery, Lumi, creek, bridge and gate can begin (Chapter 2). Home remains the emotional and functional hub; outdoor stories bring optional enhancements back home.
+
+Beats are progression milestones **not mandatory ten consecutive calendar days**. One meaningful focal change per eligible step, small tactile mini-actions and personal choices; optional free play always available. No plant decay, daily guilt or live-AI progress authority. Earlier technical S01 Instant Restore was a renderer proof, not the final gameplay.
 
 ## 6. Global-quality bar, from start
 
