@@ -1,51 +1,41 @@
-# KidsHabits — Island World v2 (product pivot proposal)
+# KidsHabits — Full-Screen Immersive Three.js World (v3)
 
-**Status:** Product direction approved in conversation; architecture/design proposal for GitHub review. **Not yet merged or implemented.**  
-**Audience:** children around 8–10, starting with a 9-year-old user test; parent-controlled configuration.  
-**Working title:** *The Little Wonder Island* / *جزيرتي العجيبة*. Final brand/name remains open.
+**Adopted product direction:** 24 October 2026. **Code not yet implemented** for this new ground-level world. Planning lives in draft [PR #8](https://github.com/addvaluewithai-hub/kidshabits/pull/8); `main` remains clean pending review.
 
-> **A magical world that grows with the child.**
+> **A magical world that grows with you.**
 >
-> Real-world habits unlock creative possibilities. The child owns an evolving island, builds a home, grows a garden, discovers friends and mysteries, and is accompanied throughout by an expressive AI character (Nova).
+> A girl around nine should feel **inside** a richly crafted world with a house, garden, old tree and Nova. She should NOT feel as though she's looking down on a floating island in a frame.
 
-## The decision
+## Where we really are
 
-We are **pivoting away from a rigid 30-day sequence of cinematic story scenes** as the main product. The heart is now **create + nurture + discover + companion**. Short authored story moments punctuate the world; the world itself persists. We will prototype a coherent island and test whether the child *wants to return voluntarily* before committing to 30-day production.
+**[STATUS.md](./STATUS.md)** is the first file at every session. It currently tracks **01/25 active, 0/25 immersive sessions completed**, previous prototype evidence, unmerged PRs and the exact next task.
 
-The previous 10-day story-only exploration in PR #7 is an experiment, **not the new product blueprint**. Preserve useful assets or lessons but do not build v2 on its hard-coded day-by-day presentation.
+### Read before any production coding
 
-## Resume work here — production control center
+1. **[PLAN_AR.md](./PLAN_AR.md)** — full Arabic explanation of the direction and the first ten beats.
+2. **[ADR_001_THREEJS_IMMERSIVE.md](./ADR_001_THREEJS_IMMERSIVE.md)** — accepted Three.js / full-screen / perspective / guided exploration decision.
+3. **[IMMERSIVE_WORLD_SPEC.md](./IMMERSIVE_WORLD_SPEC.md)** — camera pose, first 75s, space, UI, Nova, acceptance.
+4. **[SESSION_PLAN_25.md](./SESSION_PLAN_25.md)** — 25 detailed sessions reallocated around immersive world.
+5. **[TECHNICAL_CONTRACTS.md](./TECHNICAL_CONTRACTS.md)** · **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** — modular Three, state, GLB assets, art swapping, no hard line-limit.
+6. **[ART_AND_CONTENT_PIPELINE.md](./ART_AND_CONTENT_PIPELINE.md)** — premium 3D art/model/rig pipeline and world style.
+7. **[CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md)** — actual WebGL/perspective/camera/full-viewport screenshot tests.
+8. **[ROADMAP_AND_ACCEPTANCE.md](./ROADMAP_AND_ACCEPTANCE.md)** · **[FIRST_10_DAYS.md](./FIRST_10_DAYS.md)** — milestone gates and ten connected progress beats.
+9. [NOVA_COMPANION.md](./NOVA_COMPANION.md) · [PRODUCT_BLUEPRINT.md](./PRODUCT_BLUEPRINT.md) · [FINCH_COMPETITOR_STUDY_AR.md](./FINCH_COMPETITOR_STUDY_AR.md) — character, loop, competitor lessons.
 
-**Read [STATUS.md](./STATUS.md) first** at the start of every session. It holds the active session (initially **01/25**), blockers, tested commit/run evidence, and next task. Apply **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** as our clean-build, modular-file, premium worldwide quality and swappable-art contract. Use [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) for the fixed session-by-session roadmap and [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md) for GitHub Actions screenshots and acceptance gates.
+**Decision/history preserved:** [v1 25-session plan](./archive/SESSION_PLAN_25_V1_2026-10-23.md), [pre-immersive STATUS](./archive/STATUS_BEFORE_IMMERSIVE_2026-10-24.md), [older product vision](../archive/PRODUCT_VISION_PHASER_V1.md).
 
-**Current CI verification:** Planning validation has passed on [Actions run #39977185598](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39977185598). Visual job was **skipped** because the planning branch has no runnable app; real game screenshots remain **NOT VERIFIED**.
+## Important GitHub code state
 
-## Read in order
+- [PR #12](https://github.com/addvaluewithai-hub/kidshabits/pull/12) is a **Phaser 4 demo**. Good domain/storage lessons, not production runtime.
+- [PR #13](https://github.com/addvaluewithai-hub/kidshabits/pull/13) is a **Three floating-diorama A/B experiment**. Real CI pixel/screenshots, but **NOT** the newly approved immersive camera composition.
+- Do **not** bulk merge these old PRs, ship two renderers or count them as done immersive sessions.
+- Start Session 01 from reviewed planning docs with **one renderer: Three.js/R3F**, full-screen grounded land and a perspective camera. Code and screenshot tasks are separate from this planning-only PR.
+- [cloudai-x/threejs-skills](https://github.com/cloudai-x/threejs-skills) informs React Three Fiber, geometry, lights, camera, animation, materials and performance; verify current APIs before coding.
 
-**ابدأ هنا بالعربي:** [PLAN_AR.md](./PLAN_AR.md) — ملخص عملي شامل للفكرة والخطوات وأول عشرة أيام.
+## Design & review principles
 
-1. [PRODUCT_BLUEPRINT.md](./PRODUCT_BLUEPRINT.md) — audience, game loops, emotional goals, family boundaries.
-2. **[FINCH_COMPETITOR_STUDY_AR.md](./FINCH_COMPETITOR_STUDY_AR.md)** — تحليل المنافس Finch وماذا نتعلم منه وأين نختلف، بمصادر رسمية وتحذير أنه 13+.
-3. [NOVA_COMPANION.md](./NOVA_COMPANION.md) — character behavior, live AI, authored dialogue, safety.
-4. [FIRST_10_DAYS.md](./FIRST_10_DAYS.md) — playable ten-day outline with building, choice, mystery and state.
-5. [ART_AND_CONTENT_PIPELINE.md](./ART_AND_CONTENT_PIPELINE.md) — cohesive art, sprites/video/p5, production assets.
-6. [TECHNICAL_CONTRACTS.md](./TECHNICAL_CONTRACTS.md) — state, game architecture, integration and save rules.
-7. **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** — clean-from-main codebase; modular architecture, file limits and art theme boundaries.
-8. [ROADMAP_AND_ACCEPTANCE.md](./ROADMAP_AND_ACCEPTANCE.md) — small GitHub deliverables, tests, gates, next PR.
-
-## Repository alignment / precedence
-
-- This folder proposes the **v2 experience direction**. Existing `project/PRODUCT_VISION.md`, `project/ARCHITECTURE_PROPOSAL.md`, `project/ARCHITECTURE_PRODUCT_FLOW_V1_1.md` and `AGENTS.md` remain on `main` and are not silently overwritten.
-- On approving this proposal, a **separate, explicit alignment PR** must update the canonical vision/agent instructions to remove the assumption that every successful day primarily advances a linear 30-day plot.
-- Preserve solid established rules: Phaser 4 clean start; domain state outside renderer; authored core moments / AI conversation; safe memory; Arabic-first; mobile portrait; parents own habit authority; no guilt.
-- Do not treat ten days of content as ten separate scenes or ten videos.
-
-## Definition of success
-
-A child can return to a world **they changed**, see their previous choices, spend a few enjoyable minutes building or exploring with Nova, and leave curious to continue. Parents can set a few habits and verify progress quickly. The world never punishes missed days.
-
-## First action after review
-
-Start with [Roadmap: Slice 0](./ROADMAP_AND_ACCEPTANCE.md#slice-0--prove-the-beautiful-island-and-nova), which delivers a beautiful, **interactive** tiny island, a recognizable animated Nova, and camera/interaction feel — before expansion to ten days or production voice calls.
-
-We work on one issue/branch/PR at a time, posting phone screenshots/video and test evidence before merging.
+- Enduring child-selected world changes, actual models/materials, camera movements and Nova performance; authored scene beats and safe AI boundary.
+- Child-safe habit verification and optional guarded AI voice; no guilt, coercive streaks, currency grind, or dying plants.
+- Arabic-first, global localization-ready, accessible and mobile optimized; parent UX separate from full-screen child world.
+- **Top-tier quality ambition from first PR:** artistic detail, UX, light, animation and sound; file length nonblocking but real coupling forbidden.
+- No claim of flagship quality until real phone / human visual review. CI proof is a necessary but insufficient gate.
