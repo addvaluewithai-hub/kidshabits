@@ -1,3 +1,10 @@
+import * as THREE from 'three';
+
+const gable=new THREE.Shape();
+gable.moveTo(-1.82,2.89);
+gable.lineTo(0,4.16);
+gable.lineTo(1.82,2.89);
+gable.closePath();
 import type { WorldSnapshot } from '../../domain/world';
 const plaster='#efdebb';
 export function WorldCottage({world,onChoose}:{world:WorldSnapshot;onChoose:()=>void}){
@@ -16,6 +23,9 @@ export function WorldCottage({world,onChoose}:{world:WorldSnapshot;onChoose:()=>
     <boxGeometry args={[.17,2.86,.18]}/><meshStandardMaterial color="#a17758" roughness={.9}/>
   </mesh>)}
   <mesh position={[0,2.80,1.62]} castShadow><boxGeometry args={[3.78,.20,.18]}/><meshStandardMaterial color="#ac8464"/></mesh>
+  <mesh position={[0,0,1.57]} castShadow receiveShadow>
+   <shapeGeometry args={[gable]}/><meshStandardMaterial color="#e9d4ad" roughness={.9} side={THREE.DoubleSide}/>
+  </mesh>
   {[-1,1].map((side,i)=><mesh key={i} position={[side*.98,3.45,0]} rotation={[0,0,-side*.59]} castShadow receiveShadow>
     <boxGeometry args={[2.38,.29,3.72]}/><meshStandardMaterial color={restored?'#577e90':'#496a78'} roughness={.78}/>
   </mesh>)}
