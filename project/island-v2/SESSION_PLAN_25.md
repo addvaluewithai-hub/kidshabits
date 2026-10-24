@@ -1,95 +1,92 @@
-# KidsHabits Island v2 — 25-session production plan (baseline v1)
+# KidsHabits — 25-Session Immersive Three.js Production Plan (v2)
 
-**Frozen planning baseline:** 2026-10-23.  
-**Scope:** first **10 meaningful progression steps** of the new island builder, on mobile, with Nova present.  
-**Estimate:** 25 focused development/review sessions, **not** a fixed schedule or production guarantee. Art iteration, voice safety, mobile hardware testing or rework can add sessions.  
-**Authority:** [PRODUCT_BLUEPRINT.md](./PRODUCT_BLUEPRINT.md) · [NOVA_COMPANION.md](./NOVA_COMPANION.md) · [FIRST_10_DAYS.md](./FIRST_10_DAYS.md).  
-**Live operational ledger:** [STATUS.md](./STATUS.md). Update after **every** session; update with verified facts, never auto-mark green from prose.
+**Adopted direction:** 24 October 2026 — product owner selected **Three.js / React Three Fiber**, **full-screen grounded living world**, **child-height perspective camera** and **guided cinematic exploration**.  
+**Work:** first **10 meaningful progress beats** for children around 9, *not* ten separate scenes or compulsory calendar dates.  
+**Budget:** **25 provisional focused sessions**, not guaranteed delivery; extra time for models, animation, hardware or accessibility is allowed and must be recorded openly.  
+**Superseded:** [archived 2D/Phaser plan](./archive/SESSION_PLAN_25_V1_2026-10-23.md).  
+**Required reads:** [ADR-001](./ADR_001_THREEJS_IMMERSIVE.md) · [Immersive spec](./IMMERSIVE_WORLD_SPEC.md) · [Engineering standards](./ENGINEERING_STANDARDS.md) · [STATUS](./STATUS.md).
 
-The numbers below are *planning slots*, not promised dates. Each session produces code or a reviewable artifact in its own PR/commits with CI evidence. **No proceeding to the next phase without its gate.** **Architecture rule:** all new code follows [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md): small focused modules, clean import direction, stable semantic state, and replaceable art packs. Its source guard runs in CI. This plan may be revised by a new PR, preserving the older version and recording the reason.
+## Non-negotiable production direction
 
-## Phase 1 — production baseline and visual slice (sessions 01–07)
+- **One primary renderer:** Three.js / React Three Fiber. Phaser PR #12 and Three/Phaser PR #13 are **reference/spike branches**, not production dependencies. No two renderers shipped together.
+- **Full screen:** the child is **inside a grounded world**, never looking at a floating rock from above. Perspective camera, believable horizon, footpaths, distant scenery and physically located Nova.
+- **Movement initially guided:** tap a landmark → smooth, human-height camera move to a safe authored viewing point → interact. **No forced avatar, free-orbit or joystick for first 10 beats** unless child tests change the decision.
+- **World quality from Session 01:** no boxed demo, giant side-panel or delayed UX work. Every PR checked for mobile legibility, thoughtful light/motion, safe areas, audio-off, reduction of motion, accessible HTML fallback and Nova continuity.
+- **Code hygiene:** deterministic domain + versioned state outside 3D, typed interfaces, small cohesive modules, stable IDs, replaceable art packs/GLB assets. File length is **advisory** (no hard LOC fail). React Three Fiber scene components are projection only.
+- **Child privacy & safety:** 2–3 parent-configured habits, approval/trust options, no punitive streaks or dying plants, no AI control over unlocks, no unapproved child audio or external calls.
 
-| Session | Specific deliverable | Evidence / acceptance |
+## Phase A — world foundation + character (01–07)
+
+| Session | Deliverable | Acceptance evidence |
 |---|---|---|
-| **01** | **Greenfield clean scaffold from main**, audit existing PRs (#2–#7) only for selective modular reuse, enforce [engineering standards](./ENGINEERING_STANDARDS.md), confirm local/CI build and source-of-truth docs | Working `npm run build` from selected branch; documented baseline/ref; screenshots only if actual app exists |
-| **02** | Art bible: island perspective/palette/lighting/asset dimensions; Nova expressions/motion spec; choose first cottage + garden composition | Reviewed before/after keyframes at phone width; asset list; no placeholder art approved as final |
-| **03** | Phaser 4 world boot, portrait responsive safe areas, separated background/foreground/hotspots | Dev URL + working mobile viewport screenshot; no console errors |
-| **04** | Nova independent world actor: correct movement/flight, gaze toward cottage/garden, expression poses | Actor visible on portrait and desktop, screenshots + automated actor state check |
-| **05** | Cottage interaction: tap/choose a visible door/roof change; short Nova reaction | Automated tap, changed state assertion and before/after screenshot |
-| **06** | Garden interaction: first plant/placement animation + selective particles/p5 textures | Automated tap, state assertion, visual review at phone scale |
-| **07** | **Visual quality gate**: animation timing, light, subtitles, accessibility and low-end profile | 2 decisions + Nova feel intentional; review before moving on; art quality approved or stay here |
+| **01** | **Clean production Three.js app from documentation-only main**. React/Vite/TS, R3F/Three; full-screen 100dvh grounded clearing (terrain to horizon, sky, old house, garden, ancient tree); human-height perspective arrival and **one guided focus journey**; Nova represented in-world; pure minimal island/world state, app commands and local save. Port only reviewed small domain/tests and 3D ideas from #12/#13. | CI build/unit + real WebGL nonblank pixel proof; phone 390×844, narrow 360×740 & desktop screenshots; **no floating underside, orthographic bird's-eye, boxed island or page scroll**. Camera pose assertion + a focus interaction; save/reload baseline. Record actual SHA/run/artifact in STATUS. Not final art. |
+| **02** | **World & Nova art bible** with final direction candidates: character silhouette/expression sheet, scale reference, ground-level camera language, lighting, materials, rig/GLB authoring/export conventions, mobile target devices and captions/UX controls. Improve ugly placeholders before more world content. | Approved keyframe/mock and moving phone capture against same eye-level camera; source/provenance manifest; quality debt explicit; rejection/iteration allowed. |
+| **03** | Modular Three `WorldHost3D`, terrain/sky/horizon, named 3D zones, physically plausible lighting/shadows, graphics settings, loading/error/retry and orientation/safe-area behavior. | Works in mobile viewport; no world edges or empty void; no frame clipping; keyboard/accessibility controls retained; automated screenshot reference. |
+| **04** | **NovaActor3D** independent rig/GLB with idle/fly/turn/look/point/listen/speak cues, camera-aware placement and authored animation priority. | In-world eye-line and gestures follow current selected object; no vanishing/offscreen or distracting perpetual voice; authored/mock dialogue + subtitles and reduced motion pass. |
+| **05** | **Cottage visit**: tapping cottage or accessible target guides camera to front door; repair or style action changes material/mesh + Nova specific response; access to path back. | CI asserts camera rig `cottage_front` and actual material/state change, screenshot before/after + return; state survives reload. |
+| **06** | **Garden visit**: child taps ground plot, guided camera and two safe 3D planting anchors; growth animation + Nova reaction; collision/occlusion validation. | CI asserts camera rig `garden_edge`, raycast/accessible tap, growth and save/reload; world does not become top-down for placement. |
+| **07** | **Premiere visual/UX/performance gate**: polish scene composition, Nova, shading, particles/ambience, subtitles, readable HUD; test memory/frame time on at least one real phone if available. | Owner sees phone screenshots **and short camera-motion recording**; confirm it feels like *living in a world*, not a showroom. If quality fails, do not expand content; stay here. |
 
-## Phase 2 — world ownership and creative loop (sessions 08–11)
+## Phase B — persistent building in spatial world (08–11)
 
-| Session | Specific deliverable | Evidence / acceptance |
+| Session | Deliverable | Acceptance evidence |
 |---|---|---|
-| **08** | Typed island object catalog, finite anchors, variants, place/move constraints | Domain tests for allowed/blocked placements |
-| **09** | Persistence, restore after reload, migration strategy, interruption-safe state | E2E: name/house/plant survive refresh and app restart |
-| **10** | Cottage style & basic interior kit; no dead decoration UI | Real room/exterior choices; screenshot difference review |
-| **11** | Garden variety, reposition/edit freely, usable play without daily reward | Child can play using unlocked starter items and resume exactly |
+| **08** | Domain-owned 3D object catalog, stable semantic anchors and world transforms; placement validation, collision rules and depth-safe object selection without saving pixels/mesh IDs. | Unit tests reject invalid/occupied spots; changing skin or viewport preserves placement; perspective placement affordances comprehensible. |
+| **09** | Versioned snapshot migrations, reload/return, pause/resume and recovery from interrupted camera transition; world, zone and camera focus reconstruction. | E2E create/modify/close/reopen and rotate viewport; same objects and Nova contextual greeting; no duplicate world events. |
+| **10** | Cottage exterior customization plus simple first interior corner reached through guided doorway transition (no free-roam camera collision system). | Two distinct personally recognizable homes; lighting/occlusion and navigation back tested; style independent of game rules. |
+| **11** | Garden kit: choose plants and locations, rearrange, undo/preview where possible; free-play even when no habit unlock today. | Multiple visibly different gardens and return states; no plant death/missed-day guilt; comfortable touch targets. |
 
-## Phase 3 — parents and real progress (sessions 12–14)
+## Phase C — parent authority and habit progress (12–14)
 
-| Session | Specific deliverable | Evidence / acceptance |
+| Session | Deliverable | Acceptance evidence |
 |---|---|---|
-| **12** | Calm parent onboarding: child profile, 2–3 habits, trust/approval, mic policy | Parent walkthrough, clear child handoff |
-| **13** | Deterministic habit ledger, approval queue, threshold, idempotent unlock | Automated tests for pending/rejected/approved/trust, no double unlock |
-| **14** | Progress unlock integrated with world building + authored milestone queue | Habit qualification visibly changes available choices; safe reload |
+| **12** | Calm family onboarding/profile, parent owns 2–3 goals and trust/approval setting, mic consent default off; accessible child handoff into world. | Parent can configure without cluttering full-screen child world; test handoff/return to parent area. |
+| **13** | Deterministic habit ledger, authorization + idempotent thresholds, pending approvals and resilient offline/local behavior. | Domain tests: pending/rejected never unlock, trust/approved once, retries no double rewards; audit relevant permissions. |
+| **14** | Qualification unlocks **creative opportunities** (3D placeable or new path), presentation via authored sequence; no currency treadmill. | Approved real-life habit state enables one intended action; 3D world visibly changes, persists and restores without Nova/AI deciding. |
 
-## Phase 4 — authored events and days 1–10 (sessions 15–19)
+## Phase D — authored story and ten steps (15–19)
 
-| Session | Specific deliverable | Evidence / acceptance |
+| Session | Deliverable | Acceptance evidence |
 |---|---|---|
-| **15** | Typed content schema + validator, sequence director, day-jump simulator | Schema tests + authored mock scenes without hard-coded day logic |
-| **16** | Polish first 3 steps: name island, cottage, garden, authored Nova lines | Play 01–03 in sequence, save/reload, first parent-supervised child feedback |
-| **17** | Steps 04–06: interior, tree mystery, enduring seed-placement branch | Both seed branches visible and persisted; interruption safe |
-| **18** | Steps 07–08: Lumi discovery/arrival, nook and visitors | Lumi discoverable exactly once, nook saved, Nova performance controlled |
-| **19** | Steps 09–10: creek/bridge and gate hint, no forced huge new planet | Play 01–10, debug jump, compare world at start/end and after reload |
+| **15** | Typed story/zone/camera-director schema, content validator, skip/resume, authoring/debug day-jump tool and simulation with mock AI. | Add a new beat as content without changing `WorldHost3D`; interrupted reveal commits state once. |
+| **16** | **First 3 beats** polished in grounded world: meeting Nova on arrival path, first house/roof choice, garden planting; parent-supervised user playtest. | 3 distinct playable state changes, child understands own place, actual camera journeys and screenshots; tune nine-year-old copy. |
+| **17** | **Beats 4–6**: enter interior, ancient-tree symbol, secret seed with permanent placement by cottage or near creek. | Both branches persistent and visibly different in same contiguous world, close-up camera keeps credible ground perspective. |
+| **18** | **Beats 7–8**: Lumi enters world and a nook/path is built for it; Nova reacts coherently without guilt/neediness. | Lumi appears once, home anchor saved, camera/Nova/visitor choreography and muted alternative pass. |
+| **19** | **Beats 9–10**: reach creek via guided path, bridge/path placement, first hidden gate clue beyond clearing. | Sequence 01–10 replayable/debug-jumpable; nearby regions connected naturally; no cliff edge or artificial floating-zone scene. |
 
-## Phase 5 — actual production QA/polish (sessions 20–25)
+## Phase E — polish, safety and production acceptance (20–25)
 
-| Session | Specific deliverable | Evidence / acceptance |
+| Session | Deliverable | Acceptance evidence |
 |---|---|---|
-| **20** | Cinematic/audio polish (authored clips), options for mute/skip, reduced motion | Sequence coherent, subtitles, no blocking audio, no state rollback |
-| **21** | Visual/interaction screenshot coverage at desktop + portrait phone; detect state changes | GitHub Actions screenshots: baseline, cottage, garden, early/mid/late world, Nova |
-| **22** | Full mobile responsive / device performance / slow loading checks | Test actual phones where available; perf findings recorded, not fabricated |
-| **23** | Reliability: saved game migrations, background/resume, offline fallback, interrupted reveals | E2E recovery + deterministic domain tests |
-| **24** | Parent/child UX review + AI boundaries: mock conversational mode, privacy, accessibility/RTL | Signed-off test matrix; Live AI voice still an **optional separate workstream** |
-| **25** | **Ten-step acceptance gate:** screenshot/behavior review, final bugfixes, clean docs, review PR and backlog | All critical checks green, real build verified, honest unresolved issues documented |
+| **20** | Immersive authored reveals, lighting/audio/camera choreography, subtitle/haptic polish, motion reduction; optional short video only if demonstrably improves result. | Child may skip/leave/replay without progress rollback; no unskippable cinema; camera avoids nausea. |
+| **21** | Rich **GitHub Actions screenshot + interaction coverage**: 3 mobile sizes, desktop, first/house/garden/room/tree/Lumi/creek/day10, camera rig, mesh update, Nova focus and restore. | GitHub artifact/JSON at exact commit; human visual review mandatory; does not merely test existence of CSS/DOM. |
+| **22** | Actual target device performance and accessibility audit: GPU memory, frame pacing, load time, thermal/battery observations, DPR/shadow/LOD fallback, RTL/voice-off/motion. | Document real phone models and measured results; budget findings and fixes, not theoretical claims. |
+| **23** | Reliability/security: snapshot migrations, interrupted journey and authored reveal, unavailable assets/WebGL fallback, network offline, privacy data deletion and no secret leakage. | Automated recovery/contract tests + no corrupted placeables or duplicate rewards. |
+| **24** | Parent-child supervised UX review and child-safe Nova mock conversation, consent and global-ready localization/accessibility review. | Logged behaviors/observations with consent, no raw private child conversation collection, top usability defects addressed. |
+| **25** | **Ten-beat release candidate gate**: full-screen visually coherent lived-in world, robust camera/character/build loops, tests, documentation, backlog and final PR review. | All essential tests + human quality approval on actual phones. Open issues transparent; live AI voice remains a separate opt-in/safety-reviewed workstream if not ready. |
 
-### Important scope boundaries
+## Session protocol — every session
 
-- **Nova v1** means polished in-world actor, authored lines, contextual mock conversation. **Live AI voice** isn't assumed ready merely because 25 sessions passed; it needs opt-in, safety and privacy validation and may extend the schedule.
-- Production assets and animation are major risks and may need external creation/iterations. No inflated promise of studio quality in 25 sessions.
-- The first 10 "days" are **ten unlock/content beats**, not calendar streaks. No obligation for daily log-in; missed days do not punish.
-- World should genuinely support building and gardening, not just 10 similar scenes.
-- Prior draft PRs are **reference implementations**, not a baseline. Start from clean main; reimplement or selectively reuse reviewed small modules only. **Never merge all blindly.**
-- Current `main` is documentation-only; Session 01 must create a verified runnable baseline first.
+1. Read **[STATUS.md](./STATUS.md)** and this plan. Start from approved branch/commit. At session kickoff record exact objective and status.
+2. Read **[ADR-001](./ADR_001_THREEJS_IMMERSIVE.md)**, [World spec](./IMMERSIVE_WORLD_SPEC.md), engineering rules and latest cloudai-x/threejs-skills relevant to the actual work.
+3. Create a narrowly scoped issue/branch/PR. No wholesale merge of historical PR #12 or #13; avoid 2 renderers in production.
+4. Implement renderer-independent domain features with tests and authored world presentation with accessibility equivalents.
+5. Run unit/typecheck/build, **Three canvas / camera rig / world-state assertions**, built-app browser UI and actual screenshot artifacts in GitHub Actions.
+6. **Look at** phone screenshots (and moving camera clip for animation-heavy work). Document clipping, HUD intrusion, style, quality debt and mobile performance unknowns.
+7. Update STATUS with exact commit SHA, Actions URL, artifact name, visual review result and unresolved issues. **Only increment session after owner accepts**. Fail/revise means remain at current number.
 
-## PR / session protocol
+## Minimum CI contract for first code session
 
-1. Read [STATUS.md](./STATUS.md), identify active session and blocked gates.
-2. Pull current branch and review its `AGENTS.md` + the Phaser catalog for coding work.
-3. Open a narrow issue/branch referencing this plan and master issue #9.
-4. Implement *one* coherent target, and add testids/state assertions alongside the feature.
-5. Run local build/tests and GitHub Actions. Require screenshots generated **from a running built app**, not concept images, and review them manually.
-6. Record Action run URL, screenshot artifact name, tested commit SHA, result, missing tests, observations in STATUS. A green Actions icon alone is insufficient.
-7. Advance session number only when target checks pass and reviewer explicitly approves. If blocked, stay on same number and revise.
-
-## Evidence specification
-
-`npm run build` must pass. Playwright must assert real DOM or test bridge for `island-world`, `nova-actor`, `cottage-hotspot`, `garden-hotspot`, `cottage-change`, `garden-change`. It must click both hotspots and capture initial/after screenshots at phone width and desktop. Nova must report two distinct focuses. Later sessions add per-day transitions and state snapshots, never fake green without tested user behavior. See [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md).
-
-**Review gate:**
-- Build / typecheck / domain tests pass.
-- At least two meaningful interactive actions verified in CI on the **same commit SHA**.
-- Screenshot artifacts available; visual reviewer actually looks at them (manual approval), not just uploads.
-- Phone safe areas, Arabic captions, Nova visibility, and reload effects checked as relevant.
-- Important story/child-safety/product constraints preserved.
-
-If a session fails, mark **BLOCKED** with exact failure and owner; no fake checkmark and no session increment.
+- App compiles; domain and import-boundary tests pass. Line length guard nonblocking; forbidden imports fail.
+- `data-testid="world-viewport"` fills viewport and produces **no vertical page scrolling**.
+- Debug camera marker `data-camera-mode="perspective"`, `data-camera-rig="arrival_path|cottage_front|garden_edge"`, with world-space pose checks.
+- Real `canvas` WebGL context + **pixel diversity**, not screenshot of a CSS placeholder.
+- Three mesh/scene state reflected for house/garden changes, not DOM labels alone. Validate with safe test-only scene bridge (no mutable state authority).
+- Two accessible HTML controls or actual raycast objects for house/garden; scripted camera focus and Nova reaction.
+- Screenshot initial and each choice **after motion settles**, and after reload on 390×844, 360×740 and desktop.
+- Manual visual sign-off required: perspective **from within world**, no aerial diorama, no floating underside, readable Nova, safe-area-aware UI and subtitles.
+- CI does not falsely report a game pass when only docs exist. See [CI_AND_VISUAL_QA.md](./CI_AND_VISUAL_QA.md).
 
 ## Change control
 
-The plan is frozen as a **baseline** so we can compare expected to actual. A planned count shift (e.g. from 25 to 29 sessions) must be explicit in a PR, explain what changed, and update STATUS. Do not quietly rewrite completed session history.
+We preserved [v1](./archive/SESSION_PLAN_25_V1_2026-10-23.md) because scope pivot was material. **v2 is the source of planning truth from Oct 24, 2026**, conditional on PR review. Session estimate is still 25 slots by choice, not an attempt to hide additional workload. If real modelling/device testing needs more, revise count explicitly in PR with evidence. No session is retrospectively marked complete because a prior experimental code PR passed.
