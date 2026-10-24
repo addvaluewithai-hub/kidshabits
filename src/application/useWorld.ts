@@ -1,4 +1,4 @@
-import { useCallback,useState } from 'react';
+import { useCallback,useEffect,useState } from 'react';
 import { applyWorldCommand,type FocusId,type WorldCommand } from '../domain/world';
 import {loadWorld,saveWorld} from '../infrastructure/storage/worldStorage';
 
@@ -6,8 +6,9 @@ export function useWorld(){
  const [world,setWorld]=useState(loadWorld);
  const [focus,setFocus]=useState<FocusId>('arrival_path');
  const [settled,setSettled]=useState(true);
+ useEffect(()=>saveWorld(world),[world]);
  const dispatch=useCallback((action:WorldCommand)=>{
-  setWorld(s=>{const next=applyWorldCommand(s,action);saveWorld(next);return next;});
+  setWorld(s=>applyWorldCommand(s,action));
  },[]);
  const navigate=useCallback((to:FocusId)=>{
   if(focus===to){setSettled(true);return;}

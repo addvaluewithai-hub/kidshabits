@@ -20,7 +20,6 @@ function SceneEvidence(){
   if(new URLSearchParams(window.location.search).get('ci')!=='1')return;
   // Read real visible object state from Three's scene graph, not from React's labels.
   window.__KH_CI__={
-   scene,camera,
    snapshot:()=>({
     objects:{
      cottage:{lampVisible:scene.getObjectByName('cottage-lamp')?.visible===true},
