@@ -1,10 +1,11 @@
 # KidsHabits — STATUS · Immersive Three.js World
 
 **Last updated:** 2026-10-24  
-**Plan revision:** [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) **v2 — full-screen immersive Three.js**  
-**Current project stage:** **SESSION 01 IMPLEMENTED AND TECHNICALLY ACCEPTED; SESSION 02 ART-DIRECTION NEXT**  
+**Plan revision:** [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) **v3 home-first (DRAFT PROPOSAL; main still v2 until review)**  
+**Current project stage:** **SESSION 01 COMPLETE / SESSION 02 NEXT — HOME-FIRST TEN BEATS PROPOSAL UNDER REVIEW**  
 **Active session:** **02 / 25 — premium world/Nova art bible and camera language**  
-**Completed implementation sessions:** **1 / 25**  
+**Completed implementation sessions:** **1 / 25**
+**Proposed progression change:** [RFC-002 Home & Garden First](./HOME_AND_GARDEN_FIRST_10_RFC.md) — first ten steps cottage exterior, bare garden, then first interior; adventure/creek/Lumi only **11+**. The technical S01 instant house/flower behavior remains just a foundation demonstration. **Not coded or accepted yet.**  
 **Engine decision:** ✅ **Three.js + React Three Fiber accepted for production direction**, pending real-device/art quality validation; **Phaser no longer the target runtime**.  
 **Camera decision:** ✅ child-eye-level **perspective**, grounded, *inside* a continuous world; initial mode **guided tap-to-explore** (no free roam/joystick yet).  
 **Product experience:** ✅ full-screen child world; sparse accessible overlays; Nova physically in-world; no visible floating cliff/underside or orthographic diorama.  
@@ -64,7 +65,7 @@
 | Session | Target | State | Code PR/SHA | CI / screenshots | Approval |
 |---|---|---|---|---|---|
 | 01 | Immersive full-screen Three foundation | **TECHNICAL PASS / COMPLETE** | [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16), code SHA `3a93467b` | [CI #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793): build/unit/real WebGL2/13 shots/camera motion and reload PASS | technical foundation reviewed; **premium art NOT approved** (Session 02) |
-| 02 | Premium art direction + Nova bible | **NEXT / READY FOR BRIEF** | — | — | awaiting art references, concept frames and owner selection |
+| 02 | **PROPOSED:** before/after cottage+garden + Nova art bible, staged 1→5→10 states | **NEXT / HOME-FIRST PROPOSAL REVIEW** | — | — | owner should approve renovation pacing and initial/final art targets before bulk modelling |
 | 03 | World terrain / horizon / modular stage | NOT STARTED | — | — | — |
 | 04 | Nova 3D actor performance | NOT STARTED | — | — | — |
 | 05 | Ground-level guided cottage interaction | NOT STARTED | — | — | — |
@@ -103,6 +104,8 @@
 - **Commit caution:** the initial green run predates latest camera-pose assertions/normal-motion test/Nova refinements. Require a new green run on exact PR HEAD before merge. Keep completed 0/25 until final review and explicit acceptance.
 
 ## History — preserve provenance
+- **2026-10-24 (product RFC; NO new coding session):** proposed slow home-and-garden-first 10-beat chapter: visibly damaged small cottage and barren yard → incremental exterior repair and beds → starter interior → rich personal home/garden showcase on beat 10; outside adventures from beat 11. [RFC-002](./HOME_AND_GARDEN_FIRST_10_RFC.md). Draft plan edits are **under review**, not in main. **Completed production sessions remain 1/25; Session 02 remains next**. No art/gameplay implementation by this docs PR.
+
 - **2026-10-24 — Session 01 technical acceptance:** [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16), green [CI #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793) with 13 reviewed screenshots and actual normal-motion perspective camera test. Increment to **1/25**; next **02/25** premium art direction. This STATUS-only commit requires its own CI plan validation before merging.
 
 - **2026-10-24:** User explicitly accepted Three.js and replaced the **floating diorama** with **full-screen grounded first/close-person perspective** guided exploration, Nova present. Recorded ADR-001 and 25-session **v2**; reset starting brief to the new immersive code target. Earlier spikes remain evidence, **not completed production sessions**. Archived previous [STATUS](./archive/STATUS_BEFORE_IMMERSIVE_2026-10-24.md) and [plan](./archive/SESSION_PLAN_25_V1_2026-10-23.md).
