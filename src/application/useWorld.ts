@@ -10,8 +10,9 @@ export function useWorld(){
   setWorld(s=>{const next=applyWorldCommand(s,action);saveWorld(next);return next;});
  },[]);
  const navigate=useCallback((to:FocusId)=>{
+  if(focus===to){setSettled(true);return;}
   setFocus(to);setSettled(false);
- },[]);
+ },[focus]);
  const completeTravel=useCallback(()=>setSettled(true),[]);
  const cottage=useCallback(()=>{navigate('cottage_front');dispatch({type:'RESTORE_COTTAGE'});},[navigate,dispatch]);
  const garden=useCallback(()=>{navigate('garden_edge');dispatch({type:'PLANT_GARDEN'});},[navigate,dispatch]);
