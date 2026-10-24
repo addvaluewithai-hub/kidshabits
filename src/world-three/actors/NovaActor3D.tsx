@@ -5,8 +5,8 @@ import type { FocusId } from '../../domain/world';
 
 const destinations:Record<FocusId,THREE.Vector3>={
  arrival_path:new THREE.Vector3(-1.65,2.24,-2.45),
- cottage_front:new THREE.Vector3(-.12,2.18,-4.25),
- garden_edge:new THREE.Vector3(-.8,2.07,-1.65),
+ cottage_front:new THREE.Vector3(.51,2.17,-4.45),
+ garden_edge:new THREE.Vector3(-1.00,2.15,-3.25),
 };
 function Wings({side,reducedMotion}:{side:-1|1;reducedMotion:boolean}){
  const group=useRef<THREE.Group>(null);
