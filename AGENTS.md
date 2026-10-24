@@ -1,117 +1,65 @@
-# KidsHabits Agent Instructions
+# KidsHabits — Agent / Contributor Instructions (Immersive Three.js v3)
 
-Before implementing product work in this repository:
+**Current product direction: [Immersive World Specification](./project/island-v2/IMMERSIVE_WORLD_SPEC.md) + [ADR-001](./project/island-v2/ADR_001_THREEJS_IMMERSIVE.md).** This replaces the old Phaser-first 30-day story instruction set.
 
-1. Read [`README.md`](./README.md).
-2. Read [`project/PRODUCT_VISION.md`](./project/PRODUCT_VISION.md) as the product source of truth.
-3. Read [`project/ARCHITECTURE_PROPOSAL.md`](./project/ARCHITECTURE_PROPOSAL.md).
-4. Read [`project/ARCHITECTURE_PRODUCT_FLOW_V1_1.md`](./project/ARCHITECTURE_PRODUCT_FLOW_V1_1.md). This is a normative product-flow addendum and wins over older architecture wording where the two differ.
-5. Open [`project/skills/phaser/CATALOG.md`](./project/skills/phaser/CATALOG.md).
-6. Select the smallest relevant set of Phaser skills for the task and read their `SKILL.md` files before coding.
+## Required first reads, in order
 
-## Non-negotiable product rules
+1. [STATUS.md](./project/island-v2/STATUS.md) — current session, precise blockers and tested evidence.
+2. [SESSION_PLAN_25.md](./project/island-v2/SESSION_PLAN_25.md) — current 25-session plan, not the archived version.
+3. [PRODUCT_VISION.md](./project/PRODUCT_VISION.md) and [Immersive spec](./project/island-v2/IMMERSIVE_WORLD_SPEC.md).
+4. [ADR-001](./project/island-v2/ADR_001_THREEJS_IMMERSIVE.md) and [TECHNICAL_CONTRACTS.md](./project/island-v2/TECHNICAL_CONTRACTS.md).
+5. [ENGINEERING_STANDARDS.md](./project/island-v2/ENGINEERING_STANDARDS.md), [CI_AND_VISUAL_QA.md](./project/island-v2/CI_AND_VISUAL_QA.md).
+6. For actual 3D coding, review relevant instructions from [cloudai-x/threejs-skills](https://github.com/cloudai-x/threejs-skills) (React Three Fiber, geometry, camera, lighting, materials, animation, interaction, performance); verify APIs against installed versions.
 
-- This is a **Phaser 4 clean start**. Do not preserve Phaser 3 compatibility unless explicitly requested.
-- Build toward the **full product vision and complete 30-day planets**, not a disposable seven-day demo architecture.
-- The child experience is a **living 2D / 2.5D story world**, not a conventional habit dashboard with game rewards.
-- Prefer reusable scene/location kits and persistent world states over one full-screen image per story day.
-- **State decides what is true. Phaser shows what is true.**
-- Story progression, habit completion, choices, unlocks, and inventory/state are deterministic application logic.
-- **Core moments are authored; conversation is live AI.**
-- AI may perform and converse, but it does not decide progression.
-- Live AI must only receive story information the child has already discovered.
-- Important choices should create visible persistent consequences while allowing the main story to converge later.
-- Nova is not a hard-coded product assumption. Companions are selected semantic actors defined through reusable companion contracts.
-- Nova / companions are independent scene actors. They should not be baked into background art.
-- Parent UX is calm, clear, and operational. Child UX is immersive and magical.
-- Parent onboarding, child handoff, companion selection, first meeting, and first-planet introduction are part of the product architecture, not temporary setup screens.
-- Companion re-engagement is deterministic product behavior. AI does not decide when to call a child.
-- Incoming companion calls must be parent-enabled, policy-gated, rate-limited, schedulable where applicable, and respectful of quiet hours.
-- No guilt, conditional affection, abandonment framing, or emotional pressure around missed habits.
-- Raw child conversation is not durable product memory by default. Persist only explicit, safe, product-useful allow-listed fields.
-- Story content is **data, not gameplay code**. Content definitions must not directly manipulate Phaser, persistence, habit state, or AI state.
-- React/mobile overlays and Phaser must follow the documented WorldHost/input/focus/audio/lifecycle contract.
-- Arabic and RTL are first-class requirements; the architecture must also remain localizable.
-- Mobile portrait is the primary target.
+**Legacy:** `project/ARCHITECTURE_PROPOSAL.md`, `project/ARCHITECTURE_PRODUCT_FLOW_V1_1.md`, `project/skills/phaser/` and experimental PRs #2–#7, #12–#13 are **historical references only** where they conflict with this current direction. Do not accidentally follow their Phaser-first or hard-coded 30-day planet directives.
 
-## Before major implementation
+## Product invariants
 
-For any substantial new feature, first write a short implementation proposal covering:
+- **One production renderer: Three.js + React Three Fiber**. No Phaser in new immersive production path. Previous A/B evidence can inspire small reusable ideas only.
+- **Child must feel inside a real magical world**. Canvas full viewport; continuous ground/landscape, sky, far scenery, true perspective camera near child-eye height. **Never** floating island, top-down/orthographic isometric diorama, or preview in a card.
+- First ten beats are **stateful changes to one connected, grounded home/garden/tree/creek world**, not 10 video screens or mandatory calendar days.
+- Initial navigation: **guided, smooth ground-level camera transitions** between named safe destinations. No forced free roam/joystick/third-person controls before testing demands it.
+- **Nova is an always-present, spatial 3D world actor**: expressive cues, eye-line, proximity, authored lines, safe optional live AI later. Never static overlay-only or baked into skybox.
+- **State decides what is true. Three renders it.** Domain logic for placement, real habits, parent authority, unlocks and choices is deterministic/persistent and independent of Three/React/AI.
+- **Core reveals authored. AI only performs bounded conversation/actions**, sees discovered facts only, never approves habits, unlocks content or contacts children without parent authorization.
+- Children roughly 8–10 (first user test 9). Egyptian Arabic-first, localization-ready, safe parent handoff, calm parent operations.
+- No guilt or punishing missed habits, no dying plants, no conditional affection from Nova, no currency grind, ads, public child chat or unsafe engagement pressure.
+- Default **no durable raw child conversation memory**, no unapproved microphone/voice calls; only parent-visible allow-listed safe fields.
+- Child's world keeps choices after reload; saved semantic item IDs/anchors, not mesh IDs or canvas pixel positions.
+- Global premium aspiration: outstanding art, character acting, accessible UI/UX, audio, camera, loading/recovery, graphics performance **from first slice**, not a 'polish later' promise. Report placeholder and quality debt honestly.
+- File size is **advisory**. One responsibility per module and correct import direction matter more than line-count thresholds.
 
-- product behavior,
-- relevant experience phase,
-- Phaser systems / skills used,
-- state model,
-- reusable assets required,
-- what can be rendered or animated in-engine,
-- content definition / schema impact,
-- mobile performance implications,
-- persistence implications,
-- React ↔ Phaser ownership if an overlay is involved,
-- AI boundary if applicable,
-- re-engagement policy impact if applicable,
-- QA / debug / simulator approach.
-
-Do not blindly reproduce concept images. Use Phaser 4 capabilities to find the simplest production-quality implementation that preserves the intended emotional experience.
-
-## Architecture bias
-
-Keep these concerns separated:
+## Architecture boundaries
 
 ```text
-Experience routing / first-run flow
-Habit / parent logic
-Story state and story definitions
-Content validation / simulation
-World rendering
-WorldHost / overlay boundary
-Companion definitions and relationship profile
-Character runtime
-Authored sequence playback
-Live AI conversation provider
-Re-engagement policy
-Mobile platform services
-Persistence
-Audio
-Debug / authoring tools
+app (React world shell / parent and accessible HUD)
+     ↓
+application commands, domain models, versioned persistence
+     ↓ read-only world snapshot + cue intents
+WorldHost3D (R3F + Three)
+  ├─ PerspectiveCameraDirector & named authored camera rigs
+  ├─ WorldTerrain/Horizon & ZoneRegistry
+  ├─ Placeables/ArtPack/validated anchors
+  ├─ NovaActor3D & safe animation director
+  └─ Raycast interaction / DOM accessibility counterpart
+AI provider boundary; audio/voice policy; authored content schemas
 ```
 
-Do not hard-code a 30-day story directly into scene classes. New story days and future planets must be content-driven, validated, simulatable, and reconstructable from durable state.
+**Forbidden:** domain importing Three/R3F/React/browser APIs, rendering scene owning habit truth, scene-specific day logic, unbounded AI commands, backend keys in frontend, giant multi-purpose App/World classes, directly altering persistent state in tween callbacks.
 
-## Milestone bias
+## Before each substantial change
 
-Do not implement many story days at once.
+Write a short issue/PR plan covering behavior, experience location, camera state, art assets/model rig, affected domain commands, mobile/safety/accessibility implications, and exact tests. Do not scaffold empty systems without a feature. Keep code modular and file sizes comfortable, but **never fail on length alone**.
 
-Prove the production boundaries in this order unless the product documents are intentionally revised:
+## Done means proven
 
-```text
-Milestone 0 — First Meeting
-parent onboarding → child profile → habits → child handoff → choose companion → authored first meeting → live/mock conversation → persisted companion profile → enter first planet
+1. Typecheck, unit/contract tests, build, real Three WebGL pixel proof.
+2. Phone portrait + desktop screenshots from **the built app** at exact commit; no boxed artwork, top-down view or sky void; human review of visual quality.
+3. Screen-sized UI and subtitles with RTL, no unwanted scroll, meaningful keyboard/a11y actions, reduced motion/mute.
+4. Deterministic camera rigs and world-object mutations, save/reload/resume tests, Nova state-aware performance.
+5. Real device GPU/performance and child UX measurements before claiming production/flagship quality. CI screenshot ≠ real phone benchmark.
+6. Update [STATUS](./project/island-v2/STATUS.md) with SHA, Actions run, artifacts, critique and owner's approval. **Never increment 25-session count for an experimental PR or unreviewed work.**
 
-Milestone 1 — Landing Meadow: First Light
-habit → deterministic domain → story mutation → persistence + pendingSequence → authored sequence → camera → companion → world change → audio → reload
+## Session 01 next step
 
-Milestone 2 — First re-engagement
-story hook → deterministic ReengagementIntent/policy → platform delivery → accept → discovered-state conversation → correct destination
-
-Milestone 3 — First persistent choice
-choice → durable consequence → authored reveal → reload → persistent visible variant → convergence later without erasing the choice
-```
-
-## Definition of good work
-
-A feature is not complete merely because it renders.
-
-It should be:
-
-- understandable on a phone,
-- visually readable,
-- reusable,
-- deterministic where progression is concerned,
-- state-safe after reload or interruption,
-- testable through developer tools,
-- authorable without unnecessary engineering work,
-- production-minded,
-- emotionally aligned with the product vision.
-
-When uncertain, prefer the interpretation that makes the world feel more alive while keeping the content pipeline simpler.
+**Start new Three code from documentation-only `main` after plan alignment**, not by bulk merging PR #12/#13. Build a truthfully full-screen grounded clearing and guided `arrival_path → cottage_front` camera experience, with minimal Nova/world interaction, real screenshots and preservation. Read [STATUS](./project/island-v2/STATUS.md) for exact remaining gate.

@@ -1,0 +1,101 @@
+name: Immersive Three world production proof
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'docs/**'
+      - 'feat/**'
+      - 'chore/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: island-evidence-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan-validation:
+    name: plan-validation
+    runs-on: ubuntu-24.04
+    outputs:
+      has_app: ${{ steps.plan.outputs.has_app }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate frozen plan and STATUS
+        id: plan
+        run: node scripts/island-ci/validate-plan.mjs
+      - name: Enforce modular source boundaries
+        run: node scripts/island-ci/check-architecture.mjs
+
+  production-visual-proof:
+    name: production-visual-proof
+    needs: plan-validation
+    # The planning branch has no app. Skipped means NOT VERIFIED, not PASS.
+    # All implementation PRs must include package.json + index.html + src.
+    if: ${{ needs.plan-validation.outputs.has_app == 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare evidence directory
+        run: mkdir -p artifacts/immersive
+
+      - name: Install app dependencies
+        run: |
+          set -o pipefail
+          npm install --no-audit --no-fund 2>&1 | tee artifacts/immersive/dependencies.log
+      - name: Build actual production app
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee artifacts/immersive/build.log
+      - name: Run domain unit tests
+        run: |
+          set -o pipefail
+          npm run test:unit 2>&1 | tee artifacts/immersive/unit-tests.log
+      - name: Install pinned Playwright runner
+        run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1 pngjs@7.0.0
+      - name: Verify available runner Chrome
+        run: |
+          google-chrome --version
+          test -x "$(command -v google-chrome)"
+
+      - name: Serve built app
+        run: |
+          (./node_modules/.bin/vite preview --host 127.0.0.1 --port 4173 > artifacts/immersive/preview.log 2>&1 & echo $! > artifacts/immersive/preview.pid)
+          node scripts/island-ci/wait-for-server.mjs
+      - name: Run interactive screenshot QA
+        run: node scripts/island-ci/visual-smoke.mjs
+
+      - name: Upload actual build screenshot artifacts (even on failure)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: immersive-world-screenshots-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/immersive/
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Summarize evidence result
+        if: always()
+        run: |
+          echo "## Immersive Three world — real visual evidence" >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit: \`${{ github.sha }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "Artifact: \`immersive-world-screenshots-${{ github.run_id }}-${{ github.run_attempt }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f artifacts/immersive/ci-result.json ]; then
+            cat artifacts/immersive/ci-result.json >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No visual result JSON: build, install or server step failed. **Not a pass.**" >> "$GITHUB_STEP_SUMMARY"
+          fi
