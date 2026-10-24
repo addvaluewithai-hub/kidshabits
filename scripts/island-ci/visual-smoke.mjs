@@ -151,6 +151,35 @@ try{
     try{await photo(page,viewport.id+'-failure.png')}catch{}
   }finally{await context.close()}
  }
+
+ // A separate natural-motion journey proves the camera TRAVELS, not only teleports in reduce mode.
+ const motionContext=await browser.newContext({
+   viewport:{width:390,height:844},isMobile:true,hasTouch:true,
+   deviceScaleFactor:1,reducedMotion:'no-preference',locale:'ar-EG'
+ });
+ const motionPage=await motionContext.newPage();
+ const motion={viewport:'phone-390x844-normal-motion',ok:false,stage:'arrival'};
+ report.checks.push(motion);
+ try {
+   await motionPage.goto(baseUrl+'/?ci=1',{waitUntil:'domcontentloaded'});
+   await camera(motionPage,'arrival_path');
+   const beforeMotion=await sceneSnapshot(motionPage);
+   await (await required(motionPage,'cottage-hotspot')).click();
+   motion.stage='camera travelling';
+   const initiallySettled=await (await required(motionPage,'camera-debug')).getAttribute('data-camera-settled');
+   if(initiallySettled!=='false')throw Error('Guided camera travel never entered moving state');
+   await camera(motionPage,'cottage_front');
+   const afterMotion=await sceneSnapshot(motionPage);
+   if(!beforeMotion||!afterMotion||
+      Math.abs(beforeMotion.cameraPose.position[2]-afterMotion.cameraPose.position[2])<3){
+     throw Error('Camera did not physically travel through world space');
+   }
+   motion.stage='complete';motion.ok=true;
+   await photo(motionPage,'phone-390x844-guided-motion-end.png');
+ }catch(error){
+   hasFailure=true;motion.error=String(error.stack||error);
+   console.error('FAIL motion journey',motion.error);
+ }finally{await motionContext.close()}
 }catch(e){hasFailure=true;report.setupError=String(e.stack||e)}
 finally{
  report.status=hasFailure?'FAIL':'PASS';
