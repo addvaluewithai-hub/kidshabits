@@ -1,107 +1,87 @@
-# Visual, animation and content pipeline — Island v2
+# Art & Content Pipeline — Immersive Three.js World
 
-## Outcome, not engine worship
+**New direction:** authored **full-scale grounded world**, human-height perspective, visually premium and child-oriented. [ADR-001](./ADR_001_THREEJS_IMMERSIVE.md) supersedes the old layered Phaser 2.5D / floating diorama pipeline.
 
-A premium-feeling, cozy, magical **2.5D world** with readable silhouettes and a recognizable expressive companion. The target is **consistent art + responsive interaction + good motion/audio**, not more polygons or more particles.
+## Art bible — establish before expanding
 
-**Technical starting point:** existing Phaser 4 architecture. Use p5.js selectively for procedural offscreen art generation and effects proven to add value. Use external art layers/illustration and deliberate animation. The browser game runtime should remain **Phaser-owned**, not competing simultaneous render loops.
+Art target: magical, cozy, richly textured world that reads well on a phone, with identifiable cottage/ancient tree/garden, long atmospheric depth, varied silhouette and coherent proportions. Initial camera sees a *place surrounding the viewer*, not a little 3D model.
 
-No requirement to use all tools. Tool choice follows measurable aesthetic and performance gains.
+- **Composition:** path at eye level, horizon/distant hills, cottage along path, tree framing, foreground grasses and background clouds. Avoid camera looking onto the roof from above.
+- **Palette:** warm sun/amber focal accents, spring garden greens, calm sky blue/teal, gentle shadows. Color-grade and test legibility at small scale; avoid overbloom.
+- **3D materials:** consistent model style, handcrafted silhouettes, roughness/normal detail appropriate for mobile; deliberate cast/contact shadows and foliage light.
+- **Nova:** a high-quality uniquely identifiable 3D character with strong silhouette and facial readability in 390 px portrait, authored expressions, hovering/pointing/looking/turning/speech animation; no billboard or placeholder primitive accepted as final.
+- **UX overlay:** 100dvh world with tiny unobtrusive brand/menu, bottom-safe-area captions/context controls, age-appropriate RTL/English typography.
+- **Audio:** layered subtle ambient sound, tactile object/plant/build cues, authored character phrases; muted/reduced-motion alternatives.
 
-## Look and feel (art direction brief)
+## Asset contract
 
-- Warm, lush, storybook island with a little mystery: worn old cottage, tree, garden, creek, floating atmospheric depth.
-- Strong 2D silhouette and controlled texture detail. Cozy, not over-sparkly or casino-like.
-- Palette: warm stone/wood, rich garden greens, soft blue twilight, occasional amber magical glow. Style locked via actual reference sheet and samples before bulk production.
-- Depth: sky, distant islands, far foliage, terrain, interactive houses/props, Nova and visitors, foreground leaves, particle/lighting passes, UI.
-- Camera: gentle pans/zooms anchored on story objects; no disorienting constant movement.
-- Sound: ambience, footstep/object placement foley, plant bloom cues, authored musical sting; sound-off must still convey events.
-- Accessible readability on a phone: no tiny furniture controls, readable subtitles, safe-area-aware interface, reduced motion.
+Every shipping asset gets:
+- stable semantic asset/model ID, author/source/license;
+- GLB/glTF source + editable Blender/rig source (or equivalent authoring original);
+- model unit/pivot/scale/orientation and named anchors;
+- texture/material PBR references, mobile texture caps and fallback;
+- named animations for actor and state variants, with duration/loop/cancel semantics;
+- LOD/performance tier, loading fallback, actual phone screenshots;
+- whether it is **placeholder, review candidate, approved**.
 
-## Tools: what for and what not for
-
-| Technique | Use | Avoid |
-|---|---|---|
-| Phaser 4 | scene composition, touch input, placement, camera, animations, object transforms, audio state | storing canonical child progress only in Scene/GameObjects |
-| p5.js | generate organic plant shapes, procedural textures, environment embellishments; export canvas to texture when useful | second always-running full-screen renderer without performance proof |
-| Layered illustrated assets | most of the environment and hero composition; reusable modular objects | one monolithic flattened background that blocks customization |
-| Sprite atlas / sheets | light character loops, plant growth stages, creature gestures | full character design entirely remade for every scene |
-| Spine/Rive (evaluate integration first) | expressive character rig + reusable gestures if quality improves | purchasing/integrating before a proven sample + license/compatibility check |
-| Short video | rare non-interactive major cinematic reveal when it beats engine animation | daily gameplay, important irreversible state logic or every day of the 30-day chapter |
-| Audio/voice clips | authored dialogue and reveal beats with synchronized subtitles | relying on unreviewed live AI for critical emotional moments |
-
-**Video rule:** commit the state *before* playback, make video skippable/replayable, with deterministic fallback to a still/engine animation. On reload, scene reconstructs from world state, not "which frame of video was last shown". Nova can remain visible before/after; during a full-frame clip continuity needs deliberate transition.
-
-## Production asset manifest
-
-For each item:
-```json
-{
-  "id": "cottage_door_wood_01",
-  "atlas": "island_structures_v1",
-  "anchorType": "cottage_entry",
-  "logicalSize": [120, 155],
-  "pivot": [0.5, 0.95],
-  "hitArea": "door_path",
-  "depthLayer": "interactable",
-  "states": ["old", "repaired"],
-  "variants": ["amber", "mint", "blue"],
-  "animations": ["repair_reveal"],
-  "soundIds": ["soft_hammer", "repair_complete"],
-  "fallback": "static_repaired"
-}
+```yaml
+id: cottage.old_v1
+model: assets/models/cottage-old.glb
+pivot: ground_center
+units: meters
+anchors:
+  entry: cottage.front_door
+  planter_left: garden.bed_01
+materials:
+  door: [aged_wood, painted_mint, painted_blue]
+animations: [repair, idle_lantern]
+qualityStatus: review_candidate
 ```
 
-Production files need stable IDs, transparent backgrounds where appropriate, consistent perspective, safe padding, and mobile-resolution atlases. The artwork pipeline must keep originals editable; optimize output atlases separately.
+Save game references semantic `itemId`, `anchorId`, `variantId`, *not model file paths*.
 
-## Asset inventory — first slice
+## World asset kits — first ten steps
 
-1. Island environment in several **real depth layers**; distant haze/cloud motion; old cottage; tree; garden soil; two planting hotspots.
-2. Modular cottage door and roof/paint alternatives (minimum 2 distinct visible variants).
-3. Two distinct starter plants with idle/growth states, separated shadow/FX layers.
-4. Nova model/illustration + idle, fly, look/point and delighted expressions, speech UI.
-5. One magical glow/reveal effect, environmental ambient loop, 3–5 short SFX; music placeholder optional.
-6. Mobile overlay: small habit progress, object placement, concise conversation bubbles.
+- **Terrain & sky:** connected walkable clearing, natural horizon/distant scenery, paths, foliage/rocks, cloud/mist lighting; no floating island underside.
+- **Cottage:** exterior repair variants, door/roof/window materials, entry transition, interior corner.
+- **Garden:** soil beds, two or more plant models/variants, sprouts/growth states, decorative paths and object anchors.
+- **Tree/mystery:** tree silhouette/bark/leaf motion, ancient rune, glow seed, multiple light stages.
+- **Creek:** water edge with non-distracting shaders, guided approach route, small bridge/stepping stones.
+- **Visitors:** Lumi animated creature, nook and appropriate spatial interactions.
+- **Nova:** expressive rig, facial/voice synchronization and reusable gestures, camera-friendly spatial poses.
 
-First output should include **before / after** screenshots on a phone; visual consistency is a merge gate.
+## Production sequence
 
-## Asset inventory — first ten days
+1. Build a **single reference keyframe** from child's eye-level on path and a small moving camera preview; approve composition.
+2. Establish scale/environment/lighting/camera baseline and place temporary meshes for interactions in Session 01; clearly label provisional art.
+3. Produce a premium Nova rig and representative cottage/tree/vegetation model. Review turnarounds and motion at actual mobile scale.
+4. Replace placeholders with GLBs through model manifest, without changing pure domain or camera landmark IDs.
+5. Implement simple meaningful build/plant variations on meshes/materials (door/window light, flower growth, plot changes), with authored cues and audio.
+6. Optimize real target mobile phones; tune DPR, shadows, LOD, texture resolution, instancing, asset loading and animation.
+7. Only then scale content beats, zone assets, characters and cinematic reveals.
 
-Add: cottage interior corner/furniture kit; creek/water kit; footbridge/path anchors; story seed and alternate blooms; Lumi character and nook; tree mystery states; secret-gate teaser. Reuse world layers across the ten steps.
+## Media and tools
 
-Each asset includes: ID, dimensions, anchor, states, audio/animation needs, source provenance/rights, review owner, quality status. Avoid relying on unlicensed external visual references as shipping assets.
+| Technology | Preferred role | Guardrail |
+|---|---|---|
+| Three.js / React Three Fiber | 3D world, perspective camera, light/shadow, mesh state, avatar, picking | only one main renderer; game truth elsewhere |
+| Drei | selective helpers where version/size/perf justified | not a substitute for art production |
+| Blender / equivalent model and rig tools | editable source, GLB export, animations and variants | preserve export metadata/scale/provenance |
+| HDR / baked lighting / textures | intentional mood at mobile cost | performance / GPU fallback validated |
+| Procedural effects / shaders | minor fireflies, magic glow, wind/water when valuable | measured on target phone, reduced-motion path |
+| Sprites/videos | rare secondary 2D VFX overlay or authored reveal fallback | not main environment or a daily mandatory movie |
+| p5.js | optional offline texture generation at most | no parallel full-screen p5 runtime |
 
-## Art production workflow
+## Camera-dependent content authoring
 
-1. Assemble 1-page art bible with camera angle, lighting, palette, scale chart, Nova silhouette and one house.
-2. Produce one polished keyframe illustration of the initial island; review on a phone.
-3. Break scene into compositing layers / reusable interactive object kits.
-4. Animate **one** plant bloom and **one** Nova reaction; inspect their transition at phone scale.
-5. Integrate in Phaser; compare stills and live movement to quality reference.
-6. Profile performance, shrink particles/atlas usage if needed.
-7. Only then scale to more objects, zones, days and video.
+For each authored event, content declares **zone + semantic target + ground-level camera rig + Nova target/gaze + subtitle + sound + world outcome + skip/replay behavior**. Never force a top-down construction/inspection camera to hide poorly designed interactions.
 
-**Never create 30 isolated hero images before interactive art quality and reusable parts are approved.**
+A new zone is not a new entire game. Shared terrain, camera director, input, Nova, authoring and state systems remain reusable. Per-beat authored lines should feel responsive to child's persistent placement choices.
 
-## Animation/cinematic choreography contract
+## Quality and budget
 
-A story moment specifies: entry conditions, state mutation, camera cue, Nova position/face/gaze, authored line, object animation, particles, SFX/music, reveal timing, ability to skip/replay, persisted outcome. Motion starts after authoritative state transaction, and is safe if app loses focus.
-
-Examples: tree roots light up, a door repairs, a seed sprouts, Lumi arrives, first bridge appears.
-
-## Quality and performance targets (initial budgets to verify)
-
-- Portrait smartphone primary; test at narrow/typical viewport and safe areas.
-- Aim for **stable 60 FPS on target phones**, with graceful 30 FPS fallback on weaker devices. These are goals, not currently proven outcomes.
-- On entry, display meaningful art promptly; avoid blocking on optional audio/video/AI.
-- Optimize texture atlas size, draw calls, memory usage and particle overdraw as measured in actual hardware/browser tests.
-- Support no-sound mode, captions, reduced motion, loading/fallback for missing assets, pause/resume, keyboard where relevant.
-- Check Arabic text readability and animations behind overlays at multiple pixel ratios.
-
-## Why the previous demo did not feel finished
-
-The previous short Story Lab proved that events can be authored, but its visual states were procedural variations of one scene, with limited meaningful player agency. The new bar is: **child-made layout visibly changes the world, Nova acknowledges exact choices, and the result remains after reload**. Count of cinematic scenes is not a proxy for quality.
-
-## Cut line / scope protection
-
-If the visual fidelity of the first cottage + Nova is not acceptable, stop and improve style/motion instead of adding days. If p5.js makes mobile frame time worse, pre-render its art or remove runtime p5. If video makes Nova feel disconnected, use an engine-directed sequence instead. The product should feel cohesive whichever mechanism wins.
+- Global quality is the ambition, but no assertion that the current procedural 3D spike is near final game-ready art.
+- Verify phone readability, contour, eye-lines, real shadows, choice affordances, tone and emotional timing from **Session 01** onward.
+- No locked-in FPS promise without device data; target smooth frames on reference phone(s) and record frame pacing, GPU load, assets and fallback tiers in Session 07/22.
+- Maintain a visible art debt tracker; **never grow to ten days while the first clearing/Nova look substandard**.
+- Allow model exports/licenses and child UX observations to change production time estimate transparently.
