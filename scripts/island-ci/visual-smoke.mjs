@@ -36,6 +36,10 @@ async function camera(page,expected) {
   },expected,{timeout:16000});
   const y=Number(await el.getAttribute('data-camera-height'));
   if(!Number.isFinite(y)||y<.8||y>2.2)throw Error('Camera not at a plausible child-view height: '+y);
+  // Cross-check the live Three camera, never trust only a DOM debug label.
+  const real=await page.evaluate(()=>window.__KH_CI__?.snapshot()?.cameraPose);
+  if(!real?.isPerspective)throw Error('Actual Three camera is not perspective');
+  if(Math.abs(real.position[1]-y)>.065)throw Error('Debug pose differs from real Three camera height: '+JSON.stringify(real));
 }
 async function sceneSnapshot(page){
   // Test-only observer; never a command surface. Read true scene mesh/camera state.
