@@ -4,9 +4,9 @@ import * as THREE from 'three';
 import type { FocusId } from '../../domain/world';
 
 const destinations:Record<FocusId,THREE.Vector3>={
- arrival_path:new THREE.Vector3(-.75,2.40,2.8),
- cottage_front:new THREE.Vector3(.45,2.45,-2.6),
- garden_edge:new THREE.Vector3(-1.28,2.25,-1.0),
+ arrival_path:new THREE.Vector3(-1.65,2.24,-2.45),
+ cottage_front:new THREE.Vector3(-.12,2.18,-4.25),
+ garden_edge:new THREE.Vector3(-.8,2.07,-1.65),
 };
 function Wings({side,reducedMotion}:{side:-1|1;reducedMotion:boolean}){
  const group=useRef<THREE.Group>(null);
@@ -31,7 +31,7 @@ export function NovaActor3D({focus,reducedMotion}:{focus:FocusId;reducedMotion:b
   body.current.position.y=reducedMotion?0:Math.sin(clock.elapsedTime*2.5)*.14;
   body.current.rotation.z=reducedMotion?0:Math.sin(clock.elapsedTime*1.8)*.075;
  });
- return <group name="nova-world-actor" ref={root} position={destinations.arrival_path.toArray()}>
+ return <group name="nova-world-actor" ref={root} scale={.78} position={destinations.arrival_path.toArray()}>
   <pointLight position={[0,0,.45]} color="#ffdbac" intensity={22} distance={4.0}/>
   <group ref={body}>
    <Wings side={-1} reducedMotion={reducedMotion}/>
