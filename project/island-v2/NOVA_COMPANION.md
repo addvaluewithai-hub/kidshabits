@@ -1,8 +1,10 @@
-# Nova — persistent companion and character direction (v2)
+# Nova — Persistent 3D World Companion (v3)
+
+**2026-10-24 world direction:** Nova must be a **rigged or otherwise expressive 3D actor INSIDE the full-screen grounded world**, spatially positioned relative to the child-height perspective camera. No floating outside-the-scene sticker, static overlay mascot or pre-rendered Nova embedded in background. See [Immersive spec](./IMMERSIVE_WORLD_SPEC.md).
 
 ## Mission
 
-Nova is the child's **co-explorer and helper inside the island**, never a floating button that opens a chatbot. The child sees her, hears her, understands where she is looking, and can interact with her throughout play. She celebrates creative choices, observes discoveries, and plays a role in cinematic sequences.
+Nova is the child's **co-explorer and helper inside the immersive world**, never a floating button that opens a chatbot. The child sees her, hears her, understands where she is looking, and can interact with her throughout play. She celebrates creative choices, observes discoveries, and plays a role in cinematic sequences.
 
 **Core rule:** *Nova is always in the experience, not necessarily always talking.* She can be quiet, curious, busy tending a flower, or looking at a mystery. Silence is a valid character performance.
 
@@ -22,7 +24,7 @@ For every active world scene, Nova should be a **world actor** with:
 - independent position, orientation, idle animation, gaze, facial expression, flight paths and gestures;
 - contextual "look at / point toward / approach" actions for interactive objects;
 - stateful but light dialogue: idle hints, response to placement, react to habit unlock, react to new visitor;
-- persistence across room/world navigation through a companion controller; actual sprite instance can recreate on scene change;
+- persistence across room/world navigation through a companion controller; actual 3D rig instance can safely recreate when loading a zone;
 - a deliberate position policy for menus: remains visible behind compact overlay or appears in a small diegetic corner for focused UI;
 - accessible captions for every spoken line, with subtitles and reduced-motion alternatives;
 - deterministic authored lines for reveal sequences; optional live conversation when permitted.
@@ -126,4 +128,4 @@ Example projected context:
 - Voice casting/reference (Arabic), authored clips + text subtitles + lip/speech animation strategy.
 - Fallback non-voice dialogue bubbles, accessibility labels and reduced animation mode.
 
-**First character milestone:** Nova appears at island arrival, floats around the cottage, points at two interactable places, reacts to two distinct choices, stays present after switching mode, and never vanishes behind UI unexpectedly.
+**First character milestone:** Nova appears on the grounded arrival path at child-height perspective, floats around the cottage, points at two interactable places, reacts to two distinct choices, stays present after switching mode, and never vanishes behind UI unexpectedly.
