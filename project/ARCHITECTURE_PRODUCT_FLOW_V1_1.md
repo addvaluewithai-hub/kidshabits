@@ -1,3 +1,5 @@
+> **HISTORICAL v1.1 ADDENDUM — NO LONGER NORMATIVE FOR ENGINE/FLOW (2026-10-24).** Old Phaser WorldHost, compulsory Live-AI-first-meeting, 30-day planet and call assumptions have been superseded by [current Product Vision](./PRODUCT_VISION.md) and [Immersive Three.js spec](./island-v2/IMMERSIVE_WORLD_SPEC.md). Retain parent authority, content-as-data, companion safety and persistence lessons only where consistent. For new code, [ADR-001](./island-v2/ADR_001_THREEJS_IMMERSIVE.md) and [AGENTS](../AGENTS.md) win.
+
 # KidsHabits — Product-Flow Architecture Amendments v1.1
 
 **Status:** Normative addendum to `project/ARCHITECTURE_PROPOSAL.md`  
