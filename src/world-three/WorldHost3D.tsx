@@ -1,4 +1,5 @@
 import { Canvas, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 import { useEffect,useState } from 'react';
 import type { FocusId,WorldSnapshot } from '../domain/world';
 import {CAMERA_RIGS} from '../content/cameraRigs';
@@ -25,7 +26,8 @@ function SceneEvidence(){
      cottage:{lampVisible:scene.getObjectByName('cottage-lamp')?.visible===true},
      garden:{bloomVisible:!!scene.getObjectByName('garden-bloom')}
     },
-    sceneObjectCount:scene.children.length
+    sceneObjectCount:scene.children.length,
+    cameraPose:{isPerspective:camera instanceof THREE.PerspectiveCamera,position:camera.position.toArray()}
    })
   };
   return ()=>{delete window.__KH_CI__};
