@@ -2,16 +2,16 @@
 
 **Last updated:** 2026-10-24  
 **Plan revision:** [SESSION_PLAN_25.md](./SESSION_PLAN_25.md) **v2 — full-screen immersive Three.js**  
-**Current project stage:** **READY FOR NEW SESSION 01 CODE — immersive implementation NOT started**  
-**Active session:** **01 / 25 — clean full-screen Three.js foundation**  
-**Completed implementation sessions:** **0 / 25**  
+**Current project stage:** **SESSION 01 IMPLEMENTED AND TECHNICALLY ACCEPTED; SESSION 02 ART-DIRECTION NEXT**  
+**Active session:** **02 / 25 — premium world/Nova art bible and camera language**  
+**Completed implementation sessions:** **1 / 25**  
 **Engine decision:** ✅ **Three.js + React Three Fiber accepted for production direction**, pending real-device/art quality validation; **Phaser no longer the target runtime**.  
 **Camera decision:** ✅ child-eye-level **perspective**, grounded, *inside* a continuous world; initial mode **guided tap-to-explore** (no free roam/joystick yet).  
 **Product experience:** ✅ full-screen child world; sparse accessible overlays; Nova physically in-world; no visible floating cliff/underside or orthographic diorama.  
 **New Session 01 issue:** [#15 — full-screen immersive Three foundation](https://github.com/addvaluewithai-hub/kidshabits/issues/15)  
-**Next implementation branch:** **NOT CREATED** (proposed: `feat/immersive-world-s01`)  
-**Main:** documentation-only pending review/merge; **no immersive-world code merged**.  
-**Plan PR:** [#8](https://github.com/addvaluewithai-hub/kidshabits/pull/8) (still Draft; scope updated to include canonical docs).  
+**Implementation:** [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16), branch `feat/immersive-world-s01` (consult PR for live merge state)  
+**Main:** planning docs #8 merged at `936dde832052760848ae1d121e8e578e70d9b723`; Session 01 enters main through reviewed PR #16.  
+**Plan PR:** [#8](https://github.com/addvaluewithai-hub/kidshabits/pull/8) **MERGED**.  
 **Reference PRs:** [#12 Phaser spike](https://github.com/addvaluewithai-hub/kidshabits/pull/12), [#13 Three/Phaser A/B](https://github.com/addvaluewithai-hub/kidshabits/pull/13). **DO NOT BULK MERGE.**  
 **Issue history:** [#9 master](https://github.com/addvaluewithai-hub/kidshabits/issues/9) · [#11 old S01 proof](https://github.com/addvaluewithai-hub/kidshabits/issues/11) · [#14 A/B choice](https://github.com/addvaluewithai-hub/kidshabits/issues/14).
 
@@ -26,11 +26,11 @@
 | Production engine / camera decision | ✅ accepted product direction | Three.js / R3F 9, perspective, grounded world, guided cinematic camera |
 | Clean modular design, flexible file lengths | ✅ specified | [Engineering standards](./ENGINEERING_STANDARDS.md); source boundaries remain enforced |
 | Previous Three A/B prototype | ✅ technical experiment only | [run #39990929701](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/39990929701): prior **floating-island** WebGL tests/screenshots passed; not proof of immersive-camera world |
-| New immersive production app | ❌ not built | Session 01 must create it on a clean branch from updated docs baseline |
-| Full-screen horizon + eye-height camera screenshot | ❌ not produced | Required for Session 01, three viewports; no aerial or boxed preview |
-| Guided camera motion + Nova on new scene | ❌ not implemented | Requires interaction and camera test with visible 3D scene |
-| Source-compatible house/garden persistence | ⏳ transferable concept only | Reuse **small verified domain ideas** from old spike; implement/verify cleanly |
-| New immersive CI + screenshot artifact | ❌ not run | Current planning branch has no runnable app; CI planning job only here |
+| New immersive production app | ✅ technical foundation accepted | [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16) one renderer React 19 + Three r186/R3F9.8; world, camera, Nova, domain, save |
+| Full-screen horizon + eye-height camera screenshot | ✅ actual proof reviewed | [Actions #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793), code SHA `3a93467bca12106e1bc67f70a8c07372216484a4`; 13 screenshots phone 360/390 and desktop + normal-motion. |
+| Guided camera motion + Nova on new scene | ✅ normal + reduced motion tested | [Actions #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793) live actual PerspectiveCamera pose/rig assertions, guided camera travel, Nova spatial response. |
+| Source-compatible house/garden persistence | ✅ real implementation and E2E pass | Pure deterministic reducer, validated versioned local save, distinct actual Three scene mesh changes and reload with Nova context — [Actions #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793). |
+| New immersive CI + screenshot artifact | ✅ PASS on tested code SHA | [Actions #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793): 13 screenshots plus result JSON; green technical gate (docs-only status edit needs a fresh workflow run). |
 | Premium GLB/rigged Nova & world art approval | ❌ not done | Session 02 art bible, iterative polish from Session 01 |
 | Real mobile GPU/FPS/battery test | ❌ not done | Record observed devices/data before production-quality claim |
 | Parent habits / Live AI voice | ❌ not in Session 01 | Later slots and child-safety gates |
@@ -63,8 +63,8 @@
 
 | Session | Target | State | Code PR/SHA | CI / screenshots | Approval |
 |---|---|---|---|---|---|
-| 01 | Immersive full-screen Three foundation | **READY / NOT STARTED** | — | immersive proof not run | pending |
-| 02 | Premium art direction + Nova bible | NOT STARTED | — | — | — |
+| 01 | Immersive full-screen Three foundation | **TECHNICAL PASS / COMPLETE** | [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16), code SHA `3a93467b` | [CI #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793): build/unit/real WebGL2/13 shots/camera motion and reload PASS | technical foundation reviewed; **premium art NOT approved** (Session 02) |
+| 02 | Premium art direction + Nova bible | **NEXT / READY FOR BRIEF** | — | — | awaiting art references, concept frames and owner selection |
 | 03 | World terrain / horizon / modular stage | NOT STARTED | — | — | — |
 | 04 | Nova 3D actor performance | NOT STARTED | — | — | — |
 | 05 | Ground-level guided cottage interaction | NOT STARTED | — | — | — |
@@ -74,6 +74,15 @@
 | 12–14 | Parent habits / deterministic unlock | NOT STARTED | — | — | — |
 | 15–19 | Authored moments / first ten beats | NOT STARTED | — | — | — |
 | 20–25 | Sound, accessibility, screenshot suite, device QA and acceptance | NOT STARTED | — | — | — |
+
+## Technical acceptance record: Session 01
+
+- **Delivered:** actual fullscreen `100dvh` Three/R3F grounded world, child-height PerspectiveCamera rigs (arrival, cottage, garden), path, background hills/forest, physically present Nova actor, house/flower real 3D reactions, stored world, Arabic accessible HUD and a recoverable app failure boundary. No Phaser.
+- **Strict CI verified:** [GitHub Actions #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793), code commit `3a93467bca12106e1bc67f70a8c07372216484a4`: Node build, four Vitest unit tests, source guard, WebGL2 pixel evidence, actual Three perspective height/position, normal-motion camera journey, 360×740 / 390×844 / 1280×800 screenshot interactions, house/garden meshes, Nova line after reload. **13 screenshots**, artifact `immersive-world-screenshots-40079679793-1`.
+- **Visual critique:** assistant inspected arrival/close-house/flower/reload screenshots, rejected earlier enormous Nova, inverted roof and offscreen Nova, iterated visuals. Final result reads as **lived-in grounded perspective** not floating island; acceptable **technical visual slice**. However current art is simplified geometry, **NOT** flagship shipping art. The character is not rigged/pro-quality, need hero modelling, materials, vegetation/lighting, better diegetic HUD and actual child-reviewed camera feel. Those are Session 02+/07 explicit gates.
+- **Performance caveat:** only headless Chrome screenshot and motion behavior; **real phone GPU FPS/thermal/battery not tested**. Don't assert release-readiness.
+- **Merge decision:** permission to merge code foundation granted by product owner ('let's start ... then we merge to main'); this acceptance is for a working modular implementation, **not** final art sign-off.
+- **Next:** Session 02 art bible and Nova premium character review; don't multiply placeholder days.
 
 ## Session recording template
 
@@ -86,7 +95,15 @@
 - **Known issues & next step:** —
 - **Owner approval:** not yet recorded
 
+## Session 01 visual review (2026-10-24, first green snapshot)
+
+- **Verified built app:** [Actions #40078926279](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40078926279) passed plan validation, strict TS build, unit/domain tests, Chrome actual Three/WebGL2 pixel sampling, three viewport screenshots, perspective camera ground-height metadata, house and flower true scene-graph changes, save/reload and Nova return-aware dialogue. **12 screenshots inspected manually.**
+- **First screenshots showed real user-facing flaws:** Nova initially enormous, partly obscuring house; cottage roof pitch inverted. Fixed and visually re-tested. Latest review shows a grounded path, real horizon, house, tree and Nova; real 3D garden flower appears after interaction. Further polish needed for closeup framing, cottage gable, Nova at garden edge; follow-up patches added.
+- **Known quality debt:** scene is stylized **procedural placeholder geometry**, not authored production GLB assets; no Nova facial rig/voice, no authored multi-scene animation or final cinematic lighting. Full user art acceptance and actual-device FPS/battery not established. Do not label global flagship quality complete.
+- **Commit caution:** the initial green run predates latest camera-pose assertions/normal-motion test/Nova refinements. Require a new green run on exact PR HEAD before merge. Keep completed 0/25 until final review and explicit acceptance.
+
 ## History — preserve provenance
+- **2026-10-24 — Session 01 technical acceptance:** [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16), green [CI #40079679793](https://github.com/addvaluewithai-hub/kidshabits/actions/runs/40079679793) with 13 reviewed screenshots and actual normal-motion perspective camera test. Increment to **1/25**; next **02/25** premium art direction. This STATUS-only commit requires its own CI plan validation before merging.
 
 - **2026-10-24:** User explicitly accepted Three.js and replaced the **floating diorama** with **full-screen grounded first/close-person perspective** guided exploration, Nova present. Recorded ADR-001 and 25-session **v2**; reset starting brief to the new immersive code target. Earlier spikes remain evidence, **not completed production sessions**. Archived previous [STATUS](./archive/STATUS_BEFORE_IMMERSIVE_2026-10-24.md) and [plan](./archive/SESSION_PLAN_25_V1_2026-10-23.md).
 - **2026-10-23:** Draft PR #12 established a clean Phaser/React domain proof with GitHub Actions phone screenshots and save/reload; draft PR #13 added a functioning Three.js floating-diorama A/B test, with working pixel-based WebGL validation. These tests **cannot** prove the new camera/world/UX brief.

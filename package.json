@@ -1,0 +1,31 @@
+{
+  "name":"kidshabits-immersive",
+  "version":"0.1.0",
+  "private":true,
+  "type":"module",
+  "engines":{"node":">=22.18.0"},
+  "scripts":{
+    "dev":"vite --host 0.0.0.0",
+    "build":"tsc --noEmit && vite build",
+    "preview":"vite preview --host 0.0.0.0",
+    "test:unit":"vitest run",
+    "check:architecture":"node scripts/island-ci/check-architecture.mjs",
+    "check":"npm run check:architecture && npm run test:unit && npm run build"
+  },
+  "dependencies":{
+    "react":"19.2.0",
+    "react-dom":"19.2.0",
+    "three":"0.186.1",
+    "@react-three/fiber":"9.8.2",
+    "@react-three/drei":"10.7.9"
+  },
+  "devDependencies":{
+    "@vitejs/plugin-react":"5.1.1",
+    "@types/react":"19.2.2",
+    "@types/react-dom":"19.2.2",
+    "@types/three":"0.186.0",
+    "typescript":"5.9.3",
+    "vite":"7.2.4",
+    "vitest":"3.2.4"
+  }
+}

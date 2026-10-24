@@ -15,6 +15,21 @@ The experience is **inside** the world: guided ground-level camera movement to h
 - **[ADR-001 Three.js direction](./project/island-v2/ADR_001_THREEJS_IMMERSIVE.md)** — engine choice and scope tradeoffs.
 - **[Product vision](./project/PRODUCT_VISION.md)** · **[Engineering rules](./project/island-v2/ENGINEERING_STANDARDS.md)** · **[CI and screenshot proof](./project/island-v2/CI_AND_VISUAL_QA.md)**.
 
+## Run the immersive app (Session 01)
+
+Requires Node 22.18+ / npm. From the implementation branch:
+
+```bash
+npm install
+npm run dev        # local development, Vite
+npm run check      # architecture guard + Vitest + typecheck + production build
+npm run preview    # after build: production Vite preview
+```
+
+The child world is a **full-screen Three.js experience** with an arrival-path camera and focus actions for cottage and garden. Local progress is saved under a versioned key and restored on reload. No parental verification or production AI voice is part of this first session.
+
+GitHub Actions runs `plan-validation` plus `production-visual-proof` from the actual Vite build on Chrome, captures phone/desktop screenshots and verifies live camera/scene changes. Headless Chrome success is **not** real mobile GPU/FPS validation.
+
 ## Technical architecture at a glance
 
 - **React + TypeScript** for app shell and accessible child/parent UI.
@@ -27,7 +42,7 @@ The experience is **inside** the world: guided ground-level camera movement to h
 
 ## Current repository / experiments
 
-The `main` branch was documentation-only at the time this new plan was written. Old [Phaser clean spike PR #12](https://github.com/addvaluewithai-hub/kidshabits/pull/12) and [Three diorama comparison PR #13](https://github.com/addvaluewithai-hub/kidshabits/pull/13) passed their own CI but **do not implement the current lived-in full-screen world**; preserve them as reference, never merge both renderers as production.
+The initial source baseline was documentation-only. Session 01 code is implemented on [PR #16](https://github.com/addvaluewithai-hub/kidshabits/pull/16). Old [Phaser clean spike PR #12](https://github.com/addvaluewithai-hub/kidshabits/pull/12) and [Three diorama comparison PR #13](https://github.com/addvaluewithai-hub/kidshabits/pull/13) passed their own CI but **do not implement the current lived-in full-screen world**; preserve them as reference, never merge both renderers as production.
 
 After the planning PR is reviewed, **Session 01 starts a focused clean implementation branch** for a 100dvh grounded world, perspective `arrival_path → cottage_front` move, Nova in the same 3D space, accessible interaction and true screenshot evidence. [Current STATUS](./project/island-v2/STATUS.md) remains 0/25 until that new scene passes review.
 
