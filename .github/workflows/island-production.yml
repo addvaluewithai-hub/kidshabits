@@ -1,4 +1,4 @@
-name: Island v2 production evidence
+name: Immersive Three world production proof
 
 on:
   pull_request:
@@ -20,7 +20,7 @@ concurrency:
 jobs:
   plan-validation:
     name: plan-validation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       has_app: ${{ steps.plan.outputs.has_app }}
     steps:
@@ -42,7 +42,7 @@ jobs:
     # The planning branch has no app. Skipped means NOT VERIFIED, not PASS.
     # All implementation PRs must include package.json + index.html + src.
     if: ${{ needs.plan-validation.outputs.has_app == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout exact commit
@@ -52,20 +52,30 @@ jobs:
         with:
           node-version: '22'
       - name: Prepare evidence directory
-        run: mkdir -p artifacts/island
+        run: mkdir -p artifacts/immersive
 
       - name: Install app dependencies
-        run: npm install --no-audit --no-fund 2>&1 | tee artifacts/island/dependencies.log
+        run: |
+          set -o pipefail
+          npm install --no-audit --no-fund 2>&1 | tee artifacts/immersive/dependencies.log
       - name: Build actual production app
-        run: npm run build 2>&1 | tee artifacts/island/build.log
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee artifacts/immersive/build.log
+      - name: Run domain unit tests
+        run: |
+          set -o pipefail
+          npm run test:unit 2>&1 | tee artifacts/immersive/unit-tests.log
       - name: Install pinned Playwright runner
-        run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
-      - name: Install Chromium browser + Linux dependencies
-        run: npx playwright install --with-deps chromium
+        run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1 pngjs@7.0.0
+      - name: Verify available runner Chrome
+        run: |
+          google-chrome --version
+          test -x "$(command -v google-chrome)"
 
       - name: Serve built app
         run: |
-          (./node_modules/.bin/vite preview --host 127.0.0.1 --port 4173 > artifacts/island/preview.log 2>&1 & echo $! > artifacts/island/preview.pid)
+          (./node_modules/.bin/vite preview --host 127.0.0.1 --port 4173 > artifacts/immersive/preview.log 2>&1 & echo $! > artifacts/immersive/preview.pid)
           node scripts/island-ci/wait-for-server.mjs
       - name: Run interactive screenshot QA
         run: node scripts/island-ci/visual-smoke.mjs
@@ -74,18 +84,18 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: island-screenshots-${{ github.run_id }}-${{ github.run_attempt }}
-          path: artifacts/island/
+          name: immersive-world-screenshots-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/immersive/
           if-no-files-found: warn
           retention-days: 21
       - name: Summarize evidence result
         if: always()
         run: |
-          echo "## Island production visual evidence" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Immersive Three world — real visual evidence" >> "$GITHUB_STEP_SUMMARY"
           echo "Commit: \`${{ github.sha }}\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "Artifact: \`island-screenshots-${{ github.run_id }}-${{ github.run_attempt }}\`" >> "$GITHUB_STEP_SUMMARY"
-          if [ -f artifacts/island/ci-result.json ]; then
-            cat artifacts/island/ci-result.json >> "$GITHUB_STEP_SUMMARY"
+          echo "Artifact: \`immersive-world-screenshots-${{ github.run_id }}-${{ github.run_attempt }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f artifacts/immersive/ci-result.json ]; then
+            cat artifacts/immersive/ci-result.json >> "$GITHUB_STEP_SUMMARY"
           else
             echo "No visual result JSON: build, install or server step failed. **Not a pass.**" >> "$GITHUB_STEP_SUMMARY"
           fi
