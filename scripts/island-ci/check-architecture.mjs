@@ -61,7 +61,7 @@ function staticImports(code) {
 function isForbiddenPath(source, file) {
   const rel = relative(src, file).split(sep).join('/');
   if (!rel.startsWith('domain/') && !rel.startsWith('content/')) return false;
-  if (/^(?:react|react-dom|phaser)(?:\/|$)/.test(source)) return true;
+  if (/^(?:react|react-dom|three|@react-three\/fiber|@react-three\/drei|phaser)(?:\/|$)/.test(source)) return true;
   if (/^(?:@\/?|~\/)?(?:app|world|world-three|media|infrastructure)(?:\/|$)/.test(source)) return true;
   if (source.startsWith('.')) {
     const absolute = resolve(dirname(file), source);
