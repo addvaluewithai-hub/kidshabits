@@ -8,6 +8,7 @@
 **Engine decision:** ✅ **Three.js + React Three Fiber accepted for production direction**, pending real-device/art quality validation; **Phaser no longer the target runtime**.  
 **Camera decision:** ✅ child-eye-level **perspective**, grounded, *inside* a continuous world; initial mode **guided tap-to-explore** (no free roam/joystick yet).  
 **Product experience:** ✅ full-screen child world; sparse accessible overlays; Nova physically in-world; no visible floating cliff/underside or orthographic diorama.  
+**New Session 01 issue:** [#15 — full-screen immersive Three foundation](https://github.com/addvaluewithai-hub/kidshabits/issues/15)  
 **Next implementation branch:** **NOT CREATED** (proposed: `feat/immersive-world-s01`)  
 **Main:** documentation-only pending review/merge; **no immersive-world code merged**.  
 **Plan PR:** [#8](https://github.com/addvaluewithai-hub/kidshabits/pull/8) (still Draft; scope updated to include canonical docs).  
