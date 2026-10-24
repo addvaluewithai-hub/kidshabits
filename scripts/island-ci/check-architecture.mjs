@@ -62,11 +62,11 @@ function isForbiddenPath(source, file) {
   const rel = relative(src, file).split(sep).join('/');
   if (!rel.startsWith('domain/') && !rel.startsWith('content/')) return false;
   if (/^(?:react|react-dom|phaser)(?:\/|$)/.test(source)) return true;
-  if (/^(?:@\/?|~\/)?(?:app|world|media|infrastructure)(?:\/|$)/.test(source)) return true;
+  if (/^(?:@\/?|~\/)?(?:app|world|world-three|media|infrastructure)(?:\/|$)/.test(source)) return true;
   if (source.startsWith('.')) {
     const absolute = resolve(dirname(file), source);
     const target = relative(src, absolute).split(sep).join('/');
-    if (/^(?:app|world|media|infrastructure)(?:\/|$)/.test(target)) return true;
+    if (/^(?:app|world|world-three|media|infrastructure)(?:\/|$)/.test(target)) return true;
   }
   return false;
 }
