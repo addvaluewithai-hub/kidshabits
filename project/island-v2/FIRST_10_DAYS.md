@@ -1,8 +1,10 @@
-# First 10 days — Island Discovery Journey (design draft)
+# First 10 Progress Beats — Grounded Immersive World Journey
 
-**This is not 10 separate full-screen videos.** One persistent island evolves through building, decorating, gardening, small visitor events and a few authored cinematic beats. Every day offers optional free-play; story progress is based on **qualified progress events**, not the passage of calendar dates alone.
+**Updated 2026-10-24:** Each beat happens **inside a full-screen continuous Three.js world**, with perspective camera at a child's comfortable view height. No floating islands, roof-level top-down shots, or separate boxed story-card scenes; see [Immersive spec](./IMMERSIVE_WORLD_SPEC.md).
 
-## The first island world kit
+**This is not 10 separate full-screen videos.** One connected grounded magical world evolves through building, decorating, gardening, small visitor events and a few authored cinematic beats. Every day offers optional free-play; story progress is based on **qualified progress events**, not the passage of calendar dates alone.
+
+## The first grounded-world kit
 
 - **Old Cottage** — exterior + starter indoor corner.
 - **Quiet Tree** — a mystery object that reacts as the island changes.
@@ -12,34 +14,34 @@
 - **Nova** — persistent actor and interaction partner.
 - **Lumi** — first small visitor discovered later in the arc.
 
-All objects are stateful placements in the **same world**, not decorations rendered once and discarded. Before Day 10 there may be up to two camera-composed zones, not ten separate location arts.
+All objects are stateful placements in the **same grounded world**, not discarded scene art. Named guided perspective rigs move between arrival path, cottage, garden, tree and later creek/interior; **not** ten flat screens. Distant scenery makes the clearing feel continuous.
 
 ## Story / building beat outline
 
-### Day 1 — "دي جزيرتنا!"
-- **Cold open:** island reveal, old cottage, quiet tree; Nova flies into frame and greets child.
-- **Action:** name the island; choose **start with cottage** or **start with garden**.
+### Day 1 — "دي دنيتنا!"
+- **Cold open:** child-height arrival-path camera walks forward through continuous terrain with sky/horizon; cottage and old tree ahead; Nova physically flies into world view and greets child.
+- **Action:** name their place; tap **cottage** or **garden** as first guided camera destination (no free-roam joystick).
 - **World result:** first sign, selected focus highlighted and first editable object placed.
 - **Nova:** "تفتكري نبدأ بالبيت ولا بالحديقة؟ أنا نفسي أشوف هتعملي إيه."
-- **Saved:** `island.name`, `first_focus`, `placedObjects`; choice alters presentation, not access to core content.
+- **Saved:** `world.name`, `first_focus`, `placedObjects`; semantic state preserved across viewport changes. Choice affects current guided destination, not access to core content.
 - **Tomorrow hook:** faint glow behind old tree.
 
 ### Day 2 — "البيت القديم"
-- **Action:** restore cottage doorway and choose one roof/door color combination.
+- **Action:** travel via `cottage_front` camera rig and restore cottage doorway and choose one roof/door color combination.
 - **Result:** house exterior visibly changes; small dust/sparkle reveal.
 - **Nova:** "دلوقتي بقي له شكل! عارفة؟ الباب ده كأنه كان مستنيكي."
 - **Mystery:** a tiny scratched symbol near doorframe.
 - **Saved:** `cottage.style`, `cottage.repaired_door`.
 
 ### Day 3 — "أول حاجة خضرا"
-- **Action:** choose 1 of 2 starter plants; place in one of several validated garden spots.
+- **Action:** guide camera to `garden_edge` and choose 1 of 2 starter plants; place in one of several validated garden spots.
 - **Result:** animated sprout, subtle ambient VFX; plant location persists.
 - **Nova:** "دي أول زرعة هنا! نحطها جنب البيت ولا جنب الشجرة؟"
 - **Saved:** `plants[{type,anchor,stage}]`.
 - **Note:** plant does not wither if child skips a day.
 
 ### Day 4 — "الغرفة اللي جوا"
-- **Action:** enter starter room and choose desk/rug/lamp placement from anchors.
+- **Action:** go through guided cottage entrance transition and enter starter room and choose desk/rug/lamp placement from anchors.
 - **Result:** interior genuinely resembles the child's choice.
 - **Nova:** "أنا كنت متخيلة النور هنا... بس إنتِ عندك فكرة أحلى؟"
 - **Saved:** `room.layout`.
@@ -74,7 +76,7 @@ All objects are stateful placements in the **same world**, not decorations rende
 - **No emotional manipulation:** never claim Lumi is sad or abandoned if child doesn't return.
 
 ### Day 9 — "المية اللي بتلمع"
-- **Action:** place a footbridge or three path stones to unlock closer creek view.
+- **Action:** follow guided ground-level route to creek; place a footbridge or three path stones to unlock closer creek view.
 - **World result:** flowing water particles and a second interactable zone.
 - **Nova:** "هو النور ماشي مع المية؟ يلا نبص من هنا!"
 - **Saved:** `creek.pathComplete`, `zones.creekVisible`.
