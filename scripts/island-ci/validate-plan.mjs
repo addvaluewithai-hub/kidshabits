@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Island v2 planning/status validation — no external dependencies.
+ * Immersive Three v3 planning/status validation — no external dependencies.
  * This job does NOT inspect screenshots or claim a game was tested.
  */
 import assert from 'node:assert/strict';
@@ -19,6 +19,10 @@ const files = [
   'project/island-v2/STATUS.md',
   'project/island-v2/CI_AND_VISUAL_QA.md',
   'project/island-v2/ROADMAP_AND_ACCEPTANCE.md',
+  'project/island-v2/IMMERSIVE_WORLD_SPEC.md',
+  'project/island-v2/ADR_001_THREEJS_IMMERSIVE.md',
+  'project/PRODUCT_VISION.md',
+  'AGENTS.md',
   'project/island-v2/ENGINEERING_STANDARDS.md',
   'scripts/island-ci/check-architecture.mjs',
   'scripts/island-ci/visual-smoke.mjs',
@@ -32,6 +36,13 @@ for (const path of files) {
 
 const plan = read('project/island-v2/SESSION_PLAN_25.md');
 const status = read('project/island-v2/STATUS.md');
+const spec = read('project/island-v2/IMMERSIVE_WORLD_SPEC.md');
+const adr = read('project/island-v2/ADR_001_THREEJS_IMMERSIVE.md');
+const agents = read('AGENTS.md');
+assert.match(adr, /Three\.js/);
+assert.match(spec, /full.screen/i);
+assert.match(spec, /perspective/i);
+assert.match(agents, /Three\.js/);
 
 for (let i = 1; i <= 25; i++) {
   const n = String(i).padStart(2, '0');
@@ -58,7 +69,7 @@ if (hasApp) {
 }
 
 const summary = [
-  '## Island v2 baseline validation',
+  '## Immersive Three world plan validation',
   '- 25 individual planned sessions: checked',
   '- STATUS active session: ' + String(active).padStart(2, '0') + ' / 25',
   '- Implementation sessions completed: ' + completed + ' / 25',
